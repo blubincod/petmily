@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Test</title>
+</head>
+<body>
+<h1>Location Test</h1>
+<button id="startTracking">Start Tracking</button>
+<button id="stopTracking">Stop Tracking</button>
+<script>
+    let trackingInterval;
+
+    document.getElementById('startTracking').addEventListener('click', () => {
+        if (!trackingInterval) {
+            // 10초마다 위치 정보 전송
+            trackingInterval = setInterval(sendLocation, 3000);
+            console.log('Tracking started');
+        }
+
+        document.getElementById('stopTracking').addEventListener('click', () => {
+            if (trackingInterval) {
+                clearInterval(trackingInterval);
+                trackingInterval = null;
+                console.log('Tracking stopped');
+            }
+        });
+
+        function sendLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // 서버로 위치 정보 전송
+                    fetch('http://localhost:8080/api/v1/walks/location', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify( // object 형태로 전달
+                            {
+                                latitude: latitude,
+                                longitude: longitude,
+                                timestamp: new Date()
+                            }),
+                    })
+                        .then(response => response.json())
+                        .then(data => console.log('Success:', data))
+                        .catch((error) => console.error('Error:', error));
+                }, (error) => {
+                    console.error('Error getting location:', error);
+                });
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+            }
+        }
+    })
+</script>
+</body>
+</html>
