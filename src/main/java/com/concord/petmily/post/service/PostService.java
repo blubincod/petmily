@@ -11,4 +11,21 @@ public class PostService {
     public void createPost() {
 
     }
+
+    public void getPosts() {
+
+    }
+
+    public void getPost() {
+
+    }
+
+    public void updatePost() {
+
+    }
+
+    public void deletePost() {
+
+    }
+
 }
