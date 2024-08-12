@@ -1,6 +1,6 @@
-package com.concord.petmily.pet.controller;
+package com.concord.petmily.vaccination.controller;
 
-import com.concord.petmily.pet.service.PetService;
+import com.concord.petmily.vaccination.service.VaccinationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PetController {
 
-  private final PetService petService;
+  private final VaccinationService vaccinationService;
 
   @PostMapping
   public ResponseEntity<?> createPet() {
-    petService.createPet();
+    vaccinationService.createPet();
 
     return ResponseEntity.status(201).body("ok");
   }
@@ -32,7 +32,7 @@ public class PetController {
    */
   @GetMapping
   public ResponseEntity<?> userPetList() {
-    petService.userPetList();
+    vaccinationService.userPetList();
 
     return ResponseEntity.status(201).body("ok");
   }
@@ -45,21 +45,21 @@ public class PetController {
    */
   @GetMapping("/{petId}")
   public ResponseEntity<?> userPetDetail(@PathVariable Long petId) {
-    petService.userPetList();
+    vaccinationService.userPetList();
 
     return ResponseEntity.status(201).body("ok");
   }
 
   @PutMapping
   public ResponseEntity<?> modifierPet() {
-    petService.modifierPet();
+    vaccinationService.modifierPet();
 
     return ResponseEntity.status(201).body("ok");
   }
 
   @DeleteMapping
   public ResponseEntity<?> deletePat() {
-    petService.deletePet();
+    vaccinationService.deletePet();
 
     return ResponseEntity.status(204).body("ok");
   }
