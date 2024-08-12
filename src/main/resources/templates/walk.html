@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Location Test</title>
+    <title>Walk Page</title>
 </head>
 <body>
 <h1>Location Test</h1>
@@ -12,13 +13,14 @@
 <script>
     let trackingInterval;
 
+    // 산책 시작 버튼
     document.getElementById('startTracking').addEventListener('click', () => {
         if (!trackingInterval) {
-            // 10초마다 위치 정보 전송
+            // 3초마다 위치 정보 전송
             trackingInterval = setInterval(sendLocation, 3000);
             console.log('Tracking started');
         }
-
+        // 산책 중지 버튼
         document.getElementById('stopTracking').addEventListener('click', () => {
             if (trackingInterval) {
                 clearInterval(trackingInterval);
@@ -26,7 +28,7 @@
                 console.log('Tracking stopped');
             }
         });
-
+        // 위치 정보 전송 메서드
         function sendLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
