@@ -19,7 +19,7 @@ public class PetController {
   private final PetService petService;
 
   @PostMapping
-  public ResponseEntity<?>createPet(){
+  public ResponseEntity<?> createPet() {
     petService.createPet();
 
     return ResponseEntity.status(201).body("ok");
@@ -27,10 +27,11 @@ public class PetController {
 
   /**
    * 회원이 소유하고있는 반려동물들을 모두 보여준다
+   *
    * @return
    */
   @GetMapping
-  public ResponseEntity<?>userPetList(){
+  public ResponseEntity<?> userPetList() {
     petService.userPetList();
 
     return ResponseEntity.status(201).body("ok");
@@ -38,29 +39,30 @@ public class PetController {
 
   /**
    * 회원이 소유하고있는 반려동물 상세 페이지
+   *
    * @param petId
    * @return
    */
   @GetMapping("/{petId}")
-  public ResponseEntity<?>userPetDetail(@PathVariable Long petId){
+  public ResponseEntity<?> userPetDetail(@PathVariable Long petId) {
     petService.userPetList();
 
     return ResponseEntity.status(201).body("ok");
   }
+
   @PutMapping
-  public ResponseEntity<?>modifierPet(){
+  public ResponseEntity<?> modifierPet() {
     petService.modifierPet();
 
     return ResponseEntity.status(201).body("ok");
   }
 
   @DeleteMapping
-  public ResponseEntity<?>DeletePat(){
+  public ResponseEntity<?> deletePat() {
     petService.deletePet();
 
     return ResponseEntity.status(204).body("ok");
   }
-
 
 
 }

@@ -9,6 +9,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class PostService {
     public void createPost() {
-        // 게시물 생성 메서드 구현
+
     }
+
+    public void getPosts() {
+
+    }
+
+    public void getPost() {
+
+    }
+
+    public void updatePost() {
+
+    }
+
+    public void deletePost() {
+
+    }
+
 }
