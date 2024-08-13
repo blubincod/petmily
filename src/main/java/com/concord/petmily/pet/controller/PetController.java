@@ -64,38 +64,5 @@ public class PetController {
     return ResponseEntity.status(204).body("ok");
   }
 
-  @PostMapping("/{petId}/vaccination")
-  public ResponseEntity<?> createVaccination(@PathVariable Long petId) {
-
-    return ResponseEntity.status(201).body("ok");
-  }
-
-  @GetMapping("/{petId}/vaccination")
-  public ResponseEntity<?> petVaccination(@PathVariable Long petId) {
-
-    return ResponseEntity.ok("ok");
-  }
-
-  @GetMapping("/{petId}/vaccination/{vaccinationId}")
-  public ResponseEntity<?> petVaccinationDetail(@PathVariable Long petId,
-      @PathVariable Long vaccinationId) {
-
-    return ResponseEntity.ok("ok");
-  }
-
-  @PutMapping("/{petId}/vaccination/{vaccinationId}")
-  public ResponseEntity<?> modifierPetVaccination(@PathVariable Long petId,
-      @PathVariable Long vaccinationId) {
-
-    return ResponseEntity.ok("ok");
-  }
-
-  @DeleteMapping("/{petId}/vaccination/{vaccinationId}")
-  public ResponseEntity<?> deletePetVaccination(@PathVariable Long petId,
-      @PathVariable Long vaccinationId) {
-
-    return ResponseEntity.ok("ok");
-  }
-
 
 }
