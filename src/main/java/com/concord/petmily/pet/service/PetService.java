@@ -1,5 +1,6 @@
 package com.concord.petmily.pet.service;
 
+import com.concord.petmily.pet.dto.PetDto;
 import com.concord.petmily.pet.repository.PetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class PetService {
   /**
    * 반려동물 등록
    */
-  public void createPet(){
+  public void createPet(Long userId,PetDto.Create request){
 
   }
 

@@ -1,6 +1,9 @@
 package com.concord.petmily.pet.entity;
 
 import com.concord.petmily.pet.dto.PetDto;
+import com.concord.petmily.pet.dto.PetDto.Category;
+import com.concord.petmily.pet.dto.PetDto.Gender;
+import com.concord.petmily.pet.dto.PetDto.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +12,8 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Table(name = "pet")
@@ -57,8 +62,30 @@ public class Pet {
   private String chip;
 
   // 생성 시점
+  @CreatedDate
   private LocalDateTime createAt;
 
   // 수정 시점
+  @LastModifiedDate
   private LocalDateTime modifiedAt;
+
+
+  public Pet(Long userId, Category category, String brand, LocalDate birthDate, int age,
+      String name, Gender gender, boolean isPetsNeuter, int weight, Status status,
+      String image, String chip) {
+    this.userId = userId;
+    this.category = category;
+    this.brand = brand;
+    this.birthDate = birthDate;
+    this.age = age;
+    this.name = name;
+    this.gender = gender;
+    this.isPetsNeuter = isPetsNeuter;
+    this.weight = weight;
+    this.status = status;
+    this.image = image;
+    this.chip = chip;
+  }
+
+
 }
