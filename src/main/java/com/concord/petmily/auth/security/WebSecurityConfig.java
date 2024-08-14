@@ -32,6 +32,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                    .requestMatchers("/**").permitAll()//원활한 개발활경을위한 모든경로 접근 허용
                         .requestMatchers("/login", "/users/signup", "/api/v1/users/signup").permitAll() // 인증 없이 접근 허용
                         .requestMatchers("/api/v1/**").permitAll() // 조회 요청을 인증 없이 접근 허용
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
