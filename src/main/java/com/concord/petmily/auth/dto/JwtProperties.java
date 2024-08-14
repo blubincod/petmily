@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Component
 public class JwtProperties {
-
+    @Value("${spring.jwt.issuer}")
     private String issuer;
     @Value("${spring.jwt.secret-key}")
     private String secretKey;
