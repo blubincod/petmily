@@ -46,8 +46,9 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = (User) authentication.getPrincipal();
-        String accessToken = tokenProvider.generateToken(user, Duration.ofHours(1)); // 액세스 토큰 만료 시간 설정
-        String refreshToken = tokenProvider.generateToken(user, Duration.ofDays(30)); // 리프레시 토큰 만료 시간 설정
+//        String accessToken = tokenProvider.generateToken(user, Duration.ofHours(1)); // 액세스 토큰 만료 시간 설정
+        String accessToken = tokenProvider.generateToken(user, Duration.ofMillis(1)); // 액세스 토큰 만료 시간 설정 테스트
+        String refreshToken = tokenProvider.generateToken(user, Duration.ofDays(2)); // 리프레시 토큰 만료 시간 설정
 
         // 리프레시 토큰을 데이터베이스에 저장
         RefreshToken token = new RefreshToken(user.getUsername(), refreshToken);

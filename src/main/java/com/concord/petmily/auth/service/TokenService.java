@@ -1,5 +1,7 @@
 package com.concord.petmily.auth.service;
 
+import com.concord.petmily.auth.exception.AuthException;
+import com.concord.petmily.common.exception.ErrorCode;
 import com.concord.petmily.user.entity.User;
 import com.concord.petmily.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,7 @@ public class TokenService {
 
     public String createNewAccessToken(String refreshToken) {
         if (!tokenProvider.validToken(refreshToken)) {
-            throw new IllegalArgumentException("Unexpected token");
+            throw new AuthException(ErrorCode.TOKEN_EXPIRED);
         }
 
         String username = refreshTokenService.findByRefreshToken(refreshToken).getUsername();
