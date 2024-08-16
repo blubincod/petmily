@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,9 +55,6 @@ public class User implements UserDetails {
     @Column(name = "status", length = 100)
     private String status;
 
-    @Column(name = "reistered_at")
-    private LocalDateTime reisteredAt;
-
     @Column(name = "birth_date", length = 50)
     private String birthDate;
 
@@ -64,6 +63,13 @@ public class User implements UserDetails {
 
     @Column(name = "gender", length = 30)
     private String gender;
+
+    @CreatedDate
+    @Column(name = "registered_at")
+    private LocalDateTime registeredAt;
+    @LastModifiedDate
+    @Column(name = "modified_at")
+    private LocalDateTime modifiedAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

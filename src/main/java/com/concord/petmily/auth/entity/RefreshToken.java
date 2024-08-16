@@ -16,7 +16,7 @@ public class RefreshToken {
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true)
-    private String username;  // userId를 username으로 변경
+    private String username;
 
     @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
