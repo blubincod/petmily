@@ -2,7 +2,6 @@ package com.concord.petmily.user.controller;
 
 import com.concord.petmily.user.dto.AddUserRequest;
 import com.concord.petmily.user.entity.User;
-import com.concord.petmily.user.exception.CustomExceptions;
 import com.concord.petmily.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,19 +20,24 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * 회원가입
+     *
+     * @param addUserRequest
+     * @return
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody AddUserRequest addUserRequest) {
-        try {
-            Long userId = userService.save(addUserRequest);
-            return new ResponseEntity<>(Map.of("userId", userId), HttpStatus.CREATED);
-        } catch (CustomExceptions.DuplicateUsernameException | CustomExceptions.DuplicateEmailException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("회원가입 실패: " + e.getMessage());
-        }
+        Long userId = userService.save(addUserRequest);
+        return new ResponseEntity<>(Map.of("userId", userId), HttpStatus.CREATED);
     }
 
+    /**
+     * 사용자 정보 조회
+     *
+     * @param userId
+     * @return
+     */
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable String userId) {
         try {

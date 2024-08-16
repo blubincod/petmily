@@ -19,7 +19,7 @@ public class TokenService {
 
     public String createNewAccessToken(String refreshToken) {
         if (!tokenProvider.validToken(refreshToken)) {
-            throw new AuthException(ErrorCode.TOKEN_EXPIRED);
+            throw new AuthException(ErrorCode.REFRESH_TOKEN_EXPIRED);
         }
 
         String username = refreshTokenService.findByRefreshToken(refreshToken).getUsername();

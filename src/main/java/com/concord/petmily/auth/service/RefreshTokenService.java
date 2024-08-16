@@ -1,10 +1,16 @@
 package com.concord.petmily.auth.service;
 
 import com.concord.petmily.auth.entity.RefreshToken;
+import com.concord.petmily.auth.exception.AuthException;
 import com.concord.petmily.auth.repository.RefreshTokenRepository;
+import com.concord.petmily.common.exception.ErrorCode;
+import com.concord.petmily.common.exception.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * 리프레시 토큰을 관리하는 서비스 클래스
+ */
 @RequiredArgsConstructor
 @Service
 public class RefreshTokenService {
@@ -13,7 +19,7 @@ public class RefreshTokenService {
 
     public RefreshToken findByRefreshToken(String refreshToken) {
         return refreshTokenRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 토큰"));
+                .orElseThrow(() -> new AuthException(ErrorCode.REFRESH_TOKEN_EXPIRED));
     }
 
     public void deleteByUsername(String username) {

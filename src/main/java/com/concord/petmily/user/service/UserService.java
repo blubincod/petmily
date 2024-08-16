@@ -1,8 +1,11 @@
 package com.concord.petmily.user.service;
 
+import com.concord.petmily.auth.exception.AuthException;
+import com.concord.petmily.common.exception.ErrorCode;
 import com.concord.petmily.user.dto.AddUserRequest;
 import com.concord.petmily.user.entity.User;
 import com.concord.petmily.user.exception.CustomExceptions;
+import com.concord.petmily.user.exception.UserException;
 import com.concord.petmily.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,12 +20,13 @@ public class UserService {
 
     public Long save(AddUserRequest dto) {
         if (userRepository.existsByUsername(dto.getUsername())) {
-            throw new CustomExceptions.DuplicateUsernameException("이미 존재하는 아이디 입니다!");
+            throw new UserException(ErrorCode.USERNAME_ALREADY_EXISTS);
         }
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new CustomExceptions.DuplicateEmailException("이미 존재하는 이메일 입니다!");
+            throw new UserException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
 
+        // FIXME role, status ENUM으로 처리
         String role = dto.getRole() != null ? dto.getRole() : "USER";  // 관리자가 아닌 경우 기본값 "USER"
         String status = dto.getStatus() != null ? dto.getStatus() : "ACTIVE";  // 상태는 기본값 "ACTIVE"
 
@@ -46,11 +50,11 @@ public class UserService {
 
     public User findById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다: " + userId));
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
     }
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다!: " + username));
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
     }
 }

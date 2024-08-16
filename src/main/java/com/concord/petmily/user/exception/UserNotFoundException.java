@@ -1,15 +1,16 @@
-package com.concord.petmily.auth.exception;
+package com.concord.petmily.user.exception;
 
 import com.concord.petmily.common.exception.ErrorCode;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AuthException extends RuntimeException {
+public class UserNotFoundException extends RuntimeException {
     ErrorCode errorCode;
     String errorMessage;
 
-    public AuthException(ErrorCode errorCode) {
+    public UserNotFoundException(ErrorCode errorCode) {
         this.errorCode = errorCode;
         this.errorMessage = errorCode.getMessage();
     }
