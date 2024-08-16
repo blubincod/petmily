@@ -24,7 +24,7 @@ public class PetController {
   @PostMapping
   public ResponseEntity<?> createPet(@RequestParam Long userId,@RequestBody PetDto.Create request) {
     petService.createPet(userId,request);
-
+    
     return ResponseEntity.status(201).body("ok");
   }
 

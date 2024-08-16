@@ -1,9 +1,7 @@
 package com.concord.petmily.pet.entity;
 
 import com.concord.petmily.pet.dto.PetDto;
-import com.concord.petmily.pet.dto.PetDto.Category;
-import com.concord.petmily.pet.dto.PetDto.Gender;
-import com.concord.petmily.pet.dto.PetDto.Status;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,34 +24,43 @@ public class Pet {
   private Long id;
 
   // 사용자의 ID
+  @Column(nullable = false)
   private Long userId;
 
   // PetDto의 Category 타입
-  private PetDto.Category category;
+  @Column(nullable = false)
+  private Category category;
 
   // 반려동물의 품종
+  @Column(nullable = false)
   private String brand;
 
   // 반려동물의 생년월일
+  @Column(nullable = false)
   private LocalDate birthDate;
 
   // 반려동물의 나이
+  @Column(nullable = false)
   private int age;
 
   // 반려동물의 이름
+  @Column(nullable = false)
   private String name;
 
   // 반려동물의 Gender 타입
-  private PetDto.Gender gender;
+  private Gender gender;
 
   // 반려동물의 중성화 여부
+  @Column(nullable = false)
   private boolean isPetsNeuter;
 
   // 반려동물의 무게
-  private int weight;
+  @Column(nullable = false)
+  private double weight;
 
   // 반려동물의 Status 타입
-  private PetDto.Status status;
+  @Column(nullable = false)
+  private Status status;
 
   // 반려동물의 이미지
   private String image;
@@ -70,8 +77,8 @@ public class Pet {
   private LocalDateTime modifiedAt;
 
 
-  public Pet(Long userId, Category category, String brand, LocalDate birthDate, int age,
-      String name, Gender gender, boolean isPetsNeuter, int weight, Status status,
+  private Pet(Long userId, Category category, String brand, LocalDate birthDate, int age,
+      String name, Gender gender, boolean isPetsNeuter, double weight, Status status,
       String image, String chip) {
     this.userId = userId;
     this.category = category;
@@ -85,6 +92,15 @@ public class Pet {
     this.status = status;
     this.image = image;
     this.chip = chip;
+  }
+
+  public static Pet from(Long userId, PetDto.Create request) {
+   return new Pet(userId, request.getPetsCategory(), request.getPetsBreed(), request.getBirthDate(),
+        request.getPetsAge(),
+        request.getPetsName(), request.getPetsGender(), request.isPetsNeuter(),
+        request.getPetsWeight(), Status.ACTIVE,
+        request.getPetsImage().isEmpty() ? null : request.getPetsImage(),
+        request.getPetsChip().isEmpty() ? null : request.getPetsChip());
   }
 
 

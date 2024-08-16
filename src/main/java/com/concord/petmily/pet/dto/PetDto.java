@@ -1,5 +1,8 @@
 package com.concord.petmily.pet.dto;
 
+import com.concord.petmily.pet.entity.Category;
+import com.concord.petmily.pet.entity.Gender;
+import java.time.LocalDate;
 import java.util.Date;
 import lombok.Data;
 
@@ -9,27 +12,21 @@ public class PetDto {
   @Data
   public static class Create {
     private Long userId;
-    private Long petsCategory;
+    private Category petsCategory;
     private String petsBreed;
     private String petsName;
-    private Date birthDate;
+    private LocalDate birthDate;
     private int petsAge;
-    private String petsGender;
+    private Gender petsGender;
     private boolean isPetsNeuter;
     private double petsWeight;
     private String petsImage;
-    private int petsChip;
+    private String  petsChip;
   }
 
-  public enum Category {
-    DOG, CAT, OTHER;
-  }
 
-  public enum Gender{
-    M,F;
-  }
 
-  public enum Status{
-    ACTIVE,DELETED;
-  }
+
+
+
 }
