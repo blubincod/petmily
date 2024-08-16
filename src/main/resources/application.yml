@@ -3,7 +3,9 @@ spring:
     name: petmily
   profiles:
     active: dev
-
+#프로젝트 파일 저장 경로
+file:
+  dir: /petmily
 ---
 spring:
   config:

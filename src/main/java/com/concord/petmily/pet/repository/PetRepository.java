@@ -1,6 +1,10 @@
 package com.concord.petmily.pet.repository;
 
 import com.concord.petmily.pet.entity.Pet;
+import com.concord.petmily.pet.entity.Status;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 /**
@@ -10,4 +14,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PetRepository extends JpaRepository<Pet,Long> {
 
+  Page<Pet>findByUserIdAndStatus(Long userId, Status status,Pageable pageable);
+  Optional<Pet> findByIdAndUserId(Long id,Long userId);
 }
