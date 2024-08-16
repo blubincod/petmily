@@ -1,6 +1,8 @@
 package com.concord.petmily.post.repository;
 
 import com.concord.petmily.post.entity.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +12,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    // 메서드 정의
+    Page<Post> findByPostCategoryId(Long categoryId, Pageable pageable);
 }
