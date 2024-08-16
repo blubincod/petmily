@@ -1,0 +1,39 @@
+### 회원 가입 요청
+# @no-redirect
+POST http://localhost:8080/api/v1/users/signup
+Content-Type: application/json
+
+{
+  "username": "abc111",
+  "email": "abc111@test.com",
+  "password": "12345",
+  "address": "123 Main St",
+  "age": 30,
+  "birthDate": "1994-01-01",
+  "gender": "M",
+  "name": "John Doe",
+  "nickname": "johnny",
+  "phone": "123-456-7890"
+}
+
+### 로그인 요청
+POST http://localhost:8080/api/v1/users/login
+Content-Type: application/json
+
+{
+  "username": "abc111",
+  "password": "12345"
+}
+
+### 로그아웃 요청 (토큰 필요)
+POST http://localhost:8080/api/v1/users/logout
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkbHdsc2d1ZDk4QG5hdmVyLmNvbSIsImlhdCI6MTcyMzQ3NTU0MCwiZXhwIjoxNzIzNDc5MTQwLCJzdWIiOiJhYmMyMzQ1In0.Q9Iv_8gFzVv1A0N66cYPAnbdh8VhR6xRp5c2AfpjTcc
+
+Content-Type: application/json
+
+{
+}
+
+### 사용자 정보 조회
+# @no-redirect
+GET http://localhost:8080/api/v1/users/1
