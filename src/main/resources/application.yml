@@ -7,6 +7,9 @@ spring:
   jwt:
     issuer: dlwlsgud98@naver.com
     secret-key: c3R1ZHktc3ByaW5nYm9vdA==
+
+file:
+  dir: /petmily
 ---
 spring:
   config:
