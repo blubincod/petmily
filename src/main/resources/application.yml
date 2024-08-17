@@ -22,9 +22,13 @@ spring:
       hibernate:
         format_sql: true
         ddl-auto: update
+    defer-datasource-initialization: true
   h2:
     console:
       enabled: true
+  sql:
+    init:
+      mode: always
 
 ---
 spring:
