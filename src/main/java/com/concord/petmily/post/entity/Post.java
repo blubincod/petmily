@@ -57,8 +57,15 @@ public class Post extends BaseTimeEntity{
     @Column(name = "status")
     private PostStatus postStatus;
 
-    // 첨부파일 경로
-    @Column(name = "attachment_paths", length = 100)
-    private String attachmentPaths;
+    public void viewCountUp(Post post) {
+        post.viewCount++;
+    }
 
+    public void likeCountUp(Post post) {
+        post.likeCount++;
+    }
+
+    public void likeCountDown(Post post) {
+        post.likeCount--;
+    }
 }

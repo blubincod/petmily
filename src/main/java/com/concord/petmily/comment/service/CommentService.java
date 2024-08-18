@@ -2,8 +2,11 @@ package com.concord.petmily.comment.service;
 
 import com.concord.petmily.comment.dto.CommentDto;
 import com.concord.petmily.comment.entity.Comment;
+import com.concord.petmily.comment.exception.CommentException;
 import com.concord.petmily.comment.repository.CommentRepository;
+import com.concord.petmily.common.exception.ErrorCode;
 import com.concord.petmily.post.entity.Post;
+import com.concord.petmily.post.exception.PostException;
 import com.concord.petmily.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,17 +22,17 @@ public class CommentService {
     @Transactional
     public Comment insert(Long postId, CommentDto.Request dto) {
 //        User user = userRepository.findById(dto.getUserId())
-//                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+//                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
 
         Comment comment = dto.toEntity();
 
         Comment parentComment;
         if (dto.getParentId() != null) {
             parentComment = commentRepository.findById(dto.getParentId())
-                    .orElseThrow(() -> new RuntimeException("해당 댓글을 찾을 수 없습니다."));
+                    .orElseThrow(() -> new CommentException(ErrorCode.COMMENT_NOT_FOUND));
             comment.setParent(parentComment);
         }
 
@@ -42,10 +45,10 @@ public class CommentService {
     @Transactional
     public void delete(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("해당 댓글이 없습니다."));
+                .orElseThrow(() -> new CommentException(ErrorCode.COMMENT_NOT_FOUND));
 
         if(comment.getIsDeleted()){
-            throw new RuntimeException("이미 삭제된 댓글입니다.");
+            throw new CommentException(ErrorCode.COMMENT_ALREADY_DELETED);
         }
         comment.setIsDeleted(true);
         comment.setContent("댓글이 삭제되었습니다.");
@@ -54,10 +57,10 @@ public class CommentService {
     @Transactional
     public void update(Long commentId, CommentDto.Request dto) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("해당 댓글이 없습니다."));
+                .orElseThrow(() -> new CommentException(ErrorCode.COMMENT_NOT_FOUND));
 
         if(comment.getUserId() != dto.getUserId()) {
-            throw new RuntimeException("댓글 작성자가 아닙니다.");
+            throw new CommentException(ErrorCode.USER_COMMENT_UNMATCHED);
         }
 
         comment.setContent(dto.getContent());

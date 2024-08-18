@@ -26,7 +26,6 @@ public class PostDto {
         private String content;
         private String imagePath;
         private PostStatus postStatus;
-        private String attachmentPaths;
 
         public Post toEntity() {
             Post post = Post.builder()
@@ -36,7 +35,6 @@ public class PostDto {
                     .content(content)
                     .imagePath(imagePath)
                     .postStatus(postStatus)
-                    .attachmentPaths(attachmentPaths)
                     .build();
 
             return post;
@@ -57,7 +55,6 @@ public class PostDto {
         private PostStatus postStatus;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
-        private String attachmentPaths;
 
         public Response(Post post) {
             this.id = post.getId();
@@ -72,7 +69,6 @@ public class PostDto {
             this.postStatus = post.getPostStatus();
             this.createdAt = post.getCreatedAt();
             this.updatedAt = post.getUpdatedAt();
-            this.attachmentPaths = post.getAttachmentPaths();
         }
     }
 }

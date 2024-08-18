@@ -1,6 +1,10 @@
 package com.concord.petmily.common.exception;
 
 import com.concord.petmily.auth.exception.AuthException;
+import com.concord.petmily.comment.exception.CommentException;
+
+import com.concord.petmily.likes.exception.LikesException;
+import com.concord.petmily.post.exception.PostException;
 import com.concord.petmily.user.exception.UserException;
 import com.concord.petmily.user.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +51,39 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserException.class)
     public ErrorResponse handleUserException(UserException e) {
         log.error("UserException occurred: {}", e.getErrorCode());
+        return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
+    }
+
+    /**
+     * PostException 처리
+     * 게시물과 관련된 일반적인 에러 상황에서 사용
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(PostException.class)
+    public ErrorResponse handlePostException(PostException e) {
+        log.error("PostException occurred: {}", e.getErrorCode());
+        return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
+    }
+
+    /**
+     * CommentException 처리
+     * 댓글과 관련된 일반적인 에러 상황에서 사용
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(CommentException.class)
+    public ErrorResponse handleCommentException(CommentException e) {
+        log.error("CommentException occurred: {}", e.getErrorCode());
+        return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
+    }
+
+    /**
+     * LikesException 처리
+     * 좋아요와 관련된 일반적인 에러 상황에서 사용
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(LikesException.class)
+    public ErrorResponse handleLikesException(LikesException e) {
+        log.error("LikesException occurred: {}", e.getErrorCode());
         return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
     }
 

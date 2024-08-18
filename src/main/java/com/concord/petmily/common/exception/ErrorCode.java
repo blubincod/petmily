@@ -26,6 +26,20 @@ public enum ErrorCode {
     PET_NOT_FOUND("존재하지 않는 반려동물입니다."),
     PET_ALREADY_REGISTERED("이 반려동물은 이미 등록되어 있습니다."),
 
+    // Post
+    POST_NOT_FOUND("존재하지 않는 게시물입니다."),
+    POST_CATEGORY_NOT_FOUND("존재하지 않는 게시물 카테고리입니다."),
+    POST_ALREADY_DELETED("이미 삭제된 게시물입니다."),
+
+    // Comment
+    COMMENT_NOT_FOUND("존재하지 않는 댓글입니다."),
+    COMMENT_ALREADY_DELETED("이미 삭제된 댓글입니다."),
+    USER_COMMENT_UNMATCHED("사용자와 댓글 작성자가 다릅니다."),
+
+    // Likes
+    LIKES_ALREADY_EXISTS("이미 좋아요 되어있는 게시물입니다."),
+    LIKES_NOT_FOUND("좋아요 되어있지 않은 게시물입니다."),
+
     // Other
     DATABASE_CONNECTION_FAILED("데이터베이스 연결에 실패했습니다."),
     NETWORK_ERROR("네트워크 오류가 발생했습니다."),
