@@ -63,7 +63,7 @@ public class DiseaseController {
     Disease updatedDisease = diseaseService.partialUpdateDisease(diseaseId, request);
 
     // 수정된 질병 정보를 반환
-    return ResponseEntity.status(204).body("ok");
+    return ResponseEntity.status(200).body("ok");
   }
 
   // 특정 질병 삭제 엔드포인트
@@ -73,6 +73,6 @@ public class DiseaseController {
     diseaseService.deleteDisease(diseaseId);
 
     // 성공적으로 삭제되었다는 응답 반환
-    return ResponseEntity.ok("질병이 성공적으로 삭제되었습니다.");
+    return ResponseEntity.status(204).body("질병이 성공적으로 삭제되었습니다.");
   }
 }
