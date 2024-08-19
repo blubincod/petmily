@@ -2,10 +2,7 @@ package com.concord.petmily.walk.dto;
 
 import com.concord.petmily.walk.entity.Walk;
 import com.concord.petmily.walk.entity.WalkStatus;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
