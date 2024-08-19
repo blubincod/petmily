@@ -2,6 +2,8 @@ package com.concord.petmily.post.controller;
 
 import com.concord.petmily.post.dto.PostDto;
 import com.concord.petmily.post.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -54,8 +56,10 @@ public class PostController {
      * @return 조회된 게시물의 정보와 HTTP 200 상태를 반환
      */
     @GetMapping("/{postId}")
-    public ResponseEntity<?> getPost (@PathVariable Long postId){
-        PostDto.Response response = postService.getPost(postId);
+    public ResponseEntity<?> getPost (@PathVariable Long postId,
+                                      HttpServletRequest req,
+                                      HttpServletResponse res){
+        PostDto.Response response = postService.getPost(postId, req, res);
 
         return ResponseEntity.status(200).body(response);
     }

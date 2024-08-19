@@ -23,13 +23,13 @@ public class CommentController {
 
     /**
      * 새로운 댓글 등록
-     * @param postId 댓글이 작성될 게시글
+     * @param postId 댓글이 작성될 게시물
      * @param dto 등록할 댓글의 정보
      * @return HTTP 201 상태를 반환
      */
     @PostMapping("/{postId}/comment")
     public ResponseEntity<?> insert (@PathVariable Long postId,
-                                    @RequestBody CommentDto.Request dto) {
+                                     @RequestBody CommentDto.Request dto) {
         commentService.insert(postId, dto);
 
         return ResponseEntity.status(201).body("댓글 등록 성공");
@@ -51,10 +51,10 @@ public class CommentController {
     /**
      * 댓글 삭제
      * @param commentId 삭제될 댓글의 id
-     * @return HTTP 201 상태를 반환
+     * @return HTTP 204 상태를 반환
      */
     @DeleteMapping("/comment/{commentId}")
-    public ResponseEntity<?> delete(@PathVariable Long commentId) {
+    public ResponseEntity<?> delete (@PathVariable Long commentId) {
         commentService.delete(commentId);
 
         return ResponseEntity.status(204).body(null);
