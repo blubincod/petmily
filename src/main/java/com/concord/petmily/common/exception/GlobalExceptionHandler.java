@@ -2,12 +2,10 @@ package com.concord.petmily.common.exception;
 
 import com.concord.petmily.auth.exception.AuthException;
 import com.concord.petmily.comment.exception.CommentException;
-
 import com.concord.petmily.likes.exception.LikesException;
 import com.concord.petmily.post.exception.PostException;
 import com.concord.petmily.user.exception.UserException;
 import com.concord.petmily.user.exception.UserNotFoundException;
-import com.concord.petmily.walk.entity.Walk;
 import com.concord.petmily.walk.exception.WalkAccessDeniedException;
 import com.concord.petmily.walk.exception.WalkException;
 import com.concord.petmily.walk.exception.WalkNotFoundException;
@@ -26,8 +24,8 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /** AuthException 처리
-     *
+    /**
+     * AuthException 처리
      */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthException.class)
@@ -59,7 +57,6 @@ public class GlobalExceptionHandler {
     }
 
     /**
-
      * WalkNotFoundException 처리
      * 산책 정보를 찾을 수 없을 때 사용
      */
@@ -69,6 +66,7 @@ public class GlobalExceptionHandler {
         log.error("WalkNotFoundException occurred: {}", e.getErrorCode());
         return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
     }
+
     /**
      * WalkException 처리
      * 산책과 관련된 일반적인 에러 상황에서 사용
@@ -79,6 +77,7 @@ public class GlobalExceptionHandler {
         log.error("WalkException occurred: {}", e.getErrorCode());
         return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
     }
+
     /**
      * WalkAccessDeniedException 처리
      * 사용자가 권한 없이 산책 정보에 접근 시 사용
@@ -88,7 +87,9 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleWalkAccessDeniedException(WalkAccessDeniedException e) {
         log.error("WalkAccessDeniedException occurred: {}", e.getErrorCode());
         return new ErrorResponse(e.getErrorCode(), e.getMessage());
+    }
 
+    /**
      * PostException 처리
      * 게시물과 관련된 일반적인 에러 상황에서 사용
      */
@@ -119,13 +120,14 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleLikesException(LikesException e) {
         log.error("LikesException occurred: {}", e.getErrorCode());
         return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
-
     }
 
-    /** 기타 예외 처리
+    /**
+     * 기타 예외 처리
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGlobalException(Exception e, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleGlobalException(Exception
+                                                                       e, WebRequest request) {
         log.error("An unexpected error occurred: {}", e.getMessage());
 
         ErrorResponse errorResponse = new ErrorResponse(
