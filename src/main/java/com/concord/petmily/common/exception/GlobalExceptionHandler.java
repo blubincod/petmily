@@ -3,6 +3,7 @@ package com.concord.petmily.common.exception;
 import com.concord.petmily.auth.exception.AuthException;
 import com.concord.petmily.user.exception.UserException;
 import com.concord.petmily.user.exception.UserNotFoundException;
+import com.concord.petmily.walk.exception.WalkNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserException.class)
     public ErrorResponse handleUserException(UserException e) {
         log.error("UserException occurred: {}", e.getErrorCode());
+        return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
+    }
+
+
+    /**
+     * WalkException 처리
+     * 산책 정보를 찾을 수 없을 때 사용
+     */
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(WalkNotFoundException.class)
+    public ErrorResponse handleWalkNotFoundException(WalkNotFoundException e) {
+        log.error("WalkNotFoundException occurred: {}", e.getErrorCode());
         return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
     }
 

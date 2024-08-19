@@ -26,6 +26,9 @@ public enum ErrorCode {
     PET_NOT_FOUND("존재하지 않는 반려동물입니다."),
     PET_ALREADY_REGISTERED("이 반려동물은 이미 등록되어 있습니다."),
 
+    // Walk
+    WALK_NOT_FOUND("존재하지 않는 산책 정보입니다."),
+
     // Other
     DATABASE_CONNECTION_FAILED("데이터베이스 연결에 실패했습니다."),
     NETWORK_ERROR("네트워크 오류가 발생했습니다."),

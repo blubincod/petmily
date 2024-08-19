@@ -26,7 +26,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Long userId;
+    private Long id;
 
     @Column(name = "username", length = 30, nullable = false, unique = true)
     private String username;
@@ -34,14 +34,19 @@ public class User implements UserDetails {
     @Column(name = "password", length = 100, nullable = false)
     private String password;
 
-    @Column(name = "role", length = 50)
-    private String role;
-
     @Column(name = "nickname", length = 50)
     private String nickname;
 
     @Column(name = "name", length = 50)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", length = 50)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 100)
+    private Status status;
 
     @Column(name = "phone", length = 50)
     private String phone;
@@ -52,8 +57,6 @@ public class User implements UserDetails {
     @Column(name = "address", length = 100)
     private String address;
 
-    @Column(name = "status", length = 100)
-    private String status;
 
     @Column(name = "birth_date", length = 50)
     private String birthDate;
@@ -71,9 +74,10 @@ public class User implements UserDetails {
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
+    // Spring Security가 사용자의 권한을 확인하고, 접근 제어를 수행하기 위해 사용하는 메서드
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(role));
+        return Collections.singleton(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
