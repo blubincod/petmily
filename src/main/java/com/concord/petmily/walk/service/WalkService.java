@@ -2,12 +2,16 @@ package com.concord.petmily.walk.service;
 
 import com.concord.petmily.common.exception.ErrorCode;
 import com.concord.petmily.user.entity.User;
+import com.concord.petmily.user.exception.UserNotFoundException;
 import com.concord.petmily.user.repository.UserRepository;
 import com.concord.petmily.walk.dto.WalkActivityDto;
 import com.concord.petmily.walk.dto.WalkDto;
 import com.concord.petmily.walk.entity.Walk;
 import com.concord.petmily.walk.entity.WalkActivity;
 import com.concord.petmily.walk.entity.WalkGoal;
+import com.concord.petmily.walk.entity.WalkStatus;
+import com.concord.petmily.walk.exception.WalkAccessDeniedException;
+import com.concord.petmily.walk.exception.WalkException;
 import com.concord.petmily.walk.exception.WalkNotFoundException;
 import com.concord.petmily.walk.repository.WalkActivityRepository;
 import com.concord.petmily.walk.repository.WalkRepository;
@@ -19,7 +23,13 @@ import java.time.LocalDateTime;
 
 /**
  * 산책 관련 서비스
- * 비즈니스 로직을 처리
+ * <p>
+ * - 산책 위치 기록
+ * - 산책 전체 정보 조회
+ * - 산책 상세 정보 조회
+ * - 산책 목표 설정
+ * - 산책 목표 조회
+ * - 산책 목표 선택
  */
 @Service
 @RequiredArgsConstructor
@@ -30,33 +40,58 @@ public class WalkService {
     private final WalkActivityRepository walkActivityRepository;
 
     /**
-     * 산책 생성
+     * 산책 시작
      */
     public WalkDto startWalk(String username, WalkDto walkDto) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        // TODO 총 거리, 총 시간, 끝난 시간
+        // 회원 산책 중 여부 확인
+        if (user.isWalking) {
+            throw new WalkException(ErrorCode.WALK_ALREADY_IN_PROGRESS);
+        }
 
+        // TODO 반려동물 산책 그룹
+
+        // TODO 리팩토링
         Walk walk = new Walk();
-//        walk.setUser(user);
+        walk.setUser(user);
         walk.setDistance(0.0);
         walk.setDuration(0.0);
         walk.setStartTime(walkDto.getStartTime());
+        walk.setStatus(WalkStatus.IN_PROGRESS);
         walkRepository.save(walk);
+
+        updateWalkingStatus(user, true);
 
         // Walk Entity를 WalkDto로 변환
         return WalkDto.fromEntity(walk);
     }
 
-    public WalkDto endWalk(Long walkId, WalkDto walkDto) {
+    /**
+     * 산책 종료
+     */
+    public WalkDto endWalk(Long walkId, String username, WalkDto walkDto) {
 
         Walk walk = walkRepository.findById(walkId)
                 .orElseThrow(() -> new WalkNotFoundException(ErrorCode.WALK_NOT_FOUND));
 
-        System.out.println("WALK ID : " + walk.getId());
-        System.out.println("WALK START : " + walk.getStartTime());
-        System.out.println("WALK END : " + walk.getEndTime());
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        // 산책 소유자 확인
+        if (!walk.getUser().getUsername().equals(username)) {
+            throw new WalkAccessDeniedException(ErrorCode.WALK_ACCESS_DENIED);
+        }
+
+        // 종료된 산책 여부 확인
+        if (walk.getStatus() == WalkStatus.TERMINATED) {
+            throw new WalkException(ErrorCode.WALK_ALREADY_TERMINATED);
+        }
+
+//        if (!user.isWalking) {
+//            throw new WalkException(ErrorCode.WALK_ALREADY_NOT_IN_PROGRESS);
+//        }
 
         // TODO 총 거리, 총 시간, 끝난 시간
         // 총 거리 및 총 시간 계산
@@ -66,26 +101,51 @@ public class WalkService {
         walk.setEndTime(walkDto.getEndTime());
         walk.setDistance(calculatedDistance);
         walk.setDuration(calculatedDuration);
+        walk.setStatus(WalkStatus.TERMINATED);
         walkRepository.save(walk);
+
+        updateWalkingStatus(user, false);
 
         // Walk Entity를 WalkDto로 변환
         return WalkDto.fromEntity(walk);
     }
 
+    // 산책 상태 갱신 메서드
+    private void updateWalkingStatus(User user, boolean isWalking) {
+        user.setIsWalking(isWalking);
+        userRepository.save(user);
+    }
+
+    // 산책 거리 계산 메서드
     private double calculateDistance(Walk walk) {
         // TODO 거리 계산 로직
         return 0.0;
     }
 
+    // 산책 시간 계산 메서드
     private double calculateDuration(LocalDateTime startTime, LocalDateTime endTime) {
-        // TODO 시간 계산 로직
         return Duration.between(startTime, endTime).toMinutes();
     }
 
-    public WalkActivityDto logWalkActivity(Long walkId, WalkActivityDto walkActivityDto) {
+    /**
+     * 산책 활동 기록 메서드
+     */
+    public WalkActivityDto logWalkActivity(Long walkId, String username, WalkActivityDto walkActivityDto) {
 
         Walk walk = walkRepository.findById(walkId)
                 .orElseThrow(() -> new WalkNotFoundException(ErrorCode.WALK_NOT_FOUND));
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        // 산책 소유자 확인
+        if (!walk.getUser().getUsername().equals(username)) {
+            throw new WalkAccessDeniedException(ErrorCode.WALK_ACCESS_DENIED);
+        }
+        // 종료된 산책 여부 확인
+        if (walk.getStatus() == WalkStatus.TERMINATED) {
+            throw new WalkException(ErrorCode.WALK_ALREADY_TERMINATED);
+        }
 
         WalkActivity walkActivity = new WalkActivity();
         walkActivity.setWalk(walk);

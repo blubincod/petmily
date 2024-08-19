@@ -28,6 +28,9 @@ public enum ErrorCode {
 
     // Walk
     WALK_NOT_FOUND("존재하지 않는 산책 정보입니다."),
+    WALK_ACCESS_DENIED("해당 산책에 대한 접근 권한이 없습니다."),
+    WALK_ALREADY_IN_PROGRESS("현재 진행 중인 산책이 있습니다."),
+    WALK_ALREADY_TERMINATED("이미 종료된 산책입니다."),
 
     // Other
     DATABASE_CONNECTION_FAILED("데이터베이스 연결에 실패했습니다."),

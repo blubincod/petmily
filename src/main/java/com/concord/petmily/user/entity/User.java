@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,7 @@ import java.util.Collections;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails {
 
     @Id
@@ -48,6 +50,9 @@ public class User implements UserDetails {
     @Column(name = "status", length = 100)
     private Status status;
 
+    @Column(name = "is_walking", nullable = false)
+    public Boolean isWalking = false;  // 산책 중 확인(기본값 false)
+
     @Column(name = "phone", length = 50)
     private String phone;
 
@@ -68,8 +73,9 @@ public class User implements UserDetails {
     private String gender;
 
     @CreatedDate
-    @Column(name = "registered_at")
+    @Column(name = "registered_at", updatable = false)
     private LocalDateTime registeredAt;
+
     @LastModifiedDate
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;

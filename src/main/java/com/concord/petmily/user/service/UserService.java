@@ -39,6 +39,7 @@ public class UserService {
                 .phone(dto.getPhone())
                 .role(Role.USER)  // 기본값 설정
                 .status(Status.ACTIVE)  // 기본값 설정
+                .isWalking(false)
                 .build();
 
         return userRepository.save(user).getId();

@@ -1,6 +1,7 @@
 package com.concord.petmily.walk.dto;
 
 import com.concord.petmily.walk.entity.Walk;
+import com.concord.petmily.walk.entity.WalkStatus;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class WalkDto {
     private double duration; // 산책 총 시간
     private LocalDateTime startTime; // 산책 시작 시간
     private LocalDateTime endTime; // 산책 종료 시간
+    private WalkStatus status; // 산책 진행 상태
 
     // Walk Entity를 WalkDto로 변환하는 메서드
     public static WalkDto fromEntity(Walk walk){
@@ -28,6 +30,7 @@ public class WalkDto {
                 .duration(walk.getDuration())
                 .startTime(walk.getStartTime())
                 .endTime(walk.getEndTime())
+                .status(walk.getStatus())
                 .build();
     }
 }

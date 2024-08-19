@@ -3,6 +3,9 @@ package com.concord.petmily.common.exception;
 import com.concord.petmily.auth.exception.AuthException;
 import com.concord.petmily.user.exception.UserException;
 import com.concord.petmily.user.exception.UserNotFoundException;
+import com.concord.petmily.walk.entity.Walk;
+import com.concord.petmily.walk.exception.WalkAccessDeniedException;
+import com.concord.petmily.walk.exception.WalkException;
 import com.concord.petmily.walk.exception.WalkNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -51,9 +54,8 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
     }
 
-
     /**
-     * WalkException 처리
+     * WalkNotFoundException 처리
      * 산책 정보를 찾을 수 없을 때 사용
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -61,6 +63,26 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleWalkNotFoundException(WalkNotFoundException e) {
         log.error("WalkNotFoundException occurred: {}", e.getErrorCode());
         return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
+    }
+    /**
+     * WalkException 처리
+     * 산책과 관련된 일반적인 에러 상황에서 사용
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(WalkException.class)
+    public ErrorResponse handleUserException(WalkException e) {
+        log.error("WalkException occurred: {}", e.getErrorCode());
+        return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
+    }
+    /**
+     * WalkAccessDeniedException 처리
+     * 사용자가 권한 없이 산책 정보에 접근 시 사용
+     */
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(WalkAccessDeniedException.class)
+    public ErrorResponse handleWalkAccessDeniedException(WalkAccessDeniedException e) {
+        log.error("WalkAccessDeniedException occurred: {}", e.getErrorCode());
+        return new ErrorResponse(e.getErrorCode(), e.getMessage());
     }
 
     /** 기타 예외 처리

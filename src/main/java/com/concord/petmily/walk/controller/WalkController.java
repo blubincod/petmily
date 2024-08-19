@@ -1,6 +1,5 @@
 package com.concord.petmily.walk.controller;
 
-import com.concord.petmily.user.entity.User;
 import com.concord.petmily.walk.dto.WalkActivityDto;
 import com.concord.petmily.walk.dto.WalkDto;
 import com.concord.petmily.walk.service.WalkService;
@@ -16,10 +15,11 @@ import java.util.Map;
 
 /**
  * 산책 관련 컨트롤러
+ * <p>
  * - 산책 위치 기록
  * - 산책 전체 정보 조회
  * - 산책 상세 정보 조회
- * - 산책 목표 설정 (관리자)
+ * - 산책 목표 설정
  * - 산책 목표 조회
  * - 산책 목표 선택
  */
@@ -30,43 +30,54 @@ public class WalkController {
 
     private final WalkService walkService;
 
+    /**
+     * 산책 시작
+     *
+     * @param userDetails 현재 인증된 사용자의 세부 정보
+     * @param walkDto
+     */
     @PostMapping
-    public ResponseEntity<?> startWalk(
+    public ResponseEntity<WalkDto> startWalk(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody WalkDto walkDto
     ) {
         String username = userDetails.getUsername();
-        System.out.println(username);
-
         WalkDto createdWalk = walkService.startWalk(username, walkDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWalk);
     }
 
+    /**
+     * 산책 종료
+     *
+     * @param walkId
+     * @param userDetails
+     * @param walkDto
+     * @return
+     */
     @PutMapping("/{walkId}/end")
-    public ResponseEntity<?> endWalk(
+    public ResponseEntity<WalkDto> endWalk(
             @PathVariable Long walkId,
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody WalkDto walkDto
     ) {
-        System.out.println("**************" + walkId + "***************");
-        WalkDto updatedWalk = walkService.endWalk(walkId, walkDto);
+        String username = userDetails.getUsername();
+        WalkDto updatedWalk = walkService.endWalk(walkId, username, walkDto);
 
         return ResponseEntity.ok(updatedWalk);
     }
 
     /**
-     * 산책 활동 저장
-     *
-     * @param
-     * @return 생성된 게시물의 정보와 HTTP 200 상태를 반환
+     * 산책 활동 기록
      */
     @PostMapping("/{walkId}/activities")
     public ResponseEntity<Map<String, Object>> logWalkActivity(
             @PathVariable Long walkId,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody WalkActivityDto walkActivityDto
     ) {
-        WalkActivityDto savedWalkActivity = walkService.logWalkActivity(walkId, walkActivityDto);
+        String username = userDetails.getUsername();
+        WalkActivityDto savedWalkActivity = walkService.logWalkActivity(walkId, username, walkActivityDto);
 
         Map<String, Object> response = new HashMap<>();
 
@@ -77,8 +88,6 @@ public class WalkController {
 
     /**
      * 산책 기록 목록 조회
-     *
-     * @return
      */
     @GetMapping
     public ResponseEntity<?> getMyWalks() {

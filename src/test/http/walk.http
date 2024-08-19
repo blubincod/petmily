@@ -1,6 +1,11 @@
+# Walk 테스트
+
+### AccessToken
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MDYxNDczLCJleHAiOjE3MjQwNjUwNzMsInN1YiI6ImFiYzEifQ.pCZhaWFJZrGIj2biCJl0adLxFtspplca7AKIIvyygCs
+
 ### 산책 시작
 POST http://localhost:8080/api/v1/walks
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MDUwODA1LCJleHAiOjE3MjQwNTQ0MDUsInN1YiI6ImFiYzEifQ.QNz2I-WXr1WEr0g8mh_7RSdNrP-aDoFH1zORt6caHVA
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
@@ -9,43 +14,47 @@ Content-Type: application/json
 
 ### 산책 종료
 PUT http://localhost:8080/api/v1/walks/1/end
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MDUwODA1LCJleHAiOjE3MjQwNTQ0MDUsInN1YiI6ImFiYzEifQ.QNz2I-WXr1WEr0g8mh_7RSdNrP-aDoFH1zORt6caHVA
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "endTime": "2024-08-10T13:00:00Z"
+  "endTime": "2024-08-10T13:00:00Z",
+  "distance": 5.2
+
 }
 
 ### 활동 전송 - 대변
 POST http://localhost:8080/api/v1/walks/1/activities
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MDUwODA1LCJleHAiOjE3MjQwNTQ0MDUsInN1YiI6ImFiYzEifQ.QNz2I-WXr1WEr0g8mh_7RSdNrP-aDoFH1zORt6caHVA
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
   "latitude": 37.7749,
   "longitude": 122.4194,
   "activity": "POOP",
-  "timestamp": "2024-08-10T12:00:00Z"
+  "timestamp": "2024-08-10T12:10:00Z"
 }
 
 ### 활동 전송 - 소변
 POST http://localhost:8080/api/v1/walks/1/activities
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
   "latitude": 37.7749,
   "longitude": 122.4194,
   "activity": "PEE",
-  "timestamp": "2024-08-10T12:00:00Z"
+  "timestamp": "2024-08-10T12:20:00Z"
 }
 
 ### 활동 전송 - 수분 섭취
 POST http://localhost:8080/api/v1/walks/1/activities
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
   "latitude": 37.7749,
   "longitude": 122.4194,
   "activity": "WATER",
-  "timestamp": "2024-08-10T12:00:00Z"
+  "timestamp": "2024-08-10T12:30:00Z"
 }
