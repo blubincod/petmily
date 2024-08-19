@@ -14,9 +14,11 @@ import java.io.IOException;
 
 /**
  * 클라이언트 요청 시 JWT 토큰을 처리하는 필터
+ * - 클라이언트 요청이 들어올 때마다 실행
+ * - 요청에 포함된 JWT를 검증하고, 인증 정보를 설정
  */
 @RequiredArgsConstructor
-public class TokenAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final TokenProvider tokenProvider;
 
     private final static String HEADER_AUTHORIZATION = "Authorization";
@@ -44,12 +46,19 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
      * @param authorizationHeader Authorization 헤더 값
      * @return 추출된 액세스 토큰
      */
-
     private String getAccessToken(String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
             return authorizationHeader.substring(TOKEN_PREFIX.length());
         }
 
+        return null;
+    }
+
+    private String getJwtFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
         return null;
     }
 }

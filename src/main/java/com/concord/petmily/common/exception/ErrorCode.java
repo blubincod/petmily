@@ -26,6 +26,13 @@ public enum ErrorCode {
     PET_NOT_FOUND("존재하지 않는 반려동물입니다."),
     PET_ALREADY_REGISTERED("이 반려동물은 이미 등록되어 있습니다."),
 
+
+    // Walk
+    WALK_NOT_FOUND("존재하지 않는 산책 정보입니다."),
+    WALK_ACCESS_DENIED("해당 산책에 대한 접근 권한이 없습니다."),
+    WALK_ALREADY_IN_PROGRESS("현재 진행 중인 산책이 있습니다."),
+    WALK_ALREADY_TERMINATED("이미 종료된 산책입니다."),
+
     // Post
     POST_NOT_FOUND("존재하지 않는 게시물입니다."),
     POST_CATEGORY_NOT_FOUND("존재하지 않는 게시물 카테고리입니다."),
@@ -39,6 +46,7 @@ public enum ErrorCode {
     // Likes
     LIKES_ALREADY_EXISTS("이미 좋아요 되어있는 게시물입니다."),
     LIKES_NOT_FOUND("좋아요 되어있지 않은 게시물입니다."),
+
 
     // Other
     DATABASE_CONNECTION_FAILED("데이터베이스 연결에 실패했습니다."),

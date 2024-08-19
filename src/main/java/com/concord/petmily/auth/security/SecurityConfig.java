@@ -1,5 +1,6 @@
 package com.concord.petmily.auth.security;
 
+import com.concord.petmily.auth.service.TokenProvider;
 import com.concord.petmily.user.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
@@ -25,6 +27,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 public class SecurityConfig {
 
     private final UserDetailService userService;
+    private final TokenProvider tokenProvider;
 
     /**
      * WebSecurity에 대한 커스터마이징
@@ -46,9 +49,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // Cross-Site Request Forgery 보호를 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 생성하지 않는 상태 없는(stateless) 정책을 설정
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/**").permitAll()// FIXME 원활한 개발활경을위한 모든경로 접근 허용
-                        .requestMatchers("/", "/login", "/users/signup", "/api/v1/users/signup").permitAll() // 인증 없이 접근 허용
-                        .anyRequest().authenticated() // 나머지 요청은 인증 필요
+//                        .requestMatchers("/**").permitAll()// FIXME 원활한 개발활경을위한 모든경로 접근 허용
+                                .requestMatchers("/", "/login", "/api/v1/users/signup", "/api/v1/users/login").permitAll() // 인증 없이 접근 허용
+                                .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
                 .formLogin(customizer -> customizer
                         .loginPage("/login")
@@ -57,6 +60,10 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
+                )
+                .addFilterBefore(
+                        new JwtAuthenticationFilter(tokenProvider),
+                        UsernamePasswordAuthenticationFilter.class
                 )
                 .build();
     }

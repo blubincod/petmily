@@ -1,60 +1,108 @@
 package com.concord.petmily.walk.controller;
 
-import com.concord.petmily.walk.dto.WalkLocationDto;
+import com.concord.petmily.walk.dto.WalkActivityDto;
+import com.concord.petmily.walk.dto.WalkDto;
+import com.concord.petmily.walk.service.WalkService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 산책 관련 컨트롤러
+ * <p>
  * - 산책 위치 기록
  * - 산책 전체 정보 조회
  * - 산책 상세 정보 조회
- * - 산책 목표 설정 - 관리자
+ * - 산책 목표 설정
  * - 산책 목표 조회
  * - 산책 목표 선택
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/walks")
 public class WalkController {
+
+    private final WalkService walkService;
+
     /**
-     * 산책 위치(위도, 경도, 측정된 시간) 저장
+     * 산책 시작
      *
-     * @param
-     * @return 생성된 게시물의 정보와 HTTP 200 상태를 반환
+     * @param userDetails 현재 인증된 사용자의 세부 정보
+     * @param walkDto
      */
-    @PostMapping("/location")
-    public ResponseEntity<Map<String, Object>> saveLocation(@RequestBody WalkLocationDto location) {
-        System.out.println("Received location: " + location.getLatitude() + location.getLongitude());
+    @PostMapping
+    public ResponseEntity<WalkDto> startWalk(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody WalkDto walkDto
+    ) {
+        String username = userDetails.getUsername();
+        WalkDto createdWalk = walkService.startWalk(username, walkDto);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "Location received successfully");
-        response.put("timestamp", LocalDateTime.now());
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdWalk);
     }
 
     /**
-     * 산책 목록 조회
+     * 산책 종료
      *
+     * @param walkId
+     * @param userDetails
+     * @param walkDto
      * @return
      */
+    @PutMapping("/{walkId}/end")
+    public ResponseEntity<WalkDto> endWalk(
+            @PathVariable Long walkId,
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody WalkDto walkDto
+    ) {
+        String username = userDetails.getUsername();
+        WalkDto updatedWalk = walkService.endWalk(walkId, username, walkDto);
+
+        return ResponseEntity.ok(updatedWalk);
+    }
+
+    /**
+     * 산책 활동 기록
+     */
+    @PostMapping("/{walkId}/activities")
+    public ResponseEntity<Map<String, Object>> logWalkActivity(
+            @PathVariable Long walkId,
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody WalkActivityDto walkActivityDto
+    ) {
+        String username = userDetails.getUsername();
+        WalkActivityDto savedWalkActivity = walkService.logWalkActivity(walkId, username, walkActivityDto);
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("activity", savedWalkActivity);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    /**
+     * 산책 기록 목록 조회
+     */
     @GetMapping
-    public ResponseEntity<?> getAllWalks() {
+    public ResponseEntity<?> getMyWalks() {
         // TODO 산책 목록 조회 로직
         return ResponseEntity.ok(null);
     }
 
     /**
-     * 산책 정보 조회
+     * 산책 상세 정보 조회
      *
      * @return
      */
     @GetMapping("/{walkId}")
-    public ResponseEntity<?> getWalkDetail() {
+    public ResponseEntity<?> getMyWalk(
+            @PathVariable String walkId) {
         // TODO 산책 정보 조회 로직
         return ResponseEntity.ok(null);
     }
@@ -73,6 +121,7 @@ public class WalkController {
 
     /**
      * 산책 목표 목록 조회
+     *
      * @return
      */
     @GetMapping("/goals")
@@ -83,12 +132,14 @@ public class WalkController {
 
     /**
      * 산책 목표 선택
+     *
      * @param userId
      * @param goalId
      * @return
      */
-    @PostMapping("/goals/{goadId}")
-    public ResponseEntity<Void> selectWalkGoal(@RequestParam Long userId, @RequestParam Long goalId) {
+    @PostMapping("/goals/{goalId}")
+    public ResponseEntity<Void> selectWalkGoal(
+            @RequestParam Long userId, @PathVariable Long goalId) {
         // TODO 사용자가 산책 목표를 선택하는 로직
         return ResponseEntity.ok(null);
     }

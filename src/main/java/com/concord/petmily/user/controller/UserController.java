@@ -28,7 +28,8 @@ public class UserController {
      */
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody AddUserRequest addUserRequest) {
-        Long userId = userService.save(addUserRequest);
+        Long userId = userService.registerUser(addUserRequest);
+
         return new ResponseEntity<>(Map.of("userId", userId), HttpStatus.CREATED);
     }
 
@@ -39,13 +40,10 @@ public class UserController {
      * @return
      */
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getUserById(@PathVariable String userId) {
-        try {
-            Long id = Long.parseLong(userId);
-            User user = userService.findById(id);
-            return ResponseEntity.ok(user);
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().body("잘못된 유저 아이디 형식입니다");
-        }
+    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
+        Long id = userId;
+        User user = userService.findById(id);
+
+        return ResponseEntity.ok(user);
     }
 }
