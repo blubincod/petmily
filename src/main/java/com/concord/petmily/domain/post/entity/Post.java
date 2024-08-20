@@ -2,7 +2,9 @@ package com.concord.petmily.domain.post.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "post")
@@ -43,15 +45,17 @@ public class Post extends BaseTimeEntity{
     @Column(name = "content_image_path", length = 100)
     private String imagePath;
 
+    // 해시태그
+    @OneToMany(mappedBy = "post")
+    private Set<PostHashtag> hashtags = new HashSet<>();
+
     // 조회수
-    @ColumnDefault("0")
     @Column(name = "view_count")
-    private Integer viewCount;
+    private int viewCount;
 
     // 좋아요 수
-    @ColumnDefault("0")
     @Column(name = "like_count")
-    private Integer likeCount;
+    private int likeCount;
 
     // 상태 (공개, 삭제)
     @Column(name = "status")

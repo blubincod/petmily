@@ -1,7 +1,7 @@
-package com.concord.petmily.domain.likes.controller;
+package com.concord.petmily.likes.controller;
 
-import com.concord.petmily.domain.likes.dto.LikesDto;
-import com.concord.petmily.domain.likes.service.LikesService;
+import com.concord.petmily.likes.dto.LikesDto;
+import com.concord.petmily.likes.service.LikesServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class LikesController {
 
-    private final LikesService likesService;
+    private final LikesServiceImpl likesServiceImpl;
 
     /**
      * 좋아요
@@ -19,8 +19,8 @@ public class LikesController {
      * @return HTTP 201 상태를 반환
      */
     @PostMapping
-    public ResponseEntity<?> insert (@RequestBody LikesDto dto) throws Exception {
-        likesService.insert(dto);
+    public ResponseEntity<?> createLikes(@RequestBody LikesDto dto) {
+        likesServiceImpl.createLikes(dto);
         return ResponseEntity.status(201).body("좋아요 성공");
     }
 
@@ -30,8 +30,8 @@ public class LikesController {
      * @return HTTP 204 상태를 반환
      */
     @DeleteMapping
-    public ResponseEntity<?> delete (@RequestBody LikesDto dto) {
-        likesService.delete(dto);
+    public ResponseEntity<?> deleteLikes(@RequestBody LikesDto dto) {
+        likesServiceImpl.deleteLikes(dto);
         return ResponseEntity.status(204).body(null);
     }
 

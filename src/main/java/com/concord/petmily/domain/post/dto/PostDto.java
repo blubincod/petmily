@@ -1,13 +1,13 @@
-package com.concord.petmily.domain.post.dto;
+package com.concord.petmily.post.dto;
 
-import com.concord.petmily.domain.post.entity.Post;
-import com.concord.petmily.domain.post.entity.PostCategory;
-import com.concord.petmily.domain.post.entity.PostStatus;
+import com.concord.petmily.post.entity.Post;
+import com.concord.petmily.post.entity.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * 게시물 데이터 전송 객체
@@ -25,6 +25,7 @@ public class PostDto {
         private String title;
         private String content;
         private String imagePath;
+        private Set<String> hashtagNames;
         private PostStatus postStatus;
 
         public Post toEntity() {
@@ -45,11 +46,12 @@ public class PostDto {
     public static class Response {
         private Long id;
         private Long userId;
-        private PostCategory postCategory;
+        private String categoryName;
         private String thumbnailPath;
         private String title;
         private String content;
         private String imagePath;
+        private Set<String> hashtagNames;
         private Integer viewCount;
         private Integer likeCount;
         private PostStatus postStatus;
@@ -59,7 +61,7 @@ public class PostDto {
         public Response(Post post) {
             this.id = post.getId();
             this.userId = post.getUserId();
-            this.postCategory = post.getPostCategory();
+            this.categoryName = post.getPostCategory().getCategoryName();
             this.thumbnailPath = post.getThumbnailPath();
             this.title = post.getTitle();
             this.content = post.getContent();
@@ -69,6 +71,25 @@ public class PostDto {
             this.postStatus = post.getPostStatus();
             this.createdAt = post.getCreatedAt();
             this.updatedAt = post.getUpdatedAt();
+        }
+    }
+
+    @Data
+    public static class ResponseGetPosts {
+        private Long id;
+        private Long userId;
+        private String categoryName;
+        private String thumbnailPath;
+        private String title;
+        private PostStatus postStatus;
+
+        public ResponseGetPosts(Post post) {
+            this.id = post.getId();
+            this.userId = post.getUserId();
+            this.categoryName = post.getPostCategory().getCategoryName();
+            this.thumbnailPath = post.getThumbnailPath();
+            this.title = post.getTitle();
+            this.postStatus = post.getPostStatus();
         }
     }
 }
