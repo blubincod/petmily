@@ -22,7 +22,7 @@ public class DiseaseService {
 
   private final DiseaseRepository diseaseRepository;
 
-
+  // TODO 설명을 위한 주석 달기
   public void createDisease(Create request) {
 
     if (diseaseRepository.findByName(request.getName()).isPresent()){

@@ -3,6 +3,7 @@ package com.concord.petmily.pet.controller;
 import com.concord.petmily.pet.dto.PetDto;
 import com.concord.petmily.pet.entity.Pet;
 import com.concord.petmily.pet.service.PetService;
+import com.concord.petmily.pet.service.PetServiceImpl;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
