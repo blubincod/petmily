@@ -1,14 +1,14 @@
 package com.concord.petmily.common.exception;
 
-import com.concord.petmily.auth.exception.AuthException;
-import com.concord.petmily.comment.exception.CommentException;
-import com.concord.petmily.likes.exception.LikesException;
-import com.concord.petmily.post.exception.PostException;
-import com.concord.petmily.user.exception.UserException;
-import com.concord.petmily.user.exception.UserNotFoundException;
-import com.concord.petmily.walk.exception.WalkAccessDeniedException;
-import com.concord.petmily.walk.exception.WalkException;
-import com.concord.petmily.walk.exception.WalkNotFoundException;
+import com.concord.petmily.domain.auth.exception.AuthException;
+import com.concord.petmily.domain.comment.exception.CommentException;
+import com.concord.petmily.domain.likes.exception.LikesException;
+import com.concord.petmily.domain.post.exception.PostException;
+import com.concord.petmily.domain.user.exception.UserException;
+import com.concord.petmily.domain.user.exception.UserNotFoundException;
+import com.concord.petmily.domain.walk.exception.WalkAccessDeniedException;
+import com.concord.petmily.domain.walk.exception.WalkException;
+import com.concord.petmily.domain.walk.exception.WalkNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

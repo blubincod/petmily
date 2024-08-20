@@ -1,7 +1,7 @@
 package com.concord.petmily.walk;
 
-import com.concord.petmily.walk.controller.WalkController;
-import com.concord.petmily.walk.service.WalkServiceImpl;
+import com.concord.petmily.domain.walk.controller.WalkController;
+import com.concord.petmily.domain.walk.service.WalkServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
