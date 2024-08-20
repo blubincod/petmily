@@ -6,7 +6,7 @@ import com.concord.petmily.auth.entity.RefreshToken;
 import com.concord.petmily.auth.service.RefreshTokenService;
 import com.concord.petmily.auth.service.TokenProvider;
 import com.concord.petmily.user.entity.User;
-import com.concord.petmily.user.service.UserService;
+import com.concord.petmily.user.service.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -30,7 +30,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private final RefreshTokenService refreshTokenService;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     /**
      * 로그인

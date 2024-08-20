@@ -3,6 +3,7 @@ package com.concord.petmily.user.controller;
 import com.concord.petmily.user.dto.AddUserRequest;
 import com.concord.petmily.user.entity.User;
 import com.concord.petmily.user.service.UserService;
+import com.concord.petmily.user.service.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
