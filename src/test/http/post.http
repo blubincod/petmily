@@ -2,86 +2,125 @@
 
 ### 게시물 등록
 POST http://localhost:8080/api/v1/posts
-Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="dto"
+Content-type: application/json
 
 {
-  "userId": 1,
   "categoryId": 1,
-  "thumbnailPath": "abc",
-  "title": "abc",
-  "content": "abc",
-  "imagePath": "abc",
+  "title": "before",
+  "content": "before",
+  "hashtagNames": ["#강아지", "#사료"],
   "postStatus": "PUBLIC"
 }
 
+--boundary
+Content-Disposition: form-data; name="files"; filename="image1.png"
+Content-Type: image/png
+
+C:\\image1.png
+
+--boundary
+Content-Disposition: form-data; name="files"; filename="image2.png"
+Content-Type: image/png
+
+C:\\image2.png
+
+--boundary--
+
 ### 게시물 전체 조회 (카테고리별)
 GET http://localhost:8080/api/v1/posts?categoryId=1&page=0&size=5
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
+Content-Type: application/json
+
+### 게시물 전체 조회 (해시태그별)
+GET http://localhost:8080/api/v1/posts?hashtagName=#강아지&page=0&size=5
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
+Content-Type: application/json
+
+### 게시물 전체 조회 (카테고리 & 해시태그별)
+GET http://localhost:8080/api/v1/posts?categoryId=1&hashtagName=#강아지&page=0&size=5
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
 Content-Type: application/json
 
 ### 게시물 정보 조회
 GET http://localhost:8080/api/v1/posts/1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
 Content-Type: application/json
 
 ### 게시물 수정
 PUT http://localhost:8080/api/v1/posts/1
-Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="dto"
+Content-type: application/json
 
 {
-  "userId": 1,
   "categoryId": 3,
-  "thumbnailPath": "abcd",
-  "title": "abcd",
-  "content": "abcd",
-  "imagePath": "abcd",
+  "title": "after",
+  "content": "after",
+  "hashtagNames": ["#고양이", "#사료"],
   "postStatus": "PUBLIC"
 }
 
+--boundary
+Content-Disposition: form-data; name="files"; filename="image1.png"
+Content-Type: image/png
+
+C:\\image1.png
+
+--boundary--
+
 ### 게시물 삭제
 DELETE http://localhost:8080/api/v1/posts/1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
+Content-Type: application/json
+
+### 전체 해시태그 조회
+GET http://localhost:8080/api/v1/posts/hashtags
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
 Content-Type: application/json
 
 
 # comment 테스트
 ### 댓글 등록
 POST http://localhost:8080/api/v1/posts/1/comment
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
 Content-Type: application/json
 
 {
-  "userId": 1,
   "parentId": null,
   "content": "댓글등록"
 }
 
 ### 댓글 수정
 PUT http://localhost:8080/api/v1/posts/comment/1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
 Content-Type: application/json
 
 {
-  "userId": 2,
   "parentId": null,
   "content": "댓글수정"
 }
 
 ### 댓글 삭제
 DELETE http://localhost:8080/api/v1/posts/comment/1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
 Content-Type: application/json
 
 
 # likes 테스트
 ### 좋아요 등록
-POST http://localhost:8080/api/vi/posts/likes
+POST http://localhost:8080/api/vi/posts/likes/1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
 Content-Type: application/json
-
-{
-  "userId": 1,
-  "postId": 1
-}
 
 ### 좋아요 삭제
-DELETE http://localhost:8080/api/vi/posts/likes
+DELETE http://localhost:8080/api/vi/posts/likes/1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjI4OTM3LCJleHAiOjE3MjQyMzI1MzcsInN1YiI6ImFiYzEifQ.PUWk0RV_qQv8tuA9swt88P_X1zyc38R4X-CR0j9JNmQ
 Content-Type: application/json
-
-{
-  "userId": 1,
-  "postId": 1
-}

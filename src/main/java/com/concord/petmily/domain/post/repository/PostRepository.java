@@ -6,11 +6,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Set;
+
 /**
  * 게시물 저장소 인터페이스
  * 데이터베이스와의 CRUD 작업을 처리
  */
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
+
     Page<Post> findByPostCategoryId(Long categoryId, Pageable pageable);
+    Page<Post> findByIdIn(Set<Long> postIds, Pageable pageable);
+    Page<Post> findByPostCategoryIdAndIdIn(Long categoryId, Set<Long> postIds, Pageable pageable);
+
 }
