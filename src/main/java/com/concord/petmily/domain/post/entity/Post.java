@@ -1,8 +1,13 @@
 package com.concord.petmily.domain.post.entity;
 
+import com.concord.petmily.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "post")
@@ -18,9 +23,9 @@ public class Post extends BaseTimeEntity{
     private Long id;
 
     // 회원번호
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     // 카테고리 아이디
     @ManyToOne
@@ -28,7 +33,7 @@ public class Post extends BaseTimeEntity{
     private PostCategory postCategory;
 
     // 썸네일 경로
-    @Column(name = "thumbnail_path", length = 50)
+    @Column(name = "thumbnail_path", length = 255)
     private String thumbnailPath;
 
     // 제목
@@ -40,18 +45,21 @@ public class Post extends BaseTimeEntity{
     private String content;
 
     // 게시물 사진 경로
-    @Column(name = "content_image_path", length = 100)
-    private String imagePath;
+    @ElementCollection
+    @CollectionTable(name = "post_images", joinColumns = @JoinColumn(name = "post_id"))
+    private List<String> imagePaths = new ArrayList<>();
+
+    // 해시태그
+    @OneToMany(mappedBy = "post")
+    private Set<PostHashtag> hashtags = new HashSet<>();
 
     // 조회수
-    @ColumnDefault("0")
     @Column(name = "view_count")
-    private Integer viewCount;
+    private int viewCount;
 
     // 좋아요 수
-    @ColumnDefault("0")
     @Column(name = "like_count")
-    private Integer likeCount;
+    private int likeCount;
 
     // 상태 (공개, 삭제)
     @Column(name = "status")

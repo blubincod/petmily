@@ -37,6 +37,9 @@ public enum ErrorCode {
     POST_NOT_FOUND("존재하지 않는 게시물입니다."),
     POST_CATEGORY_NOT_FOUND("존재하지 않는 게시물 카테고리입니다."),
     POST_ALREADY_DELETED("이미 삭제된 게시물입니다."),
+    HASHTAG_NOT_FOUND("해시태그가 존재하지 않습니다."),
+    FILE_SAVE_FAILED("이미지 저장에 실패했습니다."),
+    USER_POST_UNMATCHED("사용자와 게시물 작성자가 다릅니다."),
 
     // Comment
     COMMENT_NOT_FOUND("존재하지 않는 댓글입니다."),
