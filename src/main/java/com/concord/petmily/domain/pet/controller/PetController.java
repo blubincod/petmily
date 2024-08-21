@@ -91,4 +91,13 @@ public class PetController {
 
     return ResponseEntity.status(204).body("반려 동물 정보 삭제 완료"); // 204 No Content 반환
   }
+
+  /**
+   * 반려동물의 전체 산책 기록 조회
+   */
+  @GetMapping("/{petId}/walks")
+  public ResponseEntity<?> getPetWalks(PathVariable petId) {
+    // TODO 전체 산책 기록 조회 로직
+    return ResponseEntity.ok(null);
+  }
 }

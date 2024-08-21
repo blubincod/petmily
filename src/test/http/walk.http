@@ -1,7 +1,7 @@
 # Walk 테스트
 
 ### AccessToken
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MTM3Mjc1LCJleHAiOjE3MjQxNDA4NzUsInN1YiI6ImFiYzEifQ.OHiQ1jL2guKXbKIY5zwKwEGCcI-kL-ZzpawEb9uWkHY
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjUwNjEwLCJleHAiOjE3MjQyNTQyMTAsInN1YiI6ImtpbWp1bjkxIn0.4Qn6aDX7Hw-R40NzdhKvLGIAC7_vzAfom4R2iOskAa8
 
 ### 로그인 요청
 POST http://localhost:8080/api/v1/users/login
@@ -10,15 +10,6 @@ Content-Type: application/json
 {
   "username": "kimjun91",
   "password": "kim123"
-}
-
-### 로그인 요청
-POST http://localhost:8080/api/v1/users/login
-Content-Type: application/json
-
-{
-  "username": "parkhyun89",
-  "password": "park123"
 }
 
 ### 산책 시작

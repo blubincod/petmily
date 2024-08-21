@@ -1,11 +1,12 @@
 package com.concord.petmily.domain.walk.service;
 
 import com.concord.petmily.common.exception.ErrorCode;
-import com.concord.petmily.domain.user.exception.UserNotFoundException;
-import com.concord.petmily.domain.walk.dto.WalkDto;
+import com.concord.petmily.domain.pet.entity.Pet;
 import com.concord.petmily.domain.user.entity.User;
+import com.concord.petmily.domain.user.exception.UserNotFoundException;
 import com.concord.petmily.domain.user.repository.UserRepository;
 import com.concord.petmily.domain.walk.dto.WalkActivityDto;
+import com.concord.petmily.domain.walk.dto.WalkDto;
 import com.concord.petmily.domain.walk.entity.Walk;
 import com.concord.petmily.domain.walk.entity.WalkActivity;
 import com.concord.petmily.domain.walk.entity.WalkGoal;
@@ -21,6 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 산책 관련 서비스
@@ -34,18 +38,31 @@ import java.time.LocalDateTime;
  */
 @Service
 @RequiredArgsConstructor
-public class WalkServiceImpl implements WalkService{
+public class WalkServiceImpl implements WalkService {
 
     private final UserRepository userRepository;
     private final WalkRepository walkRepository;
     private final WalkActivityRepository walkActivityRepository;
 
-    /**
-     * 산책 시작
-     */
-    public WalkDto startWalk(String username, WalkDto walkDto) {
+    // User 엔티티를 조회
+    private User getUser(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        return user;
+    }
+
+    // User 산책 엔티티를 조회
+    private Walk getWalk(Long walkId) {
+        Walk walk = walkRepository.findById(walkId)
+                .orElseThrow(() -> new WalkNotFoundException(ErrorCode.WALK_NOT_FOUND));
+        return walk;
+    }
+
+    /**
+     * 산책 시작 및 산책 정보 기록
+     */
+    public WalkDto startWalk(String username, WalkDto walkDto) {
+        User user = getUser(username);
 
         // 회원 산책 중 여부 확인
         if (user.isWalking) {
@@ -53,7 +70,6 @@ public class WalkServiceImpl implements WalkService{
         }
 
         // TODO 반려동물 산책 그룹
-
 
         // TODO 리팩토링
         Walk walk = new Walk();
@@ -69,16 +85,14 @@ public class WalkServiceImpl implements WalkService{
     }
 
     /**
-     * 산책 종료
+     * 산책 종료 및 산책 정보 기록
      */
     @Transactional
     public WalkDto endWalk(Long walkId, String username, WalkDto walkDto) {
 
-        Walk walk = walkRepository.findById(walkId)
-                .orElseThrow(() -> new WalkNotFoundException(ErrorCode.WALK_NOT_FOUND));
+        Walk walk = getWalk(walkId);
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        User user = getUser(username);
 
         // 산책 소유자 확인
         if (!walk.getUser().getUsername().equals(username)) {
@@ -90,11 +104,6 @@ public class WalkServiceImpl implements WalkService{
             throw new WalkException(ErrorCode.WALK_ALREADY_TERMINATED);
         }
 
-//        if (!user.isWalking) {
-//            throw new WalkException(ErrorCode.WALK_ALREADY_NOT_IN_PROGRESS);
-//        }
-
-        // TODO 총 거리, 총 시간, 끝난 시간
         // 총 거리 및 총 시간 계산
         double calculatedDistance = calculateDistance(walk);
         double calculatedDuration = calculateDuration(walk.getStartTime(), walkDto.getEndTime());
@@ -129,15 +138,13 @@ public class WalkServiceImpl implements WalkService{
     }
 
     /**
-     * 산책 활동 기록 메서드
+     * 산책 활동 기록
      */
     public WalkActivityDto logWalkActivity(Long walkId, String username, WalkActivityDto walkActivityDto) {
 
-        Walk walk = walkRepository.findById(walkId)
-                .orElseThrow(() -> new WalkNotFoundException(ErrorCode.WALK_NOT_FOUND));
+        Walk walk = getWalk(walkId);
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        User user = getUser(username);
 
         // 산책 소유자 확인
         if (!walk.getUser().getUsername().equals(username)) {
@@ -150,6 +157,7 @@ public class WalkServiceImpl implements WalkService{
 
         WalkActivity walkActivity = new WalkActivity();
         walkActivity.setWalk(walk);
+        walkActivity.setType(walkActivityDto.getActivity());
         walkActivity.setLatitude(walkActivityDto.getLatitude());
         walkActivity.setLongitude(walkActivityDto.getLongitude());
         walkActivity.setTimestamp(walkActivityDto.getTimestamp());
@@ -159,16 +167,34 @@ public class WalkServiceImpl implements WalkService{
     }
 
     /**
-     * 산책 정보 전체 조회
+     * 회원의 모든 반려동물의 산책 기록 조회
      */
-    public void getWalks() {
+    public List<WalkDto> getUserPetsWalks(String username){
 
+        User user = getUser(username);
+
+        List<Walk> walkList = walkRepository.findByUserId(user.getId());
+
+        // Walk 엔티티 리스트를 WalkDto 리스트로 변환
+        List<WalkDto> walkDtoList = walkList.stream()
+                .map(WalkDto::fromEntity) // 각 Walk 엔티티를 WalkDto로 변환
+                .collect(Collectors.toList());
+
+        return walkDtoList;
     }
 
     /**
-     * 산책 정보 조회
+     * 반려동물의 전체 산책 기록 조회
      */
-    public void getWalk() {
+    public void getPetWalks(Long petId) {
+
+        List<Walk> walks = walkRepository.findByUserId(petId);
+    }
+
+    /**
+     * 반려동물의 특정 산책 정보 조회
+     */
+    public void getPetWalk(Pet pet) {
 
     }
 

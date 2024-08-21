@@ -11,7 +11,7 @@ import java.io.Serializable;
  * - 두 엔티티의 식별자를 조합하여 기본 키로 사용하는 경우에 필요.
  */
 @Embeddable
-public class WalkGroupId implements Serializable {
+public class WalkingPetId implements Serializable {
     private Long petId;
     private Long walkId;
 }
