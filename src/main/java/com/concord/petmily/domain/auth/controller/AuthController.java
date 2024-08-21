@@ -6,14 +6,15 @@ import com.concord.petmily.domain.auth.entity.RefreshToken;
 import com.concord.petmily.domain.auth.service.RefreshTokenService;
 import com.concord.petmily.domain.auth.service.TokenProvider;
 import com.concord.petmily.domain.user.entity.User;
-import com.concord.petmily.domain.user.service.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,6 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private final RefreshTokenService refreshTokenService;
-    private final UserServiceImpl userServiceImpl;
 
     /**
      * 로그인
@@ -40,22 +40,25 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
-        );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = (User) authentication.getPrincipal();
-        String accessToken = tokenProvider.generateToken(user, Duration.ofHours(1)); // 액세스 토큰 만료 시간 설정
-//        String accessToken = tokenProvider.generateToken(user, Duration.ofMillis(1)); // 액세스 토큰 만료 시간 설정 테스트
-        String refreshToken = tokenProvider.generateToken(user, Duration.ofDays(1)); // 리프레시 토큰 만료 시간 설정
-//        String refreshToken = tokenProvider.generateToken(user, Duration.ofMillis(2)); // 리프레시 토큰 만료 시간 설정 테스트
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            );
 
-        // 리프레시 토큰을 데이터베이스에 저장
-        RefreshToken token = new RefreshToken(user.getUsername(), refreshToken);
-        refreshTokenService.save(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            User user = (User) authentication.getPrincipal();
+            String accessToken = tokenProvider.generateToken(user, Duration.ofHours(1));
+            String refreshToken = tokenProvider.generateToken(user, Duration.ofDays(1));
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(accessToken, refreshToken));
+            RefreshToken token = new RefreshToken(user.getUsername(), refreshToken);
+            refreshTokenService.save(token);
+
+            return ResponseEntity.ok(new JwtAuthenticationResponse(accessToken, refreshToken));
+        } catch (AuthenticationException e) {
+            // 인증 실패 시의 처리
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 혹은 비밀번호가 유효하지 않습니다.");
+        }
     }
 
     /**

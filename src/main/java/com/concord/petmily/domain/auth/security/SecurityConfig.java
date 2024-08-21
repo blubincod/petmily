@@ -73,11 +73,13 @@ public class SecurityConfig {
      */
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
+
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder
                 .userDetailsService(userService)
                 .passwordEncoder(bCryptPasswordEncoder); // 해당 비밀번호 인코더로 비밀번호 해싱
+
         return authenticationManagerBuilder.build();
     }
 

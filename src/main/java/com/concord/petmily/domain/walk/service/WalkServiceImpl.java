@@ -17,6 +17,7 @@ import com.concord.petmily.domain.walk.repository.WalkActivityRepository;
 import com.concord.petmily.domain.walk.repository.WalkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -53,11 +54,10 @@ public class WalkServiceImpl implements WalkService{
 
         // TODO 반려동물 산책 그룹
 
+
         // TODO 리팩토링
         Walk walk = new Walk();
         walk.setUser(user);
-        walk.setDistance(0.0);
-        walk.setDuration(0.0);
         walk.setStartTime(walkDto.getStartTime());
         walk.setStatus(WalkStatus.IN_PROGRESS);
         walkRepository.save(walk);
@@ -71,6 +71,7 @@ public class WalkServiceImpl implements WalkService{
     /**
      * 산책 종료
      */
+    @Transactional
     public WalkDto endWalk(Long walkId, String username, WalkDto walkDto) {
 
         Walk walk = walkRepository.findById(walkId)
