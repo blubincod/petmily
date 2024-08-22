@@ -1,7 +1,7 @@
 # Walk 테스트
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0Mjg1MDMyLCJleHAiOjE3MjQyODg2MzIsInN1YiI6ImtpbWp1bjkxIn0.5RR-R1f38dajVr70U5HowddMVMK0LSaJ6oD4xBJ9wZY
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MzE2MjkxLCJleHAiOjE3MjQzMTk4OTEsInN1YiI6ImtpbWp1bjkxIn0.bnFPtck2fbzHxlanREqv0Akv9xbAHHMjRo3-WP8PtSM
 @walkId = 19
 
 ### 로그인 요청
@@ -19,7 +19,7 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "petIds" :  [1,2,3],
+  "petIds" :  [1],
   "startTime": "2024-08-10T12:00:00Z"
 }
 
@@ -39,7 +39,7 @@ POST http://localhost:8080/api/v1/walks/{{walkId}}/activities
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
-{
+{ "petId": 1,
   "latitude": 37.7749,
   "longitude": 122.4194,
   "activity": "POOP",
@@ -51,7 +51,7 @@ POST http://localhost:8080/api/v1/walks/{{walkId}}/activities
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
-{
+{ "petId": 1,
   "latitude": 37.7749,
   "longitude": 122.4194,
   "activity": "PEE",
@@ -63,7 +63,7 @@ POST http://localhost:8080/api/v1/walks/{{walkId}}/activities
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
-{
+{ "petId": 1,
   "latitude": 37.7749,
   "longitude": 122.4194,
   "activity": "WATER",

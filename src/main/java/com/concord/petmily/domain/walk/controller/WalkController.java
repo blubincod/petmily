@@ -46,7 +46,6 @@ public class WalkController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody StartWalkRequest startWalkRequest
             ) {
-
         String username = userDetails.getUsername();
         List<Long> petIds = startWalkRequest.getPetIds();
         LocalDateTime startTime = startWalkRequest.getStartTime();

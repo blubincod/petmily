@@ -63,7 +63,8 @@ public class WalkServiceImpl implements WalkService {
      * 산책 시작 및 산책 정보 기록
      */
     @Override
-    public WalkDto startWalk(String username, List<Long> pets, LocalDateTime startTime) {
+    @Transactional
+    public WalkDto startWalk(String username, List<Long> petIds, LocalDateTime startTime) {
         User user = getUser(username);
 
         // 회원 산책 중 여부 확인
@@ -80,8 +81,9 @@ public class WalkServiceImpl implements WalkService {
 
         List<WalkingPet> walkingPets = new ArrayList<>();
 
-        for(int i=0; i<pets.size(); i++){
-            Pet pet = petRepository.findById(pets.get(i))
+        for(int i=0; i<petIds.size(); i++){
+            System.out.println(petIds.get(i));
+            Pet pet = petRepository.findById(petIds.get(i))
                     .orElseThrow(()-> new RuntimeException("존재하지 않는 반려동물입니다."));
 
             if(pet.getUserId() != user.getId()){
@@ -91,6 +93,12 @@ public class WalkServiceImpl implements WalkService {
             WalkingPet walkingPet = new WalkingPet();
             walkingPet.setWalk(walk);
             walkingPet.setPet(pet);
+
+            WalkingPetId walkingPetId = new WalkingPetId();
+            walkingPetId.setWalkId(walk.getId());
+            walkingPetId.setPetId(pet.getId());
+            walkingPet.setId(walkingPetId);
+
             walkingPets.add(walkingPet);
         }
         walkingPetRepository.saveAll(walkingPets);
@@ -165,6 +173,10 @@ public class WalkServiceImpl implements WalkService {
 
         User user = getUser(username);
 
+        WalkingPet walkingPet = walkingPetRepository.findByWalkIdAndPetId(walkId, walkActivityDto.getPetId());
+
+        // TODO 회원의 반려동물인지 확인
+
         // 산책 소유자 확인
         if (!walk.getUser().getUsername().equals(username)) {
             throw new WalkAccessDeniedException(ErrorCode.WALK_ACCESS_DENIED);
@@ -175,8 +187,8 @@ public class WalkServiceImpl implements WalkService {
         }
 
         WalkActivity walkActivity = new WalkActivity();
-        walkActivity.setWalk(walk);
-        walkActivity.setType(walkActivityDto.getActivity());
+        walkActivity.setWalkingPet(walkingPet);
+        walkActivity.setActivityType(walkActivityDto.getActivity());
         walkActivity.setLatitude(walkActivityDto.getLatitude());
         walkActivity.setLongitude(walkActivityDto.getLongitude());
         walkActivity.setTimestamp(walkActivityDto.getTimestamp());

@@ -21,9 +21,9 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 /**
  * Spring Security 보안 설정 클래스
  */
-@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final UserDetailService userService;
@@ -49,7 +49,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // Cross-Site Request Forgery 보호를 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 생성하지 않는 상태 없는(stateless) 정책을 설정
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-//                        .requestMatchers("/**").permitAll()// FIXME 원활한 개발활경을위한 모든경로 접근 허용
                                 .requestMatchers("/", "/login", "/api/v1/users/signup", "/api/v1/users/login").permitAll() // 인증 없이 접근 허용
                                 .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )

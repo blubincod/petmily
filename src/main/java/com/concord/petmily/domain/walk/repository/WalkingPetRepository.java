@@ -4,6 +4,8 @@ import com.concord.petmily.domain.walk.entity.WalkingPet;
 import com.concord.petmily.domain.walk.entity.WalkingPetId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface WalkingPetRepository extends JpaRepository<WalkingPet, WalkingPetId> {
+import java.util.List;
 
+public interface WalkingPetRepository extends JpaRepository<WalkingPet, WalkingPetId> {
+    WalkingPet findByWalkIdAndPetId(Long walkId, Long petId);
 }
