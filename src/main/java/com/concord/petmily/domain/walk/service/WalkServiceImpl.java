@@ -2,20 +2,19 @@ package com.concord.petmily.domain.walk.service;
 
 import com.concord.petmily.common.exception.ErrorCode;
 import com.concord.petmily.domain.pet.entity.Pet;
+import com.concord.petmily.domain.pet.repository.PetRepository;
 import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.exception.UserNotFoundException;
 import com.concord.petmily.domain.user.repository.UserRepository;
 import com.concord.petmily.domain.walk.dto.WalkActivityDto;
 import com.concord.petmily.domain.walk.dto.WalkDto;
-import com.concord.petmily.domain.walk.entity.Walk;
-import com.concord.petmily.domain.walk.entity.WalkActivity;
-import com.concord.petmily.domain.walk.entity.WalkGoal;
-import com.concord.petmily.domain.walk.entity.WalkStatus;
+import com.concord.petmily.domain.walk.entity.*;
 import com.concord.petmily.domain.walk.exception.WalkAccessDeniedException;
 import com.concord.petmily.domain.walk.exception.WalkException;
 import com.concord.petmily.domain.walk.exception.WalkNotFoundException;
 import com.concord.petmily.domain.walk.repository.WalkActivityRepository;
 import com.concord.petmily.domain.walk.repository.WalkRepository;
+import com.concord.petmily.domain.walk.repository.WalkingPetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,17 +40,19 @@ import java.util.stream.Collectors;
 public class WalkServiceImpl implements WalkService {
 
     private final UserRepository userRepository;
+    private final PetRepository petRepository;
     private final WalkRepository walkRepository;
+    private final WalkingPetRepository walkingPetRepository;
     private final WalkActivityRepository walkActivityRepository;
 
-    // User 엔티티를 조회
+    // User 엔티티 조회
     private User getUser(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
         return user;
     }
 
-    // User 산책 엔티티를 조회
+    // User 산책 엔티티 조회
     private Walk getWalk(Long walkId) {
         Walk walk = walkRepository.findById(walkId)
                 .orElseThrow(() -> new WalkNotFoundException(ErrorCode.WALK_NOT_FOUND));
@@ -61,7 +62,8 @@ public class WalkServiceImpl implements WalkService {
     /**
      * 산책 시작 및 산책 정보 기록
      */
-    public WalkDto startWalk(String username, WalkDto walkDto) {
+    @Override
+    public WalkDto startWalk(String username, List<Long> pets, LocalDateTime startTime) {
         User user = getUser(username);
 
         // 회원 산책 중 여부 확인
@@ -69,14 +71,29 @@ public class WalkServiceImpl implements WalkService {
             throw new WalkException(ErrorCode.WALK_ALREADY_IN_PROGRESS);
         }
 
-        // TODO 반려동물 산책 그룹
-
-        // TODO 리팩토링
+        // TODO 리팩토링 : 깔끔하게 정리
         Walk walk = new Walk();
         walk.setUser(user);
-        walk.setStartTime(walkDto.getStartTime());
+        walk.setStartTime(startTime);
         walk.setStatus(WalkStatus.IN_PROGRESS);
         walkRepository.save(walk);
+
+        List<WalkingPet> walkingPets = new ArrayList<>();
+
+        for(int i=0; i<pets.size(); i++){
+            Pet pet = petRepository.findById(pets.get(i))
+                    .orElseThrow(()-> new RuntimeException("존재하지 않는 반려동물입니다."));
+
+            if(pet.getUserId() != user.getId()){
+                throw new RuntimeException("반려동물의 주인이 아닙니다.");
+            }
+
+            WalkingPet walkingPet = new WalkingPet();
+            walkingPet.setWalk(walk);
+            walkingPet.setPet(pet);
+            walkingPets.add(walkingPet);
+        }
+        walkingPetRepository.saveAll(walkingPets);
 
         updateWalkingStatus(user, true);
 
@@ -87,6 +104,7 @@ public class WalkServiceImpl implements WalkService {
     /**
      * 산책 종료 및 산책 정보 기록
      */
+    @Override
     @Transactional
     public WalkDto endWalk(Long walkId, String username, WalkDto walkDto) {
 
@@ -140,6 +158,7 @@ public class WalkServiceImpl implements WalkService {
     /**
      * 산책 활동 기록
      */
+    @Override
     public WalkActivityDto logWalkActivity(Long walkId, String username, WalkActivityDto walkActivityDto) {
 
         Walk walk = getWalk(walkId);
@@ -169,6 +188,7 @@ public class WalkServiceImpl implements WalkService {
     /**
      * 회원의 모든 반려동물의 산책 기록 조회
      */
+    @Override
     public List<WalkDto> getUserPetsWalks(String username){
 
         User user = getUser(username);
@@ -186,6 +206,7 @@ public class WalkServiceImpl implements WalkService {
     /**
      * 반려동물의 전체 산책 기록 조회
      */
+    @Override
     public void getPetWalks(Long petId) {
 
         List<Walk> walks = walkRepository.findByUserId(petId);
@@ -194,6 +215,7 @@ public class WalkServiceImpl implements WalkService {
     /**
      * 반려동물의 특정 산책 정보 조회
      */
+    @Override
     public void getPetWalk(Pet pet) {
 
     }
@@ -204,6 +226,7 @@ public class WalkServiceImpl implements WalkService {
      * - 산책 횟수 (1일 1회 기준)
      * - 산책 시 시간 (분 기준)
      */
+    @Override
     public void setWeeklyWalkGoal() {
 
     }
@@ -211,6 +234,7 @@ public class WalkServiceImpl implements WalkService {
     /**
      * 산책 목표 조회
      */
+    @Override
     public WalkGoal getWalkGoal() {
         // 설정된 산책 목표를 조회하여 반환
 
@@ -220,6 +244,7 @@ public class WalkServiceImpl implements WalkService {
     /**
      * 산책 목표 수정
      */
+    @Override
     public void updateWalkGoal(int newWalkCount, int newWalkDurationMinutes) {
         // 기존 산책 목표를 새로운 값으로 수정
     }
@@ -227,6 +252,7 @@ public class WalkServiceImpl implements WalkService {
     /**
      * 산책 목표 삭제
      */
+    @Override
     public void deleteWalkGoal() {
         // 설정된 산책 목표를 삭제
     }

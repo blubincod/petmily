@@ -1,5 +1,7 @@
 package com.concord.petmily.domain.walk.controller;
 
+import com.concord.petmily.domain.pet.entity.Pet;
+import com.concord.petmily.domain.walk.dto.StartWalkRequest;
 import com.concord.petmily.domain.walk.dto.WalkDto;
 import com.concord.petmily.domain.walk.dto.WalkActivityDto;
 import com.concord.petmily.domain.walk.entity.Walk;
@@ -11,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,15 +39,19 @@ public class WalkController {
      * 산책 시작
      *
      * @param userDetails 현재 인증된 사용자의 세부 정보
-     * @param walkDto
+     * @param startWalkRequest
      */
     @PostMapping
     public ResponseEntity<WalkDto> startWalk(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody WalkDto walkDto
-    ) {
+            @RequestBody StartWalkRequest startWalkRequest
+            ) {
+
         String username = userDetails.getUsername();
-        WalkDto createdWalk = walkService.startWalk(username, walkDto);
+        List<Long> petIds = startWalkRequest.getPetIds();
+        LocalDateTime startTime = startWalkRequest.getStartTime();
+
+        WalkDto createdWalk = walkService.startWalk(username, petIds, startTime);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWalk);
     }
@@ -99,8 +106,6 @@ public class WalkController {
 
         return ResponseEntity.status(HttpStatus.OK).body(walkDtoList);
     }
-
-
 
     /**
      * 반려동물의 특정 산책 정보 조회

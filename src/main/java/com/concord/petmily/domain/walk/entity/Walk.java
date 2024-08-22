@@ -1,5 +1,6 @@
 package com.concord.petmily.domain.walk.entity;
 
+import com.concord.petmily.domain.pet.entity.Pet;
 import com.concord.petmily.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,7 @@ public class Walk {
 
     @ManyToOne
     @JoinColumn(name = "user_id") // 외래키 매핑
-    private User user; // 회원
+    private User user; // 회원 정보
 
     @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
     private List<WalkingPet> walkingPets = new ArrayList<>(); // 그룹

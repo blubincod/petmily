@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -159,6 +160,7 @@ public class PetServiceImpl implements PetService{
   /**
    * 반려동물 삭제 처리
    */
+  @Override
   @Transactional(rollbackFor = Exception.class)
   public void deletePet(Long petId, Long userId) {
     // 사용자 ID와 반려동물 ID로 반려동물 정보 조회, 없을 경우 예외 발생
@@ -177,5 +179,17 @@ public class PetServiceImpl implements PetService{
     // 반려동물 상태를 'DELETED'로 설정하여 논리적 삭제
     petEntity.setStatus(Status.DELETED);
   }
+
+  /**
+   * 반려동물의 전체 산책 기록 조회
+   */
+  @Override
+  public void getPetWalks() {
+
+  }
+
+
+
+
 
 }

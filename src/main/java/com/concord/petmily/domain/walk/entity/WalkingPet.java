@@ -2,7 +2,9 @@ package com.concord.petmily.domain.walk.entity;
 
 import com.concord.petmily.domain.pet.entity.Pet;
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "walking_pet")
 public class WalkingPet {

@@ -19,8 +19,8 @@ public interface WalkRepository extends JpaRepository<Walk, Long> {
     List<Walk> findByUserId(Long userId);
 
     // 특정 날짜의 산책 기록 조회
-    List<Walk> findByDate(LocalDate date);
+    List<Walk> findByStartTime(LocalDate date);
 
      // 반려동물 아이디로 전체 산책 목록 찾기
-    List<Walk> findByPetId(Long petId);
+//    List<Walk> findByPetId(Long petId);
 }

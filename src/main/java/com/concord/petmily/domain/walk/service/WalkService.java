@@ -7,6 +7,7 @@ import com.concord.petmily.domain.walk.dto.WalkDto;
 import com.concord.petmily.domain.walk.entity.Walk;
 import com.concord.petmily.domain.walk.entity.WalkGoal;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface WalkService {
@@ -14,7 +15,7 @@ public interface WalkService {
     /**
      * 산책 시작 및 산책 정보 저장
      */
-    WalkDto startWalk(String username, WalkDto walkDto);
+    WalkDto startWalk(String username, List<Long> petList, LocalDateTime startTime);
 
     /**
      * 산책 종료 및 산책 정보 기록
