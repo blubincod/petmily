@@ -82,7 +82,6 @@ public class WalkServiceImpl implements WalkService {
         List<WalkingPet> walkingPets = new ArrayList<>();
 
         for(int i=0; i<petIds.size(); i++){
-            System.out.println(petIds.get(i));
             Pet pet = petRepository.findById(petIds.get(i))
                     .orElseThrow(()-> new RuntimeException("존재하지 않는 반려동물입니다."));
 
@@ -90,6 +89,7 @@ public class WalkServiceImpl implements WalkService {
                 throw new RuntimeException("반려동물의 주인이 아닙니다.");
             }
 
+            // TODO null 금지
             WalkingPet walkingPet = new WalkingPet();
             walkingPet.setWalk(walk);
             walkingPet.setPet(pet);
@@ -130,12 +130,11 @@ public class WalkServiceImpl implements WalkService {
             throw new WalkException(ErrorCode.WALK_ALREADY_TERMINATED);
         }
 
-        // 총 거리 및 총 시간 계산
-        double calculatedDistance = calculateDistance(walk);
+        // 총 시간 계산
         double calculatedDuration = calculateDuration(walk.getStartTime(), walkDto.getEndTime());
 
         walk.setEndTime(walkDto.getEndTime());
-        walk.setDistance(calculatedDistance);
+        walk.setDistance(walkDto.getDistance());
         walk.setDuration(calculatedDuration);
         walk.setStatus(WalkStatus.TERMINATED);
         walkRepository.save(walk);
@@ -150,12 +149,6 @@ public class WalkServiceImpl implements WalkService {
     private void updateWalkingStatus(User user, boolean isWalking) {
         user.setIsWalking(isWalking);
         userRepository.save(user);
-    }
-
-    // 산책 거리 계산 메서드
-    private double calculateDistance(Walk walk) {
-        // TODO 거리 계산 로직
-        return 0.0;
     }
 
     // 산책 시간 계산 메서드
@@ -175,8 +168,6 @@ public class WalkServiceImpl implements WalkService {
 
         WalkingPet walkingPet = walkingPetRepository.findByWalkIdAndPetId(walkId, walkActivityDto.getPetId());
 
-        // TODO 회원의 반려동물인지 확인
-
         // 산책 소유자 확인
         if (!walk.getUser().getUsername().equals(username)) {
             throw new WalkAccessDeniedException(ErrorCode.WALK_ACCESS_DENIED);
@@ -185,6 +176,8 @@ public class WalkServiceImpl implements WalkService {
         if (walk.getStatus() == WalkStatus.TERMINATED) {
             throw new WalkException(ErrorCode.WALK_ALREADY_TERMINATED);
         }
+        // TODO 회원의 반려동물인지 확인
+        validatePetOwnership(user, walkActivityDto.getPetId());
 
         WalkActivity walkActivity = new WalkActivity();
         walkActivity.setWalkingPet(walkingPet);
@@ -195,6 +188,16 @@ public class WalkServiceImpl implements WalkService {
         walkActivityRepository.save(walkActivity);
 
         return walkActivityDto;
+    }
+
+    //  TODO 회원의 반려동물 여부 확인
+    private void validatePetOwnership(User user, Long petId) {
+        boolean isPetOwned = true;
+
+
+        if (!isPetOwned) {
+            throw new RuntimeException("반려동물의 주인이 아닙니다.");
+        }
     }
 
     /**

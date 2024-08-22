@@ -48,3 +48,5 @@ Content-Type: application/json
 # @no-redirect
 GET http://localhost:8080/api/v1/walks
 Authorization: Bearer {{accessToken}}
+
+### 나의 반려동물 조회
