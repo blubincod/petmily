@@ -6,6 +6,7 @@ import com.concord.petmily.domain.user.service.UserService;
 import com.concord.petmily.domain.user.service.UserServiceImpl;
 import com.concord.petmily.domain.walk.dto.WalkDto;
 import com.concord.petmily.domain.walk.dto.WalkStatisticsDto;
+import com.concord.petmily.domain.walk.dto.WalkWithPetsDto;
 import com.concord.petmily.domain.walk.service.WalkService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -54,13 +55,13 @@ public class UserController {
      * 옵션: 날짜 범위, 반려동물 ID
      */
     @GetMapping("/{userId}/walks")
-    public ResponseEntity<List<WalkDto>> getUserPetsWalks(
+    public ResponseEntity<List<WalkWithPetsDto>> getUserPetsWalks(
             @PathVariable Long userId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
-        List<WalkDto> walks = walkService.getUserPetsWalks(userId, startDate, endDate);
-
+        List<WalkWithPetsDto> walks = walkService.getUserPetsWalks(userId, startDate, endDate);
+        System.out.println(walks);
         return ResponseEntity.status(HttpStatus.OK).body(walks);
     }
 }

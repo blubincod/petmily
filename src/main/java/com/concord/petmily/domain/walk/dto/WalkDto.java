@@ -3,6 +3,7 @@ package com.concord.petmily.domain.walk.dto;
 import com.concord.petmily.domain.walk.entity.Walk;
 import com.concord.petmily.domain.walk.entity.WalkStatus;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * 산책 데이터 전송 객체
  */
 @Data
-@Builder
+@SuperBuilder
 public class WalkDto {
     private Long walkId;
     private double distance; // 산책 거리

@@ -9,6 +9,7 @@ import com.concord.petmily.domain.user.exception.UserNotFoundException;
 import com.concord.petmily.domain.user.repository.UserRepository;
 import com.concord.petmily.domain.walk.dto.WalkActivityDto;
 import com.concord.petmily.domain.walk.dto.WalkDto;
+import com.concord.petmily.domain.walk.dto.WalkWithPetsDto;
 import com.concord.petmily.domain.walk.entity.*;
 import com.concord.petmily.domain.walk.exception.WalkAccessDeniedException;
 import com.concord.petmily.domain.walk.exception.WalkException;
@@ -207,24 +208,46 @@ public class WalkServiceImpl implements WalkService {
      * 회원의 모든 반려동물의 산책 기록 조회
      */
     @Override
-    public List<WalkDto> getUserPetsWalks(Long userId, LocalDate startDate, LocalDate endDate) {
+    public List<WalkWithPetsDto> getUserPetsWalks(Long userId, LocalDate startDate, LocalDate endDate) {
         List<Walk> walks = walkRepository.findByUserIdAndWalkDateBetween(userId, startDate, endDate);
 
+        // TODO LocalDate 형식만 받도록 설정
+
         return walks.stream()
-                .map(WalkDto::fromEntity)
+                .map(walk -> {
+                    List<Long> petIds = walkingPetRepository.findByWalkId(walk.getId())
+                            .stream()
+                            .map(walkingPet -> walkingPet.getPet().getId())
+                            .collect(Collectors.toList());
+                    return WalkWithPetsDto.fromEntity(walk, petIds);
+                })
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 회원의 모든 반려동물의 산책 기록 조회
+     */
 //    @Override
-//    public List<WalkDto> getPetWalks(Long petId, LocalDate startDate, LocalDate endDate) {
-//        List<Walk> walks = walkingPetRepository.findWalksByPetIdAndDateBetween(petId, startDate, endDate);
+//    public Map<LocalDate, WalkStatisticsDto> getUserDailyWalkStatistics(Long userId, LocalDate startDate, LocalDate endDate) {
+//        List<Walk> walks = walkRepository.findByUserIdAndCreatedDateBetween(userId, startDate, endDate);
+//
 //        return walks.stream()
-//                .map(this::convertToWalkDto)
-//                .collect(Collectors.toList());
+//                .collect(Collectors.groupingBy(
+//                        walk -> walk.getCreatedDate().toLocalDate(),
+//                        Collectors.collectingAndThen(Collectors.toList(), this::calculateDailyStatistics)
+//                ));
 //    }
 //
-//    private WalkDto convertToWalkDto(Walk walk) {
-//        // Walk 엔티티를 WalkDto로 변환하는 로직
+//    private WalkStatisticsDto calculateDailyStatistics(List<Walk> dailyWalks) {
+//        double totalDistance = dailyWalks.stream().mapToDouble(Walk::getDistance).sum();
+//        double totalDuration = dailyWalks.stream().mapToDouble(Walk::getDuration).sum();
+//        int walkCount = dailyWalks.size();
+//
+//        return WalkStatisticsDto.builder()
+//                .totalDistance(totalDistance)
+//                .totalDuration(totalDuration)
+//                .walkCount(walkCount)
+//                .build();
 //    }
 
     /**

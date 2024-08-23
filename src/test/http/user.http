@@ -1,7 +1,7 @@
 # User 요청
 
 ### Value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NDI2NjQ5LCJleHAiOjE3MjQ0MzAyNDksInN1YiI6ImtpbWp1bjkxIn0.PjFWgTnunpNHqs3bqZDCLJl05PCRUFYEoNxEdPfp2aM
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NDM0MDQzLCJleHAiOjE3MjQ0Mzc2NDMsInN1YiI6ImtpbWp1bjkxIn0.4HsXxOjt4vq7He2wcPDTanutddNIOM1mvIwG4_4A7ck
 @userId = 1
 
 ### 회원가입 요청 - 회원1

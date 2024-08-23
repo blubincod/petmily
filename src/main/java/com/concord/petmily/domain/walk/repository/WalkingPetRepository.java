@@ -9,4 +9,8 @@ import java.util.Optional;
 
 public interface WalkingPetRepository extends JpaRepository<WalkingPet, WalkingPetId> {
     Optional<WalkingPet> findByWalkIdAndPetId(Long walkId, Long petId);
+
+    List<WalkingPet> findByWalkId(Long walkId);
+
+    List<WalkingPet> findPetIdsByWalkId(Long walkId);
 }
