@@ -76,7 +76,7 @@ public class WalkServiceImpl implements WalkService {
         Walk walk = new Walk();
         walk.setUser(user);
         walk.setStartTime(startTime);
-        walk.setStatus(WalkStatus.IN_PROGRESS);
+        walk.setWalkStatus(WalkStatus.IN_PROGRESS);
         walkRepository.save(walk);
 
         List<WalkingPet> walkingPets = new ArrayList<>();
@@ -126,7 +126,7 @@ public class WalkServiceImpl implements WalkService {
         }
 
         // 종료된 산책 여부 확인
-        if (walk.getStatus() == WalkStatus.TERMINATED) {
+        if (walk.getWalkStatus() == WalkStatus.TERMINATED) {
             throw new WalkException(ErrorCode.WALK_ALREADY_TERMINATED);
         }
 
@@ -136,7 +136,7 @@ public class WalkServiceImpl implements WalkService {
         walk.setEndTime(walkDto.getEndTime());
         walk.setDistance(walkDto.getDistance());
         walk.setDuration(calculatedDuration);
-        walk.setStatus(WalkStatus.TERMINATED);
+        walk.setWalkStatus(WalkStatus.TERMINATED);
         walkRepository.save(walk);
 
         updateWalkingStatus(user, false);
@@ -173,7 +173,7 @@ public class WalkServiceImpl implements WalkService {
             throw new WalkAccessDeniedException(ErrorCode.WALK_ACCESS_DENIED);
         }
         // 종료된 산책 여부 확인
-        if (walk.getStatus() == WalkStatus.TERMINATED) {
+        if (walk.getWalkStatus() == WalkStatus.TERMINATED) {
             throw new WalkException(ErrorCode.WALK_ALREADY_TERMINATED);
         }
         // TODO 회원의 반려동물인지 확인

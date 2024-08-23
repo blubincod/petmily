@@ -1,6 +1,6 @@
 -- 회원 DB
 insert into users (username, email, password, address, age, birth_date,
-                   gender, name, nickname, phone, role, status, is_walking,
+                   gender, name, nickname, phone, role, user_status, is_walking,
                    registered_at, modified_at)
 values
     -- USER_ID 1
@@ -36,7 +36,7 @@ values
 
 -- 반려동물 DB
 INSERT INTO pet (USER_ID, CATEGORY, BRAND, BIRTH_DATE, AGE, NAME, GENDER,
-                 IS_PETS_NEUTER, WEIGHT, STATUS, CHIP, CREATE_AT, MODIFIED_AT)
+                 IS_PETS_NEUTER, WEIGHT, PET_STATUS, CHIP, CREATE_AT, MODIFIED_AT)
 VALUES
     -- USER_ID 1의 반려동물
     (1, 'DOG', 'Labrador Retriever', '2020-05-15', 3, 'Max', 'MALE', true, 30.5,
@@ -67,7 +67,7 @@ VALUES
      'CHIP123450', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 산책 DB
-insert into walk (user_id, status, distance, duration, start_time, end_time)
+insert into walk (user_id, walk_status, distance, duration, start_time, end_time)
 values -- User 1
        (1, 1, 3.0, 30.0, '2024-08-10 01:30:00', '2024-08-10 02:00:00'),
        (1, 1, 2.5, 23.0, '2024-08-11 01:22:00', '2024-08-11 01:45:00'),

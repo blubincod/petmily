@@ -28,7 +28,7 @@ public class Walk {
     private double duration; // 산책 시간
     private LocalDateTime startTime; // 산책 시작 시간
     private LocalDateTime endTime; // 산책 종료 시간
-    private WalkStatus status; // 산책 진행 상태
+    private WalkStatus walkStatus; // 산책 진행 상태
 
     @ManyToOne
     @JoinColumn(name = "user_id") // 외래키 매핑

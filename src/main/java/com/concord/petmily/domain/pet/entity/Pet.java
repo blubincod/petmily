@@ -10,10 +10,10 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-@Entity
-@Table(name = "pet")
 @Getter
 @Setter
+@Entity
+@Table(name = "pet")
 @RequiredArgsConstructor
 public class Pet {
 
@@ -50,9 +50,9 @@ public class Pet {
   @Column(nullable = false)
   private double weight;
 
-  @Column(nullable = false)
+  @Column(name = "pet_status", nullable = false)
   @Enumerated(EnumType.STRING)
-  private Status status;
+  private PetStatus petStatus;
 
   @Column(length = 255)
   private String image;
@@ -69,7 +69,7 @@ public class Pet {
   private LocalDateTime modifiedAt;
 
   private Pet(Long userId, Category category, String brand, LocalDate birthDate, int age,
-      String name, Gender gender, Boolean isPetsNeuter, double weight, Status status,
+      String name, Gender gender, Boolean isPetsNeuter, double weight, PetStatus petStatus,
        String chip) {
     this.userId = userId;
     this.category = category;
@@ -80,14 +80,14 @@ public class Pet {
     this.gender = gender;
     this.isPetsNeuter = isPetsNeuter;
     this.weight = weight;
-    this.status = status;
+    this.petStatus = petStatus;
     this.chip = chip;
   }
 
   public static Pet from(Long userId, PetDto.Create request) {
     return new Pet(userId, request.getPetsCategory(), request.getPetsBreed(), request.getBirthDate(),
         request.getPetsAge(), request.getPetsName(), request.getPetsGender(), request.isPetsNeuter(),
-        request.getPetsWeight(), Status.ACTIVE,
+        request.getPetsWeight(), PetStatus.ACTIVE,
         request.getPetsChip().isEmpty() ? null : request.getPetsChip());
   }
 }

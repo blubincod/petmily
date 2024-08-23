@@ -5,6 +5,7 @@ import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.service.UserService;
 import com.concord.petmily.domain.user.service.UserServiceImpl;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,20 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserServiceImpl userService) {
-        this.userService = userService;
-    }
-
     /**
      * 회원가입
-     *
-     * @param addUserRequest
-     * @return
      */
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody AddUserRequest addUserRequest) {
@@ -36,9 +31,6 @@ public class UserController {
 
     /**
      * 사용자 정보 조회
-     *
-     * @param userId
-     * @return
      */
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable Long userId) {

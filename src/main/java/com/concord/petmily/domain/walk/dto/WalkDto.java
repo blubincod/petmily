@@ -27,7 +27,7 @@ public class WalkDto {
                 .duration(walk.getDuration())
                 .startTime(walk.getStartTime())
                 .endTime(walk.getEndTime())
-                .status(walk.getStatus())
+                .status(walk.getWalkStatus())
                 .build();
     }
 }
