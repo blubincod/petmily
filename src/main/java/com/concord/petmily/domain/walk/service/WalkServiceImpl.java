@@ -2,6 +2,7 @@ package com.concord.petmily.domain.walk.service;
 
 import com.concord.petmily.common.exception.ErrorCode;
 import com.concord.petmily.domain.pet.entity.Pet;
+import com.concord.petmily.domain.pet.exception.PetException;
 import com.concord.petmily.domain.pet.repository.PetRepository;
 import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.exception.UserNotFoundException;
@@ -81,12 +82,12 @@ public class WalkServiceImpl implements WalkService {
 
         List<WalkingPet> walkingPets = new ArrayList<>();
 
-        for(int i=0; i<petIds.size(); i++){
+        for (int i = 0; i < petIds.size(); i++) {
             Pet pet = petRepository.findById(petIds.get(i))
-                    .orElseThrow(()-> new RuntimeException("존재하지 않는 반려동물입니다."));
+                    .orElseThrow(() -> new PetException(ErrorCode.PET_NOT_FOUND));
 
-            if(pet.getUserId() != user.getId()){
-                throw new RuntimeException("반려동물의 주인이 아닙니다.");
+            if (pet.getUserId() != user.getId()) {
+                throw new PetException(ErrorCode.PET_OWNER_MISMATCH);
             }
 
             // TODO null 금지
@@ -204,7 +205,7 @@ public class WalkServiceImpl implements WalkService {
      * 회원의 모든 반려동물의 산책 기록 조회
      */
     @Override
-    public List<WalkDto> getUserPetsWalks(String username){
+    public List<WalkDto> getUserPetsWalks(String username) {
 
         User user = getUser(username);
 

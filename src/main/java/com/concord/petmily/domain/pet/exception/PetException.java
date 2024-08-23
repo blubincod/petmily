@@ -1,10 +1,10 @@
-package com.concord.petmily.domain.post.exception;
+package com.concord.petmily.domain.pet.exception;
 
 import com.concord.petmily.common.exception.BaseException;
 import com.concord.petmily.common.exception.ErrorCode;
 
-public class PostException extends BaseException {
-    public PostException(ErrorCode errorCode) {
+public class PetException extends BaseException {
+    public PetException(ErrorCode errorCode) {
         super(errorCode);
     }
 

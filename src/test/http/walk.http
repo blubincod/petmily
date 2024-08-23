@@ -1,7 +1,7 @@
 # Walk 테스트
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MzE4NTk5LCJleHAiOjE3MjQzMjIxOTksInN1YiI6Imp1bmdldW45NyJ9.qxEPcSysWV68F-mhrcnCMWFhHeodou__GKDz7H78DE4
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NDA1MTAwLCJleHAiOjE3MjQ0MDg3MDAsInN1YiI6ImtpbWp1bjkxIn0.A69q-GEVvrkN_P22o4ZRVZYxKG6r0CHVLxKoIuuvXfg
 #@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MzE4NTk5LCJleHAiOjE3MjQzMjIxOTksInN1YiI6Imp1bmdldW45NyJ9.qxEPcSysWV68F-mhrcnCMWFhHeodou__GKDz7H78DE4
 @walkId = 25
 @petId = 11

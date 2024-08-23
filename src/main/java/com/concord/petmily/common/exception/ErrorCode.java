@@ -23,8 +23,10 @@ public enum ErrorCode {
     EMAIL_ALREADY_EXISTS("이미 존재하는 이메일 입니다."),
 
     // Pet
-    PET_NOT_FOUND("존재하지 않는 반려동물입니다."),
-    PET_ALREADY_REGISTERED("이 반려동물은 이미 등록되어 있습니다."),
+    PET_NOT_FOUND("등록되지 않은 반려동물입니다."),
+    PET_ALREADY_REGISTERED("해당 반려동물은 이미 등록되어 있습니다."),
+    PET_OWNER_MISMATCH("해당 반려동물의 주인이 아닙니다."),
+
 
 
     // Walk

@@ -1,16 +1,16 @@
 package com.concord.petmily.domain.auth.exception;
 
+import com.concord.petmily.common.exception.BaseException;
 import com.concord.petmily.common.exception.ErrorCode;
 import lombok.*;
 
-@Data
-@AllArgsConstructor
-public class AuthException extends RuntimeException {
-    ErrorCode errorCode;
-    String errorMessage;
-
+public class AuthException extends BaseException {
     public AuthException(ErrorCode errorCode) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorCode.getMessage();
+        super(errorCode);
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return getErrorCode().getMessage();
     }
 }
