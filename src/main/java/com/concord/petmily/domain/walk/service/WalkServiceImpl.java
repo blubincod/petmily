@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 산책 관련 서비스
@@ -207,18 +208,24 @@ public class WalkServiceImpl implements WalkService {
      */
     @Override
     public List<WalkDto> getUserPetsWalks(Long userId, LocalDate startDate, LocalDate endDate) {
+        List<Walk> walks = walkRepository.findByUserIdAndWalkDateBetween(userId, startDate, endDate);
 
-//        User user = getUser(username);
-//
-//        List<Walk> walkList = walkRepository.findByUserId(user.getId());
-//
-//        // Walk 엔티티 리스트를 WalkDto 리스트로 변환
-//        List<WalkDto> walkDtoList = walkList.stream()
-//                .map(WalkDto::fromEntity) // 각 Walk 엔티티를 WalkDto로 변환
-//                .collect(Collectors.toList());
-
-        return null;
+        return walks.stream()
+                .map(WalkDto::fromEntity)
+                .collect(Collectors.toList());
     }
+
+//    @Override
+//    public List<WalkDto> getPetWalks(Long petId, LocalDate startDate, LocalDate endDate) {
+//        List<Walk> walks = walkingPetRepository.findWalksByPetIdAndDateBetween(petId, startDate, endDate);
+//        return walks.stream()
+//                .map(this::convertToWalkDto)
+//                .collect(Collectors.toList());
+//    }
+//
+//    private WalkDto convertToWalkDto(Walk walk) {
+//        // Walk 엔티티를 WalkDto로 변환하는 로직
+//    }
 
     /**
      * 반려동물의 전체 산책 기록 조회

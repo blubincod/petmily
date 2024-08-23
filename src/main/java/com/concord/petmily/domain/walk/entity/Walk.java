@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,10 @@ public class Walk {
     private LocalDateTime startTime; // 산책 시작 시간
     private LocalDateTime endTime; // 산책 종료 시간
     private WalkStatus walkStatus; // 산책 진행 상태
+
+    @CreatedDate
+    @Column(name = "walk_date", updatable = false)
+    private LocalDate walkDate; // 산책 생성일
 
     @ManyToOne
     @JoinColumn(name = "user_id") // 외래키 매핑

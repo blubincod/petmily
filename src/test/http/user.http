@@ -1,7 +1,8 @@
 # User 요청
 
-### AccessToken
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjUwNjEwLCJleHAiOjE3MjQyNTQyMTAsInN1YiI6ImtpbWp1bjkxIn0.4Qn6aDX7Hw-R40NzdhKvLGIAC7_vzAfom4R2iOskAa8
+### Value
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NDI2NjQ5LCJleHAiOjE3MjQ0MzAyNDksInN1YiI6ImtpbWp1bjkxIn0.PjFWgTnunpNHqs3bqZDCLJl05PCRUFYEoNxEdPfp2aM
+@userId = 1
 
 ### 회원가입 요청 - 회원1
 # @no-redirect
@@ -35,11 +36,13 @@ POST http://localhost:8080/api/v1/users/logout
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
-{
-}
-
 ### 사용자 정보 조회
 # @no-redirect
-GET http://localhost:8080/api/v1/users/3
+GET http://localhost:8080/api/v1/users/{{userId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+### 회원의 모든 반려동물의 산책 특정 기간 기록 조회
+GET http://localhost:8080/api/v1/users/{{userId}}/walks?startDate=2024-08-11&endDate=2024-08-20
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json

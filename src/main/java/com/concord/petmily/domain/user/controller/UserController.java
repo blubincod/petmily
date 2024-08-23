@@ -53,13 +53,14 @@ public class UserController {
      *
      * 옵션: 날짜 범위, 반려동물 ID
      */
-    @GetMapping
+    @GetMapping("/{userId}/walks")
     public ResponseEntity<List<WalkDto>> getUserPetsWalks(
             @PathVariable Long userId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    ) {
         List<WalkDto> walks = walkService.getUserPetsWalks(userId, startDate, endDate);
-        return ResponseEntity.ok(walks);
+
+        return ResponseEntity.status(HttpStatus.OK).body(walks);
     }
 }
