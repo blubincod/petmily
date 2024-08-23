@@ -51,4 +51,9 @@ public interface PetService {
      * @param userId 사용자 ID
      */
     void deletePet(Long petId, Long userId);
+
+    /**
+     * 반려동물의 전체 산책 기록 조회
+     */
+    void getPetWalks();
 }

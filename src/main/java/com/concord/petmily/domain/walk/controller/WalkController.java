@@ -1,7 +1,10 @@
 package com.concord.petmily.domain.walk.controller;
 
+import com.concord.petmily.domain.pet.entity.Pet;
+import com.concord.petmily.domain.walk.dto.StartWalkRequest;
 import com.concord.petmily.domain.walk.dto.WalkDto;
 import com.concord.petmily.domain.walk.dto.WalkActivityDto;
+import com.concord.petmily.domain.walk.entity.Walk;
 import com.concord.petmily.domain.walk.service.WalkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,7 +13,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,15 +39,18 @@ public class WalkController {
      * 산책 시작
      *
      * @param userDetails 현재 인증된 사용자의 세부 정보
-     * @param walkDto
+     * @param startWalkRequest
      */
     @PostMapping
     public ResponseEntity<WalkDto> startWalk(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody WalkDto walkDto
-    ) {
+            @RequestBody StartWalkRequest startWalkRequest
+            ) {
         String username = userDetails.getUsername();
-        WalkDto createdWalk = walkService.startWalk(username, walkDto);
+        List<Long> petIds = startWalkRequest.getPetIds();
+        LocalDateTime startTime = startWalkRequest.getStartTime();
+
+        WalkDto createdWalk = walkService.startWalk(username, petIds, startTime);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWalk);
     }
@@ -87,34 +95,35 @@ public class WalkController {
     }
 
     /**
-     * 산책 기록 목록 조회
+     * 회원의 모든 반려동물의 산책 기록 조회
      */
     @GetMapping
-    public ResponseEntity<?> getMyWalks() {
-        // TODO 산책 목록 조회 로직
-        return ResponseEntity.ok(null);
+    public ResponseEntity<List<WalkDto>> getUserPetsWalks(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        List<WalkDto> walkDtoList = walkService.getUserPetsWalks(userDetails.getUsername());
+
+        return ResponseEntity.status(HttpStatus.OK).body(walkDtoList);
     }
 
     /**
-     * 산책 상세 정보 조회
-     *
-     * @return
+     * 반려동물의 특정 산책 정보 조회
      */
     @GetMapping("/{walkId}")
-    public ResponseEntity<?> getMyWalk(
+    public ResponseEntity<?> getPetWalk(
             @PathVariable String walkId) {
-        // TODO 산책 정보 조회 로직
+        // TODO 특정 산책 정보 조회 로직
         return ResponseEntity.ok(null);
     }
 
+
     /**
-     * 산책 목표 생성 - 관리자
+     * 산책 목표 생성
      *
      * @return
      */
     @PostMapping("goals")
     public ResponseEntity<?> createWalkGoal() {
-        // TODO 관리자 권한 확인 로직 추가
         // TODO 산책 목표 생성 로직
         return ResponseEntity.ok(null);
     }

@@ -86,7 +86,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WalkAccessDeniedException.class)
     public ErrorResponse handleWalkAccessDeniedException(WalkAccessDeniedException e) {
         log.error("WalkAccessDeniedException occurred: {}", e.getErrorCode());
-        return new ErrorResponse(e.getErrorCode(), e.getMessage());
+        return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
     }
 
     /**

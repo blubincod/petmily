@@ -1,0 +1,16 @@
+# Pet 요청
+
+### AccessToken
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjUwNjEwLCJleHAiOjE3MjQyNTQyMTAsInN1YiI6ImtpbWp1bjkxIn0.4Qn6aDX7Hw-R40NzdhKvLGIAC7_vzAfom4R2iOskAa8
+
+### 회원의 모든 반려동물 산책 기록 조회
+# @no-redirect
+GET http://localhost:8080/api/v1/walks/pets
+Authorization: Bearer {{accessToken}}
+
+### 반려동물 등록 - 강아지
+
+
+### 반려동물 등록 - 고양이
+
+### 반려동물 등록 - 기타 동물

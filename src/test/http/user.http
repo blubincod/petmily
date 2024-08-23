@@ -1,37 +1,24 @@
+# User 요청
+
+### AccessToken
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MjUwNjEwLCJleHAiOjE3MjQyNTQyMTAsInN1YiI6ImtpbWp1bjkxIn0.4Qn6aDX7Hw-R40NzdhKvLGIAC7_vzAfom4R2iOskAa8
+
 ### 회원가입 요청 - 회원1
 # @no-redirect
 POST http://localhost:8080/api/v1/users/signup
 Content-Type: application/json
 
 {
-  "username": "abc1",
-  "email": "abc1@test.com",
-  "password": "12345",
-  "address": "123 Main St",
-  "age": 30,
-  "birthDate": "1994-01-01",
+  "username": "test",
+  "email": "test@example.com",
+  "password": "test123",
+  "address": "강원특별자치도 양양군",
+  "age": 33,
+  "birthDate": "1991-11-11",
   "gender": "M",
-  "name": "John Doe",
-  "nickname": "johnny",
-  "phone": "123-456-7890"
-}
-
-### 회원가입 요청 - 회원2
-# @no-redirect
-POST http://localhost:8080/api/v1/users/signup
-Content-Type: application/json
-
-{
-  "username": "abc2",
-  "email": "abc2@test.com",
-  "password": "12345",
-  "address": "123 Main St",
-  "age": 34,
-  "birthDate": "1990-01-01",
-  "gender": "M",
-  "name": "Harry Kane",
-  "nickname": "Harry",
-  "phone": "123-456-7890"
+  "name": "테스트",
+  "nickname": "테테",
+  "phone": "010-1111-3333"
 }
 
 ### 로그인 요청
@@ -39,14 +26,13 @@ POST http://localhost:8080/api/v1/users/login
 Content-Type: application/json
 
 {
-  "username": "abc1",
-  "password": "12345"
+  "username": "kimjun91",
+  "password": "kim123"
 }
 
 ### 로그아웃 요청 (토큰 필요)
 POST http://localhost:8080/api/v1/users/logout
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkbHdsc2d1ZDk4QG5hdmVyLmNvbSIsImlhdCI6MTcyMzQ3NTU0MCwiZXhwIjoxNzIzNDc5MTQwLCJzdWIiOiJhYmMyMzQ1In0.Q9Iv_8gFzVv1A0N66cYPAnbdh8VhR6xRp5c2AfpjTcc
-
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
@@ -54,4 +40,13 @@ Content-Type: application/json
 
 ### 사용자 정보 조회
 # @no-redirect
-GET http://localhost:8080/api/v1/users/1
+GET http://localhost:8080/api/v1/users/3
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+### 회원의 모든 반려동물 산책 기록 조회
+# @no-redirect
+GET http://localhost:8080/api/v1/walks
+Authorization: Bearer {{accessToken}}
+
+### 나의 반려동물 조회

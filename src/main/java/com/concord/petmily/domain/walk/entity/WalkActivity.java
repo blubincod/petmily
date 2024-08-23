@@ -24,19 +24,15 @@ public class WalkActivity {
     private double latitude; // 위도
     private double longitude; // 경도
 
-    private ActivityType type; // 활동 유형(대변, 소변, 수분 섭취)
+    @Enumerated(EnumType.STRING)
+    private ActivityType activityType; // 활동 유형(대변, 소변, 수분 섭취)
 
     private LocalDateTime timestamp; // 타임스탬프
 
     @ManyToOne
-    @JoinColumn(name = "walk_id")
-    private Walk walk; // 산책
-
-    @ManyToOne
-    @JoinColumn(name = "pet_id")
-    private Pet pet; // 반려동물
-
-    public void setWalk(Walk walk) {
-        this.walk = walk;
-    }
+    @JoinColumns({
+            @JoinColumn(name = "walk_id", referencedColumnName = "walk_id"),
+            @JoinColumn(name = "pet_id", referencedColumnName = "pet_id")
+    })
+    private WalkingPet walkingPet;
 }

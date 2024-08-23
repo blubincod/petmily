@@ -1,7 +1,9 @@
 package com.concord.petmily.domain.pet.entity;
 
 public enum Category {
-    DOG, CAT, OTHER;
+    DOG,
+    CAT,
+    OTHER;
     //문자를 열거형으로 변환시키는 매소드
     public static Category fromString(String categoryName) {
         try {

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 public class WalkActivityDto {
 
+    private Long petId; // 반려동물 아이디
     private double latitude; // 위도
     private double longitude; // 경도
     private ActivityType activity; // 활동 유형(대변, 소변, 수분 섭취)
