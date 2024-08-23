@@ -23,7 +23,7 @@ public interface WalkService {
     WalkDto endWalk(Long walkId, String username, WalkDto walkDto);
 
     /**
-     * 산책 활동 기록 메서드
+     * 산책 활동 기록
      */
     public WalkActivityDto logWalkActivity(Long walkId, String username, WalkActivityDto walkActivityDto);
 

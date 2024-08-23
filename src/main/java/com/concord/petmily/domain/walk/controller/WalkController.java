@@ -20,8 +20,10 @@ import java.util.Map;
 
 /**
  * 산책 관련 컨트롤러
- * <p>
- * - 산책 위치 기록
+ *
+ * - 산책 시작 및 산책 정보 기록
+ * - 산책 종료 및 산책 정보 기록
+ * - 산책 활동 기록
  * - 산책 전체 정보 조회
  * - 산책 상세 정보 조회
  * - 산책 목표 설정
@@ -36,10 +38,9 @@ public class WalkController {
     private final WalkService walkService;
 
     /**
-     * 산책 시작
+     * 산책 시작 및 산책 정보 기록
      *
      * @param userDetails 현재 인증된 사용자의 세부 정보
-     * @param startWalkRequest
      */
     @PostMapping
     public ResponseEntity<WalkDto> startWalk(
@@ -56,12 +57,7 @@ public class WalkController {
     }
 
     /**
-     * 산책 종료
-     *
-     * @param walkId
-     * @param userDetails
-     * @param walkDto
-     * @return
+     * 산책 종료 및 산책 정보 기록
      */
     @PutMapping("/{walkId}/end")
     public ResponseEntity<WalkDto> endWalk(

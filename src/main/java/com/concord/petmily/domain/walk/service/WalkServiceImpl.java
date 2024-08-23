@@ -86,6 +86,7 @@ public class WalkServiceImpl implements WalkService {
             Pet pet = petRepository.findById(petIds.get(i))
                     .orElseThrow(() -> new PetException(ErrorCode.PET_NOT_FOUND));
 
+            // 주인 확인
             if (pet.getUserId() != user.getId()) {
                 throw new PetException(ErrorCode.PET_OWNER_MISMATCH);
             }
@@ -167,7 +168,10 @@ public class WalkServiceImpl implements WalkService {
 
         User user = getUser(username);
 
-        WalkingPet walkingPet = walkingPetRepository.findByWalkIdAndPetId(walkId, walkActivityDto.getPetId());
+        WalkingPet walkingPet = walkingPetRepository.findByWalkIdAndPetId(walkId, walkActivityDto.getPetId())
+                .orElseThrow(() -> new WalkNotFoundException(ErrorCode.PET_NOT_IN_THIS_WALK));
+
+        Pet pet = walkingPet.getPet();
 
         // 산책 소유자 확인
         if (!walk.getUser().getUsername().equals(username)) {
@@ -177,8 +181,8 @@ public class WalkServiceImpl implements WalkService {
         if (walk.getWalkStatus() == WalkStatus.TERMINATED) {
             throw new WalkException(ErrorCode.WALK_ALREADY_TERMINATED);
         }
-        // TODO 회원의 반려동물인지 확인
-        validatePetOwnership(user, walkActivityDto.getPetId());
+        // 회원의 반려동물인지 확인
+        validatePetOwnership(user, pet);
 
         WalkActivity walkActivity = new WalkActivity();
         walkActivity.setWalkingPet(walkingPet);
@@ -191,13 +195,10 @@ public class WalkServiceImpl implements WalkService {
         return walkActivityDto;
     }
 
-    //  TODO 회원의 반려동물 여부 확인
-    private void validatePetOwnership(User user, Long petId) {
-        boolean isPetOwned = true;
-
-
-        if (!isPetOwned) {
-            throw new RuntimeException("반려동물의 주인이 아닙니다.");
+    // 회원의 반려동물인지 유효성 검사
+    private void validatePetOwnership(User user, Pet pet) {
+        if (pet.getUserId() != user.getId()) {
+            throw new PetException(ErrorCode.PET_OWNER_MISMATCH);
         }
     }
 

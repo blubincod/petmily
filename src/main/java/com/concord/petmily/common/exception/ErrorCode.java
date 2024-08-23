@@ -27,13 +27,12 @@ public enum ErrorCode {
     PET_ALREADY_REGISTERED("해당 반려동물은 이미 등록되어 있습니다."),
     PET_OWNER_MISMATCH("해당 반려동물의 주인이 아닙니다."),
 
-
-
     // Walk
     WALK_NOT_FOUND("존재하지 않는 산책 정보입니다."),
     WALK_ACCESS_DENIED("해당 산책에 대한 접근 권한이 없습니다."),
     WALK_ALREADY_IN_PROGRESS("현재 진행 중인 산책이 있습니다."),
     WALK_ALREADY_TERMINATED("이미 종료된 산책입니다."),
+    PET_NOT_IN_THIS_WALK("해당 반려동물이 현재 산책에 참여하고 있지 않습니다."),
 
     // Post
     POST_NOT_FOUND("존재하지 않는 게시물입니다."),

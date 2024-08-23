@@ -1,10 +1,11 @@
 # Walk 테스트
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NDA1MTAwLCJleHAiOjE3MjQ0MDg3MDAsInN1YiI6ImtpbWp1bjkxIn0.A69q-GEVvrkN_P22o4ZRVZYxKG6r0CHVLxKoIuuvXfg
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NDA4ODQ5LCJleHAiOjE3MjQ0MTI0NDksInN1YiI6ImtpbWp1bjkxIn0.CRDd5f2ncSWZL6GEcVR1CmtODLCNWTaUoE9QGqg820g
 #@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MzE4NTk5LCJleHAiOjE3MjQzMjIxOTksInN1YiI6Imp1bmdldW45NyJ9.qxEPcSysWV68F-mhrcnCMWFhHeodou__GKDz7H78DE4
-@walkId = 25
-@petId = 11
+@walkId = 19
+@petIds = 2,3
+@petId = 2
 
 ### 회원1 로그인 요청
 POST http://localhost:8080/api/v1/users/login
@@ -30,7 +31,7 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "petIds" :  [11],
+  "petIds" :  [{{petIds}}],
   "startTime": "2024-08-10T12:00:00Z"
 }
 
