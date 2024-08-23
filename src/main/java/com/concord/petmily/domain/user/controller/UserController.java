@@ -4,12 +4,20 @@ import com.concord.petmily.domain.user.dto.AddUserRequest;
 import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.service.UserService;
 import com.concord.petmily.domain.user.service.UserServiceImpl;
+import com.concord.petmily.domain.walk.dto.WalkDto;
+import com.concord.petmily.domain.walk.dto.WalkStatisticsDto;
+import com.concord.petmily.domain.walk.service.WalkService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,6 +26,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final WalkService walkService;
 
     /**
      * 회원가입
@@ -37,5 +46,20 @@ public class UserController {
         User user = userService.findById(userId);
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    /**
+     * 회원의 모든 반려동물의 산책 기록 조회
+     *
+     * 옵션: 날짜 범위, 반려동물 ID
+     */
+    @GetMapping
+    public ResponseEntity<List<WalkDto>> getUserPetsWalks(
+            @PathVariable Long userId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        List<WalkDto> walks = walkService.getUserPetsWalks(userId, startDate, endDate);
+        return ResponseEntity.ok(walks);
     }
 }

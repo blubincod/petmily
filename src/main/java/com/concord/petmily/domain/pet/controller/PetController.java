@@ -3,6 +3,9 @@ package com.concord.petmily.domain.pet.controller;
 import com.concord.petmily.domain.pet.dto.PetDto;
 import com.concord.petmily.domain.pet.entity.Pet;
 import com.concord.petmily.domain.pet.service.PetService;
+import com.concord.petmily.domain.walk.dto.WalkDto;
+import com.concord.petmily.domain.walk.dto.WalkStatisticsDto;
+import com.concord.petmily.domain.walk.service.WalkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/pets")
@@ -23,6 +29,7 @@ import javax.validation.Valid;
 public class PetController {
 
     private final PetService petService;
+    private final WalkService walkService;
 
     /**
      * 반려동물 등록
@@ -92,13 +99,24 @@ public class PetController {
         return ResponseEntity.status(204).body("반려 동물 정보 삭제 완료"); // 204 No Content 반환
     }
 
-    // TODO 산책으로 이동
-//    /**
-//     * 반려동물의 전체 산책 기록 조회
-//     */
-//    @GetMapping("/{petId}/walks")
-//    public ResponseEntity<?> getPetWalks(PathVariable petId) {
-//        // TODO 전체 산책 기록 조회 로직
-//        return ResponseEntity.ok(null);
-//    }
+    /**
+     * 특정 반려동물의 산책 일별 조회
+     */
+    @GetMapping("/walks/daily")
+    public ResponseEntity<Map<LocalDate, List<WalkStatisticsDto>>> getPetDailyWalks(@PathVariable Long petId) {
+//        Map<LocalDate, List<WalkStatisticsDto>> dailyWalks = walkService.getPetDailyWalks(petId);
+        return ResponseEntity.ok(null);
+    }
+
+    /**
+     * 특정 반려동물의 특정 산책 상세 정보 조회
+     */
+    @GetMapping("/walks/{walkId}")
+    public ResponseEntity<WalkDto> getPetWalkDetail(
+            @PathVariable Long petId,
+            @PathVariable Long walkId) {
+//        WalkDto walkDetail = walkService.getPetWalkDetail(petId, walkId);
+        return ResponseEntity.ok(null);
+    }
+
 }

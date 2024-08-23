@@ -90,28 +90,39 @@ public class WalkController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    /**
-     * 회원의 모든 반려동물의 산책 기록 조회
-     */
-    @GetMapping
-    public ResponseEntity<List<WalkDto>> getUserPetsWalks(
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        List<WalkDto> walkDtoList = walkService.getUserPetsWalks(userDetails.getUsername());
+//    /**
+//     * 회원의 모든 반려동물의 산책 기록 조회
+//     */
+//    @GetMapping("/pets")
+//    public ResponseEntity<List<WalkDto>> getUserPetsWalks(
+//            @AuthenticationPrincipal UserDetails userDetails
+//    ) {
+//        List<WalkDto> userPetsWalks = walkService.getUserPetsWalks(userDetails.getUsername());
+//        System.out.println(userPetsWalks);
+//        return ResponseEntity.status(HttpStatus.OK).body(userPetsWalks);
+//    }
+//
+//    /**
+//     * 반려동물의 전체 산책 기록 조회
+//     */
+//    @GetMapping("/pets/{petId}")
+//    public ResponseEntity<List<WalkDto>> getPetWalks(
+//            @PathVariable Long petId) {
+//        List<WalkDto> petWalks = walkService.getPetWalks(petId);
+//        System.out.println(petWalks);
+//        return ResponseEntity.status(HttpStatus.OK).body(petWalks);
+//    }
 
-        return ResponseEntity.status(HttpStatus.OK).body(walkDtoList);
-    }
-
-    /**
-     * 반려동물의 특정 산책 정보 조회
-     */
-    @GetMapping("/{walkId}")
-    public ResponseEntity<?> getPetWalk(
-            @PathVariable String walkId) {
-        // TODO 특정 산책 정보 조회 로직
-        return ResponseEntity.ok(null);
-    }
-
+//    /**
+//     * TODO 반려동물의 특정 산책 정보를 조회
+//     */
+//    @GetMapping("/{walkId}/pets/{petId}")
+//    public ResponseEntity<List<WalkDto>> getPetWalk(
+//            @PathVariable Long petId) {
+//        List<WalkDto> petWalks = walkService.getPetWalks(petId);
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(petWalks);
+//    }
 
     /**
      * 산책 목표 생성

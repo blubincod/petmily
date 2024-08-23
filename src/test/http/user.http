@@ -43,10 +43,3 @@ Content-Type: application/json
 GET http://localhost:8080/api/v1/users/3
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
-
-### 회원의 모든 반려동물 산책 기록 조회
-# @no-redirect
-GET http://localhost:8080/api/v1/walks
-Authorization: Bearer {{accessToken}}
-
-### 나의 반려동물 조회

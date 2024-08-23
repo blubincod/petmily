@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
     }
 
+    // TODO 중복 기능?
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));

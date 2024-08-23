@@ -5,6 +5,7 @@ import com.concord.petmily.domain.walk.entity.WalkStatus;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 산책 데이터 전송 객체

@@ -1,7 +1,7 @@
 # Walk 테스트
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NDA4ODQ5LCJleHAiOjE3MjQ0MTI0NDksInN1YiI6ImtpbWp1bjkxIn0.CRDd5f2ncSWZL6GEcVR1CmtODLCNWTaUoE9QGqg820g
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NDEzMjgzLCJleHAiOjE3MjQ0MTY4ODMsInN1YiI6ImtpbWp1bjkxIn0.5K2X3LbdVTYp0cUGXKtQigpE40jvwpKfRtr44b236sw
 #@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MzE4NTk5LCJleHAiOjE3MjQzMjIxOTksInN1YiI6Imp1bmdldW45NyJ9.qxEPcSysWV68F-mhrcnCMWFhHeodou__GKDz7H78DE4
 @walkId = 19
 @petIds = 2,3
@@ -86,3 +86,10 @@ Content-Type: application/json
 # @no-redirect
 GET http://localhost:8080/api/v1/walks/pets
 Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+### 반려동물의 산책 정보 조회
+# @no-redirect
+GET http://localhost:8080/api/v1/walks/pets/2
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json

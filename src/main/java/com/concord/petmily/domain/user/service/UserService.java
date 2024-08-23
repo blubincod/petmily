@@ -2,6 +2,11 @@ package com.concord.petmily.domain.user.service;
 
 import com.concord.petmily.domain.user.dto.AddUserRequest;
 import com.concord.petmily.domain.user.entity.User;
+import com.concord.petmily.domain.walk.dto.WalkDto;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -14,15 +19,11 @@ public interface UserService {
 
     /**
      *
-     * @param userId
-     * @return
      */
     User findById(Long userId);
 
     /**
-     *
-     * @param username
-     * @return
+     * TODO 중복 기능?
      */
     User findByUsername(String username);
 }
