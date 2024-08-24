@@ -1,6 +1,8 @@
 package com.concord.petmily.domain.walk.entity;
 
 import com.concord.petmily.domain.pet.entity.Pet;
+import com.concord.petmily.domain.walk.dto.WalkActivityDto;
+import com.concord.petmily.domain.walk.dto.WalkDetailDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,12 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
 @Data
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "walk_activity")
 public class WalkActivity {
 

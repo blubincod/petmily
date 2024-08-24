@@ -47,8 +47,8 @@ public class User implements UserDetails {
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", length = 100)
-    private Status status;
+    @Column(name = "user_status", length = 100)
+    private Status userStatus;
 
     @Column(name = "is_walking", nullable = false)
     public Boolean isWalking = false;  // 산책 중 확인(기본값 false)

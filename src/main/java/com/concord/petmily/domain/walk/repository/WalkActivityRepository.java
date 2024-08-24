@@ -1,7 +1,12 @@
 package com.concord.petmily.domain.walk.repository;
 
+import com.concord.petmily.domain.walk.entity.Walk;
 import com.concord.petmily.domain.walk.entity.WalkActivity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 /**
  * 산책 저장소 인터페이스
@@ -9,4 +14,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface WalkActivityRepository extends JpaRepository<WalkActivity, Long> {
 
+    // 산책 아이디로 특정 산책 활동 기록 찾기
+    @Query("SELECT wa FROM WalkActivity wa WHERE wa.walkingPet.walk.id = :walkId")
+    List<WalkActivity> findByWalkId(@Param("walkId") Long walkId);
 }

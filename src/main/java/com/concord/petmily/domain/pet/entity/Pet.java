@@ -1,93 +1,90 @@
 package com.concord.petmily.domain.pet.entity;
 
 import com.concord.petmily.domain.pet.dto.PetDto;
+import com.concord.petmily.domain.user.entity.User;
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "pet")
-@Getter
-@Setter
-@RequiredArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Pet {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(nullable = false)
-  private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY) // Pet 엔티티를 로드할 때 User 정보를 즉시 로드하지 않고, 실제로 사용될 때 로드
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private Category category;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
-  @Column(nullable = false, length = 50)
-  private String brand;
+    @Column(nullable = false, length = 50)
+    private String brand;
 
-  @Column(nullable = false)
-  private LocalDate birthDate;
+    @Column(nullable = false)
+    private LocalDate birthDate;
 
-  @Column(nullable = false)
-  private int age;
+    @Column(nullable = false)
+    private int age;
 
-  @Column(nullable = false, length = 30)
-  private String name;
+    @Column(nullable = false, length = 30)
+    private String name;
 
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private Gender gender;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
-  @Column(nullable = false)
-  private Boolean isPetsNeuter;
+    @Column(nullable = false)
+    private Boolean isPetsNeuter;
 
-  @Column(nullable = false)
-  private double weight;
+    @Column(nullable = false)
+    private double weight;
 
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private Status status;
+    @Column(name = "pet_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PetStatus petStatus;
 
-  @Column(length = 255)
-  private String image;
+    @Column(length = 255)
+    private String image;
 
-  @Column(unique = true, length = 20)
-  private String chip;
+    @Column(unique = true, length = 20)
+    private String chip;
 
-  @CreatedDate
-  @Column(nullable = false, updatable = false)
-  private LocalDateTime createAt;
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createAt;
 
-  @LastModifiedDate
-  @Column(nullable = false)
-  private LocalDateTime modifiedAt;
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime modifiedAt;
 
-  private Pet(Long userId, Category category, String brand, LocalDate birthDate, int age,
-      String name, Gender gender, Boolean isPetsNeuter, double weight, Status status,
-       String chip) {
-    this.userId = userId;
-    this.category = category;
-    this.brand = brand;
-    this.birthDate = birthDate;
-    this.age = age;
-    this.name = name;
-    this.gender = gender;
-    this.isPetsNeuter = isPetsNeuter;
-    this.weight = weight;
-    this.status = status;
-    this.chip = chip;
-  }
-
-  public static Pet from(Long userId, PetDto.Create request) {
-    return new Pet(userId, request.getPetsCategory(), request.getPetsBreed(), request.getBirthDate(),
-        request.getPetsAge(), request.getPetsName(), request.getPetsGender(), request.isPetsNeuter(),
-        request.getPetsWeight(), Status.ACTIVE,
-        request.getPetsChip().isEmpty() ? null : request.getPetsChip());
-  }
+    public static Pet fromEntity(User user, PetDto.Create request) {
+        return Pet.builder()
+                .user(user)
+                .category(request.getPetsCategory())
+                .brand(request.getPetsBreed())
+                .birthDate(request.getBirthDate())
+                .age(request.getPetsAge())
+                .name(request.getPetsName())
+                .gender(request.getPetsGender())
+                .isPetsNeuter(request.isPetsNeuter())
+                .weight(request.getPetsWeight())
+                .petStatus(PetStatus.ACTIVE)
+                .chip(request.getPetsChip().isEmpty() ? null : request.getPetsChip())
+                .build();
+    }
 }

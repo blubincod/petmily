@@ -1,17 +1,17 @@
 package com.concord.petmily.domain.user.exception;
 
+import com.concord.petmily.common.exception.BaseException;
 import com.concord.petmily.common.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Data
-@AllArgsConstructor
-public class UserException extends RuntimeException {
-    ErrorCode errorCode;
-    String errorMessage;
-
+public class UserException extends BaseException {
     public UserException(ErrorCode errorCode) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorCode.getMessage();
+        super(errorCode);
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return getErrorCode().getMessage();
     }
 }

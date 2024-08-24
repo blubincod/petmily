@@ -2,28 +2,27 @@ package com.concord.petmily.domain.walk.dto;
 
 import com.concord.petmily.domain.walk.entity.Walk;
 import com.concord.petmily.domain.walk.entity.WalkStatus;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * 산책 데이터 전송 객체
- */
 @Data
 @Builder
-public class WalkDto {
+public class WalkWithPetsDto {
+    private List<Long> petIds;
     private Long walkId;
-    private double distance; // 산책 거리
-    private double duration; // 산책 총 시간
-    private LocalDateTime startTime; // 산책 시작 시간
-    private LocalDateTime endTime; // 산책 종료 시간
-    private WalkStatus status; // 산책 진행 상태
+    private double distance;
+    private double duration;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private WalkStatus status;
 
-    // Walk Entity를 WalkDto로 변환하는 메서드
-    public static WalkDto fromEntity(Walk walk){
-        return WalkDto.builder()
+    // WalkWithPetsDto 객체를 생성
+    public static WalkWithPetsDto fromEntity(Walk walk, List<Long> petIds) {
+        return WalkWithPetsDto.builder()
+                .petIds(petIds)
                 .walkId(walk.getId())
                 .distance(walk.getDistance())
                 .duration(walk.getDuration())

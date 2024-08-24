@@ -1,16 +1,15 @@
 package com.concord.petmily.domain.likes.exception;
 
+import com.concord.petmily.common.exception.BaseException;
 import com.concord.petmily.common.exception.ErrorCode;
-import lombok.*;
 
-@Data
-@AllArgsConstructor
-public class LikesException extends RuntimeException {
-    ErrorCode errorCode;
-    String errorMessage;
-
+public class LikesException extends BaseException {
     public LikesException(ErrorCode errorCode) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorCode.getMessage();
+        super(errorCode);
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return getErrorCode().getMessage();
     }
 }

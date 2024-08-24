@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
                 .nickname(dto.getNickname())
                 .phone(dto.getPhone())
                 .role(Role.USER)  // 기본값 설정
-                .status(Status.ACTIVE)  // 기본값 설정
+                .userStatus(Status.ACTIVE)  // 기본값 설정
                 .isWalking(false)
                 .build();
 
@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
     }
 
+    // TODO 중복 기능?
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));

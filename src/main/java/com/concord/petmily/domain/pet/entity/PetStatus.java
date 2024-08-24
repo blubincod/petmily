@@ -1,6 +1,6 @@
 package com.concord.petmily.domain.pet.entity;
 
-public enum Status{
+public enum PetStatus {
     ACTIVE,
     DELETED;
   }

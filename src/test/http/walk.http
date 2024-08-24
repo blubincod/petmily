@@ -1,10 +1,11 @@
 # Walk 테스트
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MzE4NTk5LCJleHAiOjE3MjQzMjIxOTksInN1YiI6Imp1bmdldW45NyJ9.qxEPcSysWV68F-mhrcnCMWFhHeodou__GKDz7H78DE4
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NDkwMjI5LCJleHAiOjE3MjQ0OTM4MjksInN1YiI6ImtpbWp1bjkxIn0.MnDZgaPufQfx7ulr16jcSkhMDxEyS3ErHtY461bYNps
 #@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MzE4NTk5LCJleHAiOjE3MjQzMjIxOTksInN1YiI6Imp1bmdldW45NyJ9.qxEPcSysWV68F-mhrcnCMWFhHeodou__GKDz7H78DE4
-@walkId = 25
-@petId = 11
+@walkId = 20
+@petIds = 1,3
+@petId = 1
 
 ### 회원1 로그인 요청
 POST http://localhost:8080/api/v1/users/login
@@ -30,8 +31,8 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "petIds" :  [11],
-  "startTime": "2024-08-10T12:00:00Z"
+  "petIds" :  [{{petIds}}],
+  "startTime": "2024-08-12T12:00:00Z"
 }
 
 ### 산책 종료
@@ -40,7 +41,7 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "endTime": "2024-08-10T13:00:00Z",
+  "endTime": "2024-08-13T13:00:00Z",
   "distance": 5.2
 
 }
@@ -80,3 +81,21 @@ Content-Type: application/json
   "activity": "WATER",
   "timestamp": "2024-08-10T12:30:00Z"
 }
+
+#### 특정 산책 상세 기록 조회
+#GET http://localhost:8080/api/v1/walks/11
+#Authorization: Bearer {{accessToken}}
+#Content-Type: application/json
+#
+#### 회원의 모든 반려동물 산책 기록 조회
+## @no-redirect
+#GET http://localhost:8080/api/v1/walks/pets
+#Authorization: Bearer {{accessToken}}
+#Content-Type: application/json
+#
+#### 반려동물의 산책 정보 조회
+## @no-redirect
+#GET http://localhost:8080/api/v1/walks/pets/2
+#Authorization: Bearer {{accessToken}}
+#Content-Type: application/json
+
