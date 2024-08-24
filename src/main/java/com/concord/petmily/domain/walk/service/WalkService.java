@@ -26,7 +26,7 @@ public interface WalkService {
      * 산책 기록 조회
      */
     // 회원의 모든 반려동물의 산책 기록 조회
-    public List<WalkWithPetsDto> getUserPetsWalks(Long userId, LocalDate startDate, LocalDate endDate);
+    public List<WalkWithPetsDto> getUserPetsWalks(String username, LocalDate startDate, LocalDate endDate);
 
 //    //  반려동물의 전체 산책 정보를 조회
 //    public List<WalkDto> getPetWalks(Long petId);

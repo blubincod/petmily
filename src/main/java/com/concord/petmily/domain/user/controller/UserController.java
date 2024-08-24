@@ -52,17 +52,16 @@ public class UserController {
     /**
      * 회원의 모든 반려동물의 산책 기록 조회
      *
-     * 옵션: 날짜 범위(시작일 - 종료일)
-     *
-     *
+     * 파라미터 O : 날짜 범위(시작일 - 종료일)의 산책 기록 조회
+     * 파라미터 X : 전체 산책 기록 조회
      */
-    @GetMapping("/{userId}/walks")
+    @GetMapping("/{username}/walks")
     public ResponseEntity<List<WalkWithPetsDto>> getUserPetsWalks(
-            @PathVariable Long userId,
+            @PathVariable String username ,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
-        List<WalkWithPetsDto> walks = walkService.getUserPetsWalks(userId, startDate, endDate);
+        List<WalkWithPetsDto> walks = walkService.getUserPetsWalks(username, startDate, endDate);
         System.out.println(walks);
         return ResponseEntity.status(HttpStatus.OK).body(walks);
     }
