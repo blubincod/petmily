@@ -94,7 +94,7 @@ public class WalkController {
      */
     @GetMapping("/{walkId}")
     public ResponseEntity<?> getWalkDetail(@PathVariable Long walkId) {
-         WalkDetailDto walkDetail =  walkService.getWalkDetail(walkId);
+        WalkDetailDto walkDetail = walkService.getWalkDetail(walkId);
 
         return ResponseEntity.ok(walkDetail);
     }

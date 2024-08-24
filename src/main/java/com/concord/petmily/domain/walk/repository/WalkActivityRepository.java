@@ -1,5 +1,6 @@
 package com.concord.petmily.domain.walk.repository;
 
+import com.concord.petmily.domain.walk.dto.WalkActivityDto;
 import com.concord.petmily.domain.walk.entity.Walk;
 import com.concord.petmily.domain.walk.entity.WalkActivity;
 import org.springframework.data.jpa.repository.JpaRepository;

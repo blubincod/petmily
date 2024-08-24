@@ -206,15 +206,21 @@ public class WalkServiceImpl implements WalkService {
     @Override
     public WalkDetailDto getWalkDetail(Long walkId) {
         Walk walk = walkRepository.findById(walkId)
-                .orElseThrow(()-> new WalkNotFoundException(ErrorCode.WALK_NOT_FOUND));
-        List<WalkingPet> pets = walkingPetRepository.findByWalkId(walkId);
-        List<WalkActivity> activities = walkActivityRepository.findByWalkId(walkId);
-//        List<WalkActivityDto> activityDtos = activities.stream()
-//                .map(WalkActivityDto::fromEntity)
-//                .collect(Collectors.toList());
+                .orElseThrow(() -> new WalkNotFoundException(ErrorCode.WALK_NOT_FOUND));
 
-//        return WalkDetailDto.fromEntity(walk,pets,activityDtos);
-        return null;
+        // 산책에 참여한 반려동물 아이디 리스트
+        List<Long> petIds = walkingPetRepository.findByWalkId(walk.getId())
+                .stream()
+                .map(walkingPet -> walkingPet.getPet().getId())
+                .collect(Collectors.toList());
+
+        // 해당 산책에 활동 리스트
+        List<WalkActivity> activities = walkActivityRepository.findByWalkId(walk.getId());
+        List<WalkActivityDto> activityDtos = activities.stream()
+                .map(WalkActivityDto::fromEntity)
+                .collect(Collectors.toList());
+
+        return WalkDetailDto.fromEntity(walk, petIds, activityDtos);
     }
 
 
