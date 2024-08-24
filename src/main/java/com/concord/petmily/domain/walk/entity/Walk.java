@@ -1,6 +1,5 @@
 package com.concord.petmily.domain.walk.entity;
 
-import com.concord.petmily.domain.pet.entity.Pet;
 import com.concord.petmily.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

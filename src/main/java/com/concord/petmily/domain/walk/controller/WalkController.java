@@ -1,10 +1,8 @@
 package com.concord.petmily.domain.walk.controller;
 
-import com.concord.petmily.domain.pet.entity.Pet;
 import com.concord.petmily.domain.walk.dto.StartWalkRequest;
-import com.concord.petmily.domain.walk.dto.WalkDto;
 import com.concord.petmily.domain.walk.dto.WalkActivityDto;
-import com.concord.petmily.domain.walk.entity.Walk;
+import com.concord.petmily.domain.walk.dto.WalkDto;
 import com.concord.petmily.domain.walk.service.WalkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +18,7 @@ import java.util.Map;
 
 /**
  * 산책 관련 컨트롤러
- *
+ * <p>
  * - 산책 시작 및 산책 정보 기록
  * - 산책 종료 및 산책 정보 기록
  * - 산책 활동 기록
@@ -46,7 +44,7 @@ public class WalkController {
     public ResponseEntity<WalkDto> startWalk(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody StartWalkRequest startWalkRequest
-            ) {
+    ) {
         String username = userDetails.getUsername();
         List<Long> petIds = startWalkRequest.getPetIds();
         LocalDateTime startTime = startWalkRequest.getStartTime();

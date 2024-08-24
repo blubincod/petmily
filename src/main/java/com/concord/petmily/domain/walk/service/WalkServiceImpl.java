@@ -228,7 +228,7 @@ public class WalkServiceImpl implements WalkService {
     }
 
     /**
-     * 회원의 모든 반려동물의 전체 산책 통계 조회
+     * 회원의 모든 반려동물별 전체 산책 통계 조회
      */
     @Override
     @Transactional(readOnly = true)
@@ -247,6 +247,7 @@ public class WalkServiceImpl implements WalkService {
                 .collect(Collectors.toList());
     }
 
+    // 산책 통계 메서드
     private WalkStatisticsDto createWalkStatisticsDto(Pet pet, List<Walk> walks) {
         // 산책 통계 계산
         int totalWalks = walks.size();
@@ -263,37 +264,37 @@ public class WalkServiceImpl implements WalkService {
         return WalkStatisticsDto.builder()
                 .petId(pet.getId())
                 .totalWalks(totalWalks)
-                .totalDistance(totalDistance)
-                .totalDuration(totalDuration)
-                .averageDistance(avgDistance)
-                .averageDuration(avgDuration)
+                .totalDistanceKm(totalDistance)
+                .totalDurationMinutes(totalDuration)
+                .averageDistanceKm(avgDistance)
+                .averageDurationMinutes(avgDuration)
                 .build();
     }
 
 
     /**
-     * 회원의 모든 반려동물의 산책 기록 조회
+     * 모든 반려동물에 대한 종합적인 산책 통계 조회
      */
 //    @Override
-//    public Map<LocalDate, WalkStatisticsDto> getUserDailyWalkStatistics(Long userId, LocalDate startDate, LocalDate endDate) {
-//        List<Walk> walks = walkRepository.findByUserIdAndCreatedDateBetween(userId, startDate, endDate);
+//    @Transactional(readOnly = true)
+//    public WalkStatisticsDto getUserPetsOverallWalkStatistics(String username) {
+//        User user = getUser(username);
+//        List<Pet> pets = petRepository.findByUser(user);
 //
-//        return walks.stream()
-//                .collect(Collectors.groupingBy(
-//                        walk -> walk.getCreatedDate().toLocalDate(),
-//                        Collectors.collectingAndThen(Collectors.toList(), this::calculateDailyStatistics)
-//                ));
-//    }
+//        List<Walk> allWalks = walkRepository.findAllByUserPets(pets);
 //
-//    private WalkStatisticsDto calculateDailyStatistics(List<Walk> dailyWalks) {
-//        double totalDistance = dailyWalks.stream().mapToDouble(Walk::getDistance).sum();
-//        double totalDuration = dailyWalks.stream().mapToDouble(Walk::getDuration).sum();
-//        int walkCount = dailyWalks.size();
+//        int totalWalks = allWalks.size();
+//        double totalDistance = allWalks.stream().mapToDouble(Walk::getDistance).sum();
+//        long totalDuration = allWalks.stream()
+//                .mapToLong(walk -> Duration.between(walk.getStartTime(), walk.getEndTime()).toMinutes())
+//                .sum();
 //
 //        return WalkStatisticsDto.builder()
-//                .totalDistance(totalDistance)
-//                .totalDuration(totalDuration)
-//                .walkCount(walkCount)
+//                .totalWalks(totalWalks)
+//                .totalDistanceKm(totalDistance)
+//                .totalDurationMinutes(totalDuration)
+//                .averageDistanceKm(totalWalks > 0 ? totalDistance / totalWalks : 0)
+//                .averageDurationMinutes(totalWalks > 0 ? (double) totalDuration / totalWalks : 0)
 //                .build();
 //    }
 
