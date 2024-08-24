@@ -52,7 +52,9 @@ public class UserController {
     /**
      * 회원의 모든 반려동물의 산책 기록 조회
      *
-     * 옵션: 날짜 범위, 반려동물 ID
+     * 옵션: 날짜 범위(시작일 - 종료일)
+     *
+     *
      */
     @GetMapping("/{userId}/walks")
     public ResponseEntity<List<WalkWithPetsDto>> getUserPetsWalks(

@@ -208,10 +208,13 @@ public class WalkServiceImpl implements WalkService {
      * 회원의 모든 반려동물의 산책 기록 조회
      */
     @Override
-    public List<WalkWithPetsDto> getUserPetsWalks(Long userId, LocalDate startDate, LocalDate endDate) {
-        List<Walk> walks = walkRepository.findByUserIdAndWalkDateBetween(userId, startDate, endDate);
-
+    public List<WalkWithPetsDto> getUserPetsWalks(Long userId, LocalDate start, LocalDate end) {
         // TODO LocalDate 형식만 받도록 설정
+        // 파라미터 입력하지 않은 경우 처리
+        LocalDate startDate = start != null ? start : LocalDate.of(1970, 1, 1);
+        LocalDate endDate = end != null ? end : LocalDate.now();
+
+        List<Walk> walks = walkRepository.findByUserIdAndWalkDateBetween(userId, startDate, endDate);
 
         return walks.stream()
                 .map(walk -> {

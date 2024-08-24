@@ -12,7 +12,7 @@ import java.util.List;
  * 산책 데이터 전송 객체
  */
 @Data
-@SuperBuilder
+@Builder
 public class WalkDto {
     private Long walkId;
     private double distance; // 산책 거리
