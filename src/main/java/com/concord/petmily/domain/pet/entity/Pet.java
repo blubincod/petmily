@@ -24,7 +24,7 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // Pet 엔티티를 로드할 때 User 정보를 즉시 로드하지 않고, 실제로 사용될 때 로드
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

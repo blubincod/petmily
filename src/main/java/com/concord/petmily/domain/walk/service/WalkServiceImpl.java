@@ -7,10 +7,7 @@ import com.concord.petmily.domain.pet.repository.PetRepository;
 import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.exception.UserNotFoundException;
 import com.concord.petmily.domain.user.repository.UserRepository;
-import com.concord.petmily.domain.walk.dto.WalkActivityDto;
-import com.concord.petmily.domain.walk.dto.WalkDto;
-import com.concord.petmily.domain.walk.dto.WalkStatisticsDto;
-import com.concord.petmily.domain.walk.dto.WalkWithPetsDto;
+import com.concord.petmily.domain.walk.dto.*;
 import com.concord.petmily.domain.walk.entity.*;
 import com.concord.petmily.domain.walk.exception.WalkAccessDeniedException;
 import com.concord.petmily.domain.walk.exception.WalkException;
@@ -202,6 +199,24 @@ public class WalkServiceImpl implements WalkService {
             throw new PetException(ErrorCode.PET_OWNER_MISMATCH);
         }
     }
+
+    /**
+     * 특정 산책 기록 상세 조회
+     */
+    @Override
+    public WalkDetailDto getWalkDetail(Long walkId) {
+        Walk walk = walkRepository.findById(walkId)
+                .orElseThrow(()-> new WalkNotFoundException(ErrorCode.WALK_NOT_FOUND));
+        List<WalkingPet> pets = walkingPetRepository.findByWalkId(walkId);
+        List<WalkActivity> activities = walkActivityRepository.findByWalkId(walkId);
+//        List<WalkActivityDto> activityDtos = activities.stream()
+//                .map(WalkActivityDto::fromEntity)
+//                .collect(Collectors.toList());
+
+//        return WalkDetailDto.fromEntity(walk,pets,activityDtos);
+        return null;
+    }
+
 
     /**
      * 회원의 모든 반려동물의 산책 기록 조회

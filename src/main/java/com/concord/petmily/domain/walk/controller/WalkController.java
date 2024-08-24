@@ -2,6 +2,7 @@ package com.concord.petmily.domain.walk.controller;
 
 import com.concord.petmily.domain.walk.dto.StartWalkRequest;
 import com.concord.petmily.domain.walk.dto.WalkActivityDto;
+import com.concord.petmily.domain.walk.dto.WalkDetailDto;
 import com.concord.petmily.domain.walk.dto.WalkDto;
 import com.concord.petmily.domain.walk.service.WalkService;
 import lombok.RequiredArgsConstructor;
@@ -88,6 +89,15 @@ public class WalkController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * 특정 산책 기록 상세 조회
+     */
+    @GetMapping("/{walkId}")
+    public ResponseEntity<?> getWalkDetail(@PathVariable Long walkId) {
+         WalkDetailDto walkDetail =  walkService.getWalkDetail(walkId);
+
+        return ResponseEntity.ok(walkDetail);
+    }
 //    /**
 //     * 회원의 모든 반려동물의 산책 기록 조회
 //     */

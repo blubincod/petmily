@@ -1,9 +1,6 @@
 package com.concord.petmily.domain.walk.service;
 
-import com.concord.petmily.domain.walk.dto.WalkActivityDto;
-import com.concord.petmily.domain.walk.dto.WalkDto;
-import com.concord.petmily.domain.walk.dto.WalkStatisticsDto;
-import com.concord.petmily.domain.walk.dto.WalkWithPetsDto;
+import com.concord.petmily.domain.walk.dto.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +23,9 @@ public interface WalkService {
     /**
      * 산책 기록 조회
      */
+    // 특정 산책 상세 기록 조회
+    WalkDetailDto getWalkDetail(Long walkId);
+
     // 회원의 모든 반려동물의 산책 기록 조회
     List<WalkWithPetsDto> getUserPetsWalks(String username, LocalDate startDate, LocalDate endDate);
 

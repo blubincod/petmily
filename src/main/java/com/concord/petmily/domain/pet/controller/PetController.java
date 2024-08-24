@@ -100,9 +100,9 @@ public class PetController {
     }
 
     /**
-     * 특정 반려동물의 산책 일별 조회
+     * 특정 반려동물의 산책 특정일 통계 조회
      */
-    @GetMapping("/walks/daily")
+    @GetMapping("/{petId}/walks/daily")
     public ResponseEntity<Map<LocalDate, List<WalkStatisticsDto>>> getPetDailyWalks(@PathVariable Long petId) {
 //        Map<LocalDate, List<WalkStatisticsDto>> dailyWalks = walkService.getPetDailyWalks(petId);
         return ResponseEntity.ok(null);
