@@ -1,7 +1,7 @@
 # User 요청
 
 ### Value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NDcyNzAxLCJleHAiOjE3MjQ0NzYzMDEsInN1YiI6ImNob2ltaW5qaTAyIn0.n8N1KVoJ7ZcKScV7DQngKpE8SOpwET1hsX32axArkYU
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NTA2MjUxLCJleHAiOjE3MjQ1MDk4NTEsInN1YiI6ImtpbWp1bjkxIn0.d3cwDnBwJ9xL7wep9pQ8-AvH0tv-QAVzD8RnZiuGtUU
 @userId = 1
 @username = kimjun91
 

@@ -82,20 +82,20 @@ Content-Type: application/json
   "timestamp": "2024-08-10T12:30:00Z"
 }
 
-### 특정 산책 상세 기록 조회
-GET http://localhost:8080/api/v1/walks/11
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-### 회원의 모든 반려동물 산책 기록 조회
-# @no-redirect
-GET http://localhost:8080/api/v1/walks/pets
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-### 반려동물의 산책 정보 조회
-# @no-redirect
-GET http://localhost:8080/api/v1/walks/pets/2
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
+#### 특정 산책 상세 기록 조회
+#GET http://localhost:8080/api/v1/walks/11
+#Authorization: Bearer {{accessToken}}
+#Content-Type: application/json
+#
+#### 회원의 모든 반려동물 산책 기록 조회
+## @no-redirect
+#GET http://localhost:8080/api/v1/walks/pets
+#Authorization: Bearer {{accessToken}}
+#Content-Type: application/json
+#
+#### 반려동물의 산책 정보 조회
+## @no-redirect
+#GET http://localhost:8080/api/v1/walks/pets/2
+#Authorization: Bearer {{accessToken}}
+#Content-Type: application/json
 
