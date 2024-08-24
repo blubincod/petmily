@@ -36,11 +36,11 @@ public class PetController {
      */
     @PostMapping
     public ResponseEntity<?> registerPet(
-            @RequestParam Long userId,
+            @RequestParam String username,
             @Valid @RequestBody PetDto.Create request,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage
     ) {
-        petService.createPet(userId, request, profileImage);
+        petService.registerPet(username, request, profileImage);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("반려동물 정보 등록 완료");
     }

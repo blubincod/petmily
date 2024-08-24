@@ -12,7 +12,7 @@ public interface PetService {
      *
      * @param profileImage 프로필 이미지 파일
      */
-    void createPet(Long userId, PetDto.Create request, MultipartFile profileImage);
+    void registerPet(String username, PetDto.Create request, MultipartFile profileImage);
 
     /**
      * 회원의 반려동물 목록 조회

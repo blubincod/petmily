@@ -62,7 +62,18 @@ public class UserController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
         List<WalkWithPetsDto> walks = walkService.getUserPetsWalks(username, startDate, endDate);
-        System.out.println(walks);
-        return ResponseEntity.status(HttpStatus.OK).body(walks);
+
+        return ResponseEntity.ok(walks);
+    }
+
+    /**
+     * 회원의 모든 반려동물의 전체 산책 통계 조회
+     */
+    @GetMapping("/{username}/pets/walks/statistics")
+    public ResponseEntity<List<WalkStatisticsDto>> getUserPetsWalkStatistics(
+            @PathVariable String username) {
+        List<WalkStatisticsDto> walkStatistics = walkService.getUserPetsWalkStatistics(username);
+
+        return ResponseEntity.ok(walkStatistics);
     }
 }
