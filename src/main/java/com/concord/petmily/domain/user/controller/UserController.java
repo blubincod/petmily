@@ -28,7 +28,7 @@ import java.util.Map;
  * [회원]
  * - 회원가입
  * - 회원 정보 조회
- * [산책 기록]
+ * [산책]
  * - 회원의 모든 반려동물의 산책 기록 조회
  * - 회원의 모든 반려동물별 전체 산책 통계 조회
  * - 회원의 모든 반려동물에 대한 종합적인 산책 통계 조회
@@ -62,9 +62,8 @@ public class UserController {
     }
 
     /**
-     * 회원의 모든 반려동물의 산책 특정 기간 기록 조회
+     * 회원의 모든 반려동물의 특정 기간 산책 기록 조회
      *
-     * @param username  조회할 사용자의 아이디
      * @param startDate 조회 시작 날짜 (선택적, null 가능)
      * @param endDate   조회 종료 날짜 (선택적, null 가능)
      * @param pageable  페이지네이션 정보 (페이지 번호, 페이지 크기, 정렬 정보)
@@ -87,22 +86,16 @@ public class UserController {
     /**
      * 회원의 모든 반려동물별 전체 산책 통계 조회
      *
-     * @param username 조회할 사용자의 아이디 (URL 경로 변수)
-     * @param pageable 페이지네이션 정보 (페이지 번호, 페이지 크기, 정렬 정보 포함)
-     * @return 페이지네이션된 WalkStatisticsDto 객체를 포함한 ApiResponse
+     * @param pageable 페이지네이션 정보 (페이지 번호, 페이지 크기, 정렬 정보)
      */
     @GetMapping("/{username}/pets/walks/statistics")
-    public ResponseEntity<ApiResponse<Page<WalkStatisticsDto>>> getUserPetsWalkStatistics(
+    public ResponseEntity<ApiResponse<List<WalkStatisticsDto>>> getUserPetsWalkStatistics(
             @PathVariable String username,
-            @PageableDefault(page = 0, size = 10, sort = "petId", direction = Sort.Direction.ASC) Pageable pageable
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
     ) {
-        Page<WalkStatisticsDto> statisticsPage = walkService.getUserPetsWalkStatistics(username, pageable);
+        Page<WalkStatisticsDto> petsStatisticsPage = walkService.getUserPetsWalkStatistics(username, pageable);
 
-        ApiResponse<Page<WalkStatisticsDto>> response = new ApiResponse<>();
-        response.setStatus("success");
-        response.setData(statisticsPage);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(petsStatisticsPage));
     }
 
     /**

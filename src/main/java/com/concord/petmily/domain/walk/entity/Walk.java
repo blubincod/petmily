@@ -28,7 +28,7 @@ public class Walk {
     private Long id; // 산책 아이디
 
     private double distance; // 산책 거리
-    private double duration; // 산책 시간
+    private long duration; // 산책 시간
     private LocalDateTime startTime; // 산책 시작 시간
     private LocalDateTime endTime; // 산책 종료 시간
     private WalkStatus walkStatus; // 산책 진행 상태

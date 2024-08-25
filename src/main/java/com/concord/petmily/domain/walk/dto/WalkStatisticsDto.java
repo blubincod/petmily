@@ -15,5 +15,5 @@ public class WalkStatisticsDto {
     private double totalDistanceKm; // 총 산책 거리(KM)
     private long totalDurationMinutes; // 총 산책 시간(Minutes)
     private double averageDistanceKm; // 평균 산책 거리(KM)
-    private double averageDurationMinutes; // 평균 산책 시간(Minutes)
+    private long averageDurationMinutes; // 평균 산책 시간(Minutes)
 }

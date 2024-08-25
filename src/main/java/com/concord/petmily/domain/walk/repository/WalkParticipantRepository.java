@@ -7,11 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface WalkingPetRepository extends JpaRepository<WalkParticipant, WalkParticipantId> {
+public interface WalkParticipantRepository extends JpaRepository<WalkParticipant, WalkParticipantId> {
     Optional<WalkParticipant> findByWalkIdAndPetId(Long walkId, Long petId);
 
     List<WalkParticipant> findByWalkId(Long walkId);
 
-    List<WalkParticipant> findByPetId(Long petId);
-
+    List<WalkParticipant> findByIdPetId(Long petId);
 }
