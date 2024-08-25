@@ -2,7 +2,6 @@ package com.concord.petmily.domain.walk.dto;
 
 import com.concord.petmily.domain.walk.entity.Walk;
 import com.concord.petmily.domain.walk.entity.WalkStatus;
-import com.concord.petmily.domain.walk.entity.WalkingPet;
 import lombok.Builder;
 import lombok.Data;
 

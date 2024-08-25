@@ -1,9 +1,6 @@
 package com.concord.petmily.domain.walk.repository;
 
-import com.concord.petmily.domain.user.entity.User;
-import com.concord.petmily.domain.walk.dto.WalkDto;
 import com.concord.petmily.domain.walk.entity.Walk;
-import com.concord.petmily.domain.walk.entity.WalkingPet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

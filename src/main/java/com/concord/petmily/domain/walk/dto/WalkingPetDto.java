@@ -1,11 +1,9 @@
 package com.concord.petmily.domain.walk.dto;
 
 import com.concord.petmily.domain.pet.dto.PetDto;
-import com.concord.petmily.domain.walk.entity.WalkingPet;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data

@@ -1,21 +1,17 @@
 package com.concord.petmily.domain.walk.repository;
 
-import com.concord.petmily.domain.pet.entity.Pet;
-import com.concord.petmily.domain.walk.dto.WalkingPetDto;
-import com.concord.petmily.domain.walk.entity.WalkingPet;
-import com.concord.petmily.domain.walk.entity.WalkingPetId;
+import com.concord.petmily.domain.walk.entity.WalkParticipant;
+import com.concord.petmily.domain.walk.entity.WalkParticipantId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface WalkingPetRepository extends JpaRepository<WalkingPet, WalkingPetId> {
-    Optional<WalkingPet> findByWalkIdAndPetId(Long walkId, Long petId);
+public interface WalkingPetRepository extends JpaRepository<WalkParticipant, WalkParticipantId> {
+    Optional<WalkParticipant> findByWalkIdAndPetId(Long walkId, Long petId);
 
-    List<WalkingPet> findByWalkId(Long walkId);
+    List<WalkParticipant> findByWalkId(Long walkId);
 
-    List<WalkingPet> findPetIdsByWalkId(Long walkId);
-
-    List<WalkingPet> findByPetId(Long petId);
+    List<WalkParticipant> findByPetId(Long petId);
 
 }

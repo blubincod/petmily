@@ -80,7 +80,7 @@ public class WalkServiceImpl implements WalkService {
         walk.setWalkStatus(WalkStatus.IN_PROGRESS);
         walkRepository.save(walk);
 
-        List<WalkingPet> walkingPets = new ArrayList<>();
+        List<WalkParticipant> walkParticipants = new ArrayList<>();
 
         for (int i = 0; i < petIds.size(); i++) {
             Pet pet = petRepository.findById(petIds.get(i))
@@ -92,18 +92,18 @@ public class WalkServiceImpl implements WalkService {
             }
 
             // TODO null 금지
-            WalkingPet walkingPet = new WalkingPet();
-            walkingPet.setWalk(walk);
-            walkingPet.setPet(pet);
+            WalkParticipant walkParticipant = new WalkParticipant();
+            walkParticipant.setWalk(walk);
+            walkParticipant.setPet(pet);
 
-            WalkingPetId walkingPetId = new WalkingPetId();
-            walkingPetId.setWalkId(walk.getId());
-            walkingPetId.setPetId(pet.getId());
-            walkingPet.setId(walkingPetId);
+            WalkParticipantId walkParticipantId = new WalkParticipantId();
+            walkParticipantId.setWalkId(walk.getId());
+            walkParticipantId.setPetId(pet.getId());
+            walkParticipant.setId(walkParticipantId);
 
-            walkingPets.add(walkingPet);
+            walkParticipants.add(walkParticipant);
         }
-        walkingPetRepository.saveAll(walkingPets);
+        walkingPetRepository.saveAll(walkParticipants);
 
         updateWalkingStatus(user, true);
 
@@ -168,10 +168,10 @@ public class WalkServiceImpl implements WalkService {
 
         User user = getUser(username);
 
-        WalkingPet walkingPet = walkingPetRepository.findByWalkIdAndPetId(walkId, walkActivityDto.getPetId())
+        WalkParticipant walkParticipant = walkingPetRepository.findByWalkIdAndPetId(walkId, walkActivityDto.getPetId())
                 .orElseThrow(() -> new WalkNotFoundException(ErrorCode.PET_NOT_IN_THIS_WALK));
 
-        Pet pet = walkingPet.getPet();
+        Pet pet = walkParticipant.getPet();
 
         // 산책 소유자 확인
         if (!walk.getUser().getUsername().equals(username)) {
@@ -185,7 +185,7 @@ public class WalkServiceImpl implements WalkService {
         validatePetOwnership(user, pet);
 
         WalkActivity walkActivity = new WalkActivity();
-        walkActivity.setWalkingPet(walkingPet);
+        walkActivity.setWalkParticipant(walkParticipant);
         walkActivity.setActivityType(walkActivityDto.getActivity());
         walkActivity.setLatitude(walkActivityDto.getLatitude());
         walkActivity.setLongitude(walkActivityDto.getLongitude());
@@ -260,15 +260,15 @@ public class WalkServiceImpl implements WalkService {
         User user = getUser(username);
         Page<Pet> petsPage = petRepository.findById(user.getId(), pageable);
 
-//        List<WalkStatisticsDto> statistics = petsPage.getContent().stream()
-//                .map(pet -> {
-//                    List<WalkingPet> walkingPets = walkingPetRepository.findByPetId(pet.getId());
-//                    List<Walk> petWalks = walkingPets.stream()
-//                            .map(WalkingPet::getWalk)
-//                            .collect(Collectors.toList());
-//                    return createWalkStatisticsDto(pet, petWalks);
-//                })
-//                .collect(Collectors.toList());
+        List<WalkStatisticsDto> statistics = petsPage.getContent().stream()
+                .map(pet -> {
+                    List<WalkParticipant> walkParticipants = walkingPetRepository.findByPetId(pet.getId());
+                    List<Walk> petWalks = walkParticipants.stream()
+                            .map(WalkParticipant::getWalk)
+                            .collect(Collectors.toList());
+                    return createWalkStatisticsDto(pet, petWalks);
+                })
+                .collect(Collectors.toList());
 
         return null;
     }

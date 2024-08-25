@@ -42,5 +42,5 @@ public class Walk {
     private User user; // 회원 정보
 
     @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
-    private List<WalkingPet> walkingPets = new ArrayList<>(); // 그룹
+    private List<WalkParticipant> walkParticipants = new ArrayList<>(); // 그룹
 }

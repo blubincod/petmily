@@ -8,11 +8,11 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "walking_pet")
-public class WalkingPet {
+@Table(name = "walk_participant")
+public class WalkParticipant {
 
     @EmbeddedId
-    private WalkingPetId id;
+    private WalkParticipantId id;
 
     @ManyToOne
     @MapsId("walkId") // 복합 키 클래스(WalkGroupId)의 필드와 엔티티의 필드를 매핑
@@ -24,6 +24,6 @@ public class WalkingPet {
     @JoinColumn(name = "pet_id")
     private Pet pet;
 
-    @OneToMany(mappedBy = "walkingPet")
+    @OneToMany(mappedBy = "walkParticipant")
     private List<WalkActivity> activities;
 }

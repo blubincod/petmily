@@ -118,7 +118,7 @@ VALUES
      '2024-08-12');
 
 -- 산책 참여 반려동물 테이블
-INSERT INTO WALKING_PET (PET_ID, WALK_ID)
+INSERT INTO WALK_PARTICIPANT (PET_ID, WALK_ID)
 VALUES (1, 1),
        (2, 1),
        (1, 2),

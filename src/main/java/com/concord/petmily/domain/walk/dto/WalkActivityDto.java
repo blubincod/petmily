@@ -28,7 +28,7 @@ public class WalkActivityDto {
     public static WalkActivityDto fromEntity(WalkActivity walkActivity) {
         return WalkActivityDto.builder()
                 .id(walkActivity.getId())
-                .petId(walkActivity.getWalkingPet().getPet().getId())
+                .petId(walkActivity.getWalkParticipant().getPet().getId())
                 .latitude(walkActivity.getLatitude())
                 .longitude(walkActivity.getLongitude())
                 .activity(walkActivity.getActivityType())

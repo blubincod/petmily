@@ -16,6 +16,6 @@ import java.util.List;
 public interface WalkActivityRepository extends JpaRepository<WalkActivity, Long> {
 
     // 산책 아이디로 특정 산책 활동 기록 찾기
-    @Query("SELECT wa FROM WalkActivity wa WHERE wa.walkingPet.walk.id = :walkId")
+    @Query("SELECT wp FROM WalkActivity wp WHERE wp.walkParticipant.walk.id = :walkId")
     List<WalkActivity> findByWalkId(@Param("walkId") Long walkId);
 }

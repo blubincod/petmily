@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Embeddable
-public class WalkingPetId implements Serializable {
+public class WalkParticipantId implements Serializable {
     private Long petId;
     private Long walkId;
 }
