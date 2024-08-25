@@ -22,6 +22,9 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     // 사용자 ID와 상태를 기준으로 활성화된 반려동물 리스트 조회
     Page<Pet> findByUserIdAndPetStatus(Long userId, PetStatus petStatus, Pageable pageable);
 
+    // 반려동물 ID에 해당하는 반려동물 정보를 페이지네이션하여 조회
+    Page<Pet> findById(Long petId, Pageable pageable);
+
     // 회원의 반려동물 조회
     Optional<Pet> findByIdAndUserId(Long petId, Long userId);
 

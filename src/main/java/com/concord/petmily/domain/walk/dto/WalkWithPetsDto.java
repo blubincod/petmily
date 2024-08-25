@@ -5,6 +5,7 @@ import com.concord.petmily.domain.walk.entity.WalkStatus;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class WalkWithPetsDto {
     private double duration;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private LocalDate walkDate;
     private WalkStatus status;
 
     // WalkWithPetsDto 객체를 생성
@@ -28,7 +30,9 @@ public class WalkWithPetsDto {
                 .duration(walk.getDuration())
                 .startTime(walk.getStartTime())
                 .endTime(walk.getEndTime())
+                .walkDate(walk.getWalkDate())
                 .status(walk.getWalkStatus())
                 .build();
     }
+
 }

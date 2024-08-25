@@ -1,6 +1,8 @@
 package com.concord.petmily.domain.walk.service;
 
 import com.concord.petmily.domain.walk.dto.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,10 +29,10 @@ public interface WalkService {
     WalkDetailDto getWalkDetail(Long walkId);
 
     // 회원의 모든 반려동물의 산책 기록 조회
-    List<WalkWithPetsDto> getUserPetsWalks(String username, LocalDate startDate, LocalDate endDate);
+    Page<WalkWithPetsDto> getUserPetsWalks(String username, LocalDate startDate, LocalDate endDate, Pageable pageable);
 
     // 회원의 모든 반려동물별 전체 산책 통계 조회
-    List<WalkStatisticsDto> getUserPetsWalkStatistics(String username);
+    Page<WalkStatisticsDto> getUserPetsWalkStatistics(String username, Pageable pageable);
 
 //    //  반려동물의 전체 산책 정보를 조회
 //    public List<WalkDto> getPetWalks(Long petId);

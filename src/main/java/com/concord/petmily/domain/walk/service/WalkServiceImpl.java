@@ -16,6 +16,8 @@ import com.concord.petmily.domain.walk.repository.WalkActivityRepository;
 import com.concord.petmily.domain.walk.repository.WalkRepository;
 import com.concord.petmily.domain.walk.repository.WalkingPetRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -223,29 +225,30 @@ public class WalkServiceImpl implements WalkService {
         return WalkDetailDto.fromEntity(walk, petIds, activityDtos);
     }
 
-
     /**
      * 회원의 모든 반려동물의 산책 기록 조회
      */
     @Override
-    public List<WalkWithPetsDto> getUserPetsWalks(String username, LocalDate start, LocalDate end) {
-
-        // 파라미터 입력하지 않은 경우 처리
-        LocalDate startDate = start != null ? start : LocalDate.of(1970, 1, 1);
-        LocalDate endDate = end != null ? end : LocalDate.now();
-
+    public Page<WalkWithPetsDto> getUserPetsWalks(String username, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         User user = getUser(username);
-        List<Walk> walks = walkRepository.findByUserIdAndWalkDateBetween(user.getId(), startDate, endDate);
+        Page<Walk> walkPage;
+        if (startDate != null && endDate != null) {
+            walkPage = walkRepository.findByUserIdAndWalkDateBetween(user.getId(), startDate, endDate, pageable);
+        } else {
+            walkPage = walkRepository.findByUserId(user.getId(), pageable);
+        }
 
-        return walks.stream()
-                .map(walk -> {
-                    List<Long> petIds = walkingPetRepository.findByWalkId(walk.getId())
-                            .stream()
-                            .map(walkingPet -> walkingPet.getPet().getId())
-                            .collect(Collectors.toList());
-                    return WalkWithPetsDto.fromEntity(walk, petIds);
-                })
+        return walkPage.map(this::convertToWalkWithPetsDto);
+    }
+
+    // Walk 엔티티를 WalkWithPetsDto로 변환
+    private WalkWithPetsDto convertToWalkWithPetsDto(Walk walk) {
+        List<Long> petIds = walkingPetRepository.findByWalkId(walk.getId())
+                .stream()
+                .map(walkingPet -> walkingPet.getPet().getId())
                 .collect(Collectors.toList());
+
+        return WalkWithPetsDto.fromEntity(walk, petIds);
     }
 
     /**
@@ -253,20 +256,32 @@ public class WalkServiceImpl implements WalkService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<WalkStatisticsDto> getUserPetsWalkStatistics(String username) {
+    public Page<WalkStatisticsDto> getUserPetsWalkStatistics(String username, Pageable pageable) {
         User user = getUser(username);
-        List<Pet> pets = petRepository.findByUser(user);
+        Page<Pet> petsPage = petRepository.findById(user.getId(), pageable);
 
-        return pets.stream()
-                .map(pet -> {
-                    List<WalkingPet> walkingPets = walkingPetRepository.findByPet(pet);
-                    List<Walk> petWalks = walkingPets.stream()
-                            .map(WalkingPet::getWalk)
-                            .collect(Collectors.toList());
-                    return createWalkStatisticsDto(pet, petWalks);
-                })
-                .collect(Collectors.toList());
+//        List<WalkStatisticsDto> statistics = petsPage.getContent().stream()
+//                .map(pet -> {
+//                    List<WalkingPet> walkingPets = walkingPetRepository.findByPetId(pet.getId());
+//                    List<Walk> petWalks = walkingPets.stream()
+//                            .map(WalkingPet::getWalk)
+//                            .collect(Collectors.toList());
+//                    return createWalkStatisticsDto(pet, petWalks);
+//                })
+//                .collect(Collectors.toList());
+
+        return null;
     }
+
+    // Walk 엔티티를 WalkStatisticsDto로 변환
+//    private WalkStatisticsDto convertToWalkStatisticsDto(WalkStatisticsDto statistics, ) {
+//        List<Long> petIds = walkingPetRepository.findByWalkId(walk.getId())
+//                .stream()
+//                .map(walkingPet -> walkingPet.getPet().getId())
+//                .collect(Collectors.toList());
+//
+//        return WalkWithPetsDto.fromEntity(walk, petIds);
+//    }
 
     // 산책 통계 메서드
     private WalkStatisticsDto createWalkStatisticsDto(Pet pet, List<Walk> walks) {

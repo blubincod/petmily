@@ -16,6 +16,6 @@ public interface WalkingPetRepository extends JpaRepository<WalkingPet, WalkingP
 
     List<WalkingPet> findPetIdsByWalkId(Long walkId);
 
-    List<WalkingPet> findByPet(Pet pet);
+    List<WalkingPet> findByPetId(Long petId);
 
 }
