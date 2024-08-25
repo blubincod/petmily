@@ -77,7 +77,7 @@ public class UserController {
             @PathVariable String username,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable // id는 walkId
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable // id: walkId
     ) {
         Page<WalkWithPetsDto> walksPage = walkService.getUserPetsWalks(username, startDate, endDate, pageable);
 
@@ -91,7 +91,7 @@ public class UserController {
     @GetMapping("/{username}/pets/walks/statistics")
     public ResponseEntity<ApiResponse<List<WalkStatisticsDto>>> getUserPetsWalkStatistics(
             @PathVariable String username,
-            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable // id: petId
     ) {
         Page<WalkStatisticsDto> petsStatisticsPage = walkService.getUserPetsWalkStatistics(username, pageable);
 

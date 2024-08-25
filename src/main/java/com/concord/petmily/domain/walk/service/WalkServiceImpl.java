@@ -241,27 +241,6 @@ public class WalkServiceImpl implements WalkService {
         return walkPage.map(this::convertToWalkWithPetsDto);
     }
 
-    private WalkStatisticsDto convertToWalkStatisticsDto(Pet pet) {
-        List<WalkParticipant> walkParticipants = walkParticipantRepository.findByIdPetId(pet.getId());
-        List<Walk> petWalks = walkParticipants.stream()
-                .map(WalkParticipant::getWalk)
-                .collect(Collectors.toList());
-
-        double totalDistance = petWalks.stream().mapToDouble(Walk::getDistance).sum();
-        long totalDuration = petWalks.stream().mapToLong(Walk::getDuration).sum();
-        LocalDate lastWalkDate = petWalks.stream()
-                .map(Walk::getWalkDate)
-                .max(LocalDate::compareTo)
-                .orElse(null);
-
-        return WalkStatisticsDto.builder()
-                .petId(pet.getId())
-                .totalWalks(petWalks.size())
-                .totalDistanceKm(totalDistance)
-                .totalDurationMinutes(totalDuration)
-                .build();
-    }
-
     // Walk 엔티티를 WalkWithPetsDto로 변환
     private WalkWithPetsDto convertToWalkWithPetsDto(Walk walk) {
         List<Long> petIds = walkParticipantRepository.findByWalkId(walk.getId())
@@ -282,11 +261,13 @@ public class WalkServiceImpl implements WalkService {
         Page<Pet> petsPage = petRepository.findByUserId(user.getId(), pageable);
 
         return petsPage.map(pet -> {
+            // 참여한 산책을 찾기
             List<WalkParticipant> walkParticipants = walkParticipantRepository.findByIdPetId(pet.getId());
-            List<Walk> petWalks = walkParticipants.stream()
+            // 참여한 산책을 리스트로 변환
+            List<Walk> walks = walkParticipants.stream()
                     .map(WalkParticipant::getWalk)
                     .collect(Collectors.toList());
-            return createWalkStatisticsDto(pet.getId(), petWalks);
+            return createWalkStatisticsDto(pet.getId(), walks);
         });
     }
 
