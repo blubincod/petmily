@@ -17,6 +17,16 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 회원 관련 컨트롤러
+ * [회원]
+ * - 회원가입
+ * - 회원 정보 조회
+ * [산책 기록]
+ * - 회원의 모든 반려동물의 산책 기록 조회
+ * - 회원의 모든 반려동물별 전체 산책 통계 조회
+ * - 회원의 모든 반려동물에 대한 종합적인 산책 통계 조회
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/users")

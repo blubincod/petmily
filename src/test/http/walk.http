@@ -1,11 +1,11 @@
 # Walk 테스트
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NTExNjY3LCJleHAiOjE3MjQ1MTUyNjcsInN1YiI6ImtpbWp1bjkxIn0.t_PiSPoDkF-pJ-A0GEf2Qcw06Z2xxpuOg3wG6cXp4GM
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NTUxMjIyLCJleHAiOjE3MjQ1NTQ4MjIsInN1YiI6ImtpbWp1bjkxIn0.H6xZnEInhQr9ZBSFq7cTbEz_vjTO5fxVYyUz_l4FNkQ
 #@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MzE4NTk5LCJleHAiOjE3MjQzMjIxOTksInN1YiI6Imp1bmdldW45NyJ9.qxEPcSysWV68F-mhrcnCMWFhHeodou__GKDz7H78DE4
-@walkId = 20
+@walkId = 19
 @petIds = 1,3
-@petId = 1
+@petId = 3
 
 ### 회원1 로그인 요청
 POST http://localhost:8080/api/v1/users/login
@@ -83,7 +83,7 @@ Content-Type: application/json
 }
 
 #### 특정 산책 상세 기록 조회
-GET http://localhost:8080/api/v1/walks/8
+GET http://localhost:8080/api/v1/walks/19
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 

@@ -100,7 +100,12 @@ public class PetController {
     }
 
     /**
-     * 특정 반려동물의 산책 특정일 통계 조회
+     * 반려동물의 전체 산책 통계 조회
+     */
+
+
+    /**
+     * 반려동물의 산책 특정 날짜 통계 조회
      */
     @GetMapping("/{petId}/walks/daily")
     public ResponseEntity<Map<LocalDate, List<WalkStatisticsDto>>> getPetDailyWalks(@PathVariable Long petId) {
@@ -109,7 +114,7 @@ public class PetController {
     }
 
     /**
-     * 특정 반려동물의 특정 산책 상세 정보 조회
+     * 반려동물의 일별 산책 통계 조회
      */
     @GetMapping("/walks/{walkId}")
     public ResponseEntity<WalkDto> getPetWalkDetail(
