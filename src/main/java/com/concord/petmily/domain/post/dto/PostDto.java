@@ -2,9 +2,7 @@ package com.concord.petmily.domain.post.dto;
 
 import com.concord.petmily.domain.post.entity.Post;
 import com.concord.petmily.domain.post.entity.PostStatus;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,11 +12,15 @@ import java.util.Set;
  * 게시물 데이터 전송 객체
  * 클라이언트와 서버 간의 데이터 전송에 사용
  */
+@Getter
+@Setter
 public class PostDto {
 
-    @Data
-    @AllArgsConstructor
+    @Getter
+    @Setter
+    @Builder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class Request {
         private Long categoryId;
         private String title;
@@ -37,7 +39,11 @@ public class PostDto {
         }
     }
 
-    @Data
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Response {
         private Long id;
         private Long userId;
@@ -69,7 +75,11 @@ public class PostDto {
         }
     }
 
-    @Data
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ResponseGetPosts {
         private Long id;
         private Long userId;

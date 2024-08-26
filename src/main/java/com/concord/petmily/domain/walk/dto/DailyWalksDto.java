@@ -6,8 +6,6 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.util.List;
 
-
-@Data
 @AllArgsConstructor
 public class DailyWalksDto {
     private LocalDate date; // 조회된 날짜

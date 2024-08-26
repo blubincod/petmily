@@ -2,6 +2,7 @@ package com.concord.petmily.domain.walk.controller;
 
 import com.concord.petmily.common.dto.ApiResponse;
 import com.concord.petmily.domain.walk.dto.*;
+import com.concord.petmily.domain.walk.service.WalkGoalService;
 import com.concord.petmily.domain.walk.service.WalkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,10 +24,12 @@ import java.util.Map;
 
 /**
  * 산책 관련 컨트롤러
+ * <p>
  * [산책 기록]
  * - 산책 시작 및 산책 정보 기록
  * - 산책 종료 및 산책 정보 기록
  * - 산책 활동 기록
+ * <p>
  * [산책 기록 조회]
  * - 산책 상세 기록 조회
  * - 반려동물 기간별 일일 산책 목록과 요약 조회
@@ -34,10 +37,12 @@ import java.util.Map;
  * - 회원의 모든 반려동물의 특정 기간 산책 기록 조회
  * - 회원의 모든 반려동물별 전체 산책 통계 조회
  * - 회원의 모든 반려동물에 대한 종합적인 산책 통계 조회
+ * <p>
  * [산책 목표]
  * - 산책 목표 설정
  * - 산책 목표 조회
- * - 산책 목표 선택
+ * - 산책 목표 수정
+ * - 산책 목표 삭제
  */
 @RestController
 @RequiredArgsConstructor
@@ -45,6 +50,7 @@ import java.util.Map;
 public class WalkController {
 
     private final WalkService walkService;
+    private final WalkGoalService walkGoalService;
 
     /**
      * 산책 시작 및 산책 정보 기록
@@ -193,37 +199,41 @@ public class WalkController {
 
     /**
      * 산책 목표 생성
-     *
-     * @return
      */
-    @PostMapping("goals")
-    public ResponseEntity<?> createWalkGoal() {
-        // TODO 산책 목표 생성 로직
-        return ResponseEntity.ok(null);
+    @PostMapping("/pets/{petId}/goal")
+    public ResponseEntity<WalkGoalDto> createWalkGoal(
+            @PathVariable Long petId,
+            @RequestBody WalkGoalDto walkGoalDto) {
+        WalkGoalDto createdGoal = walkGoalService.createWalkGoal(petId, walkGoalDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdGoal);
     }
 
     /**
-     * 산책 목표 목록 조회
-     *
-     * @return
+     * 산책 목표 조회
      */
-    @GetMapping("/goals")
-    public ResponseEntity<?> getWalkGoals() {
-
-        return ResponseEntity.ok(null);
+    @GetMapping("/pets/{petId}/goal")
+    public ResponseEntity<WalkGoalDto> getWalkGoal(@PathVariable Long petId) {
+        WalkGoalDto goal = walkGoalService.getWalkGoal(petId);
+        return goal != null ? ResponseEntity.ok(goal) : ResponseEntity.notFound().build();
     }
 
     /**
-     * 산책 목표 선택
-     *
-     * @param userId
-     * @param goalId
-     * @return
+     * 산책 목표 수정
      */
-    @PostMapping("/goals/{goalId}")
-    public ResponseEntity<Void> selectWalkGoal(
-            @RequestParam Long userId, @PathVariable Long goalId) {
-        // TODO 사용자가 산책 목표를 선택하는 로직
-        return ResponseEntity.ok(null);
+    @PutMapping("/pets/{petId}/goal")
+    public ResponseEntity<WalkGoalDto> updateWalkGoal(
+            @PathVariable Long petId,
+            @RequestBody WalkGoalDto walkGoalDto) {
+        WalkGoalDto updatedGoal = walkGoalService.updateWalkGoal(petId, walkGoalDto);
+        return ResponseEntity.ok(updatedGoal);
+    }
+
+    /**
+     * 산책 목표 삭제
+     */
+    @DeleteMapping("/pets/{petId}/goal")
+    public ResponseEntity<Void> deleteWalkGoal(@PathVariable Long petId) {
+        walkGoalService.deleteWalkGoal(petId);
+        return ResponseEntity.noContent().build();
     }
 }

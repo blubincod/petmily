@@ -34,6 +34,10 @@ public enum ErrorCode {
     WALK_ALREADY_TERMINATED("이미 종료된 산책입니다."),
     PET_NOT_IN_THIS_WALK("해당 반려동물이 현재 산책에 참여하고 있지 않습니다."),
 
+    // WalkGoal
+    WALK_GOAL_NOT_FOUND("산책 목표를 찾을 수 없습니다."),
+    WALK_GOAL_ALREADY_EXISTS("이미 존재하는 산책 목표입니다."),
+
     // Post
     POST_NOT_FOUND("존재하지 않는 게시물입니다."),
     POST_CATEGORY_NOT_FOUND("존재하지 않는 게시물 카테고리입니다."),

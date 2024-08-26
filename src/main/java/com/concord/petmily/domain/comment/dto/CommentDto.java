@@ -1,13 +1,13 @@
 package com.concord.petmily.domain.comment.dto;
 
 import com.concord.petmily.domain.comment.entity.Comment;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class CommentDto {
 
     private Long parentId;

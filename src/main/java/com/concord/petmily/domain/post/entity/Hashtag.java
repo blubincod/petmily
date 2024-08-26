@@ -6,12 +6,13 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
-@Table(name = "hashtag")
-@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "hashtag")
 public class Hashtag {
 
     @Id

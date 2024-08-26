@@ -2,12 +2,16 @@ package com.concord.petmily.domain.walk.entity;
 
 import com.concord.petmily.domain.pet.entity.Pet;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
-@Data
 @Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "walk_participant")
 public class WalkParticipant {
 

@@ -2,11 +2,9 @@ package com.concord.petmily.domain.walk.dto;
 
 import com.concord.petmily.domain.pet.dto.PetDto;
 import lombok.Builder;
-import lombok.Data;
 
 import java.util.List;
 
-@Data
 @Builder
 public class WalkingPetDto {
     private Long walkId;

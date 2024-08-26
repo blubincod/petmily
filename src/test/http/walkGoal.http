@@ -1,0 +1,46 @@
+# Walk Goal 요청
+
+### value
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NjY4OTA0LCJleHAiOjE3MjQ2NzI1MDQsInN1YiI6ImtpbWp1bjkxIn0.QdLUNlnqtpBbmRQywpMqQIBxhG8zw9-H-cD2D4AT5e8
+@petId = 3
+
+### 회원1 로그인 요청
+POST http://localhost:8080/api/v1/users/login
+Content-Type: application/json
+
+{
+  "username": "kimjun91",
+  "password": "kim123"
+}
+
+### 산책 목표 설정
+POST http://localhost:8080/api/v1/walks/pets/{{petId}}/goal
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title":"매일 매일 산책하기!!",
+  "dailyTargetMinutes": 30,
+  "targetStartTime": "17:00"
+}
+
+### 산책 목표 조회
+GET http://localhost:8080/api/v1/walks/pets/{{petId}}/goal
+Authorization: Bearer {{accessToken}}
+#Content-Type: application/json
+
+### 산책 목표 수정
+PUT http://localhost:8080/api/v1/walks/pets/{{petId}}/goal
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title":"매일 매일 산책하기2!!",
+  "dailyTargetMinutes": 30,
+  "targetStartTime": "17:00"
+}
+
+### 산책 목표 삭제
+DELETE http://localhost:8080/api/v1/walks/pets/{{petId}}/goal
+Authorization: Bearer {{accessToken}}
+#Content-Type: application/json

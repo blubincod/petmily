@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
 @Builder
 public class PetsWalkDetailDto {
     private List<Long> petIds;

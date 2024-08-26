@@ -1,17 +1,15 @@
 package com.concord.petmily.domain.post.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Getter
+@Setter
 @Entity
-@Table(name = "post_hashtag")
-@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "post_hashtag")
 public class PostHashtag {
 
     @Id
@@ -26,6 +24,7 @@ public class PostHashtag {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
+
 
     public PostHashtag(Post post, Hashtag hashtag) {
         this.post = post;

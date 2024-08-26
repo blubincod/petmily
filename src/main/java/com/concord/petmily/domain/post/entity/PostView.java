@@ -2,17 +2,15 @@ package com.concord.petmily.domain.post.entity;
 
 import com.concord.petmily.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Getter
+@Setter
 @Entity
-@Table(name = "post_view")
-@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "post_view")
 public class PostView {
 
     @Id

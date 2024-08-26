@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 /**
  * 산책 활동 로그 데이터 전송 객체
  */
-@Data
 @Getter
 @Setter
 @Builder
