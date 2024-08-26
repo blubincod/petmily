@@ -17,6 +17,7 @@ import com.concord.petmily.domain.walk.repository.WalkParticipantRepository;
 import com.concord.petmily.domain.walk.repository.WalkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -229,40 +231,43 @@ public class WalkServiceImpl implements WalkService {
      * 반려동물 기간별 일일 산책 목록 조회
      */
     @Override
-    @Transactional(readOnly = true)
-    public Page<DailyWalksDto> getPetDailyWalks(Long petId, String username, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+    public Page<DailyWalksDto> getPetDailyWalks(
+            Long petId, String username, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         User user = getUser(username);
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new PetException(ErrorCode.PET_NOT_FOUND));
 
-        if (!pet.getUser().equals(user)) {
-            throw new WalkAccessDeniedException(ErrorCode.WALK_ACCESS_DENIED);
-        }
+        // TODO 공개/비공개 설정 추가(Pet 엔티티 isPublic 으로 구분 )
+        //if (!pet.getUser().equals(user) && !pet.isPublic()) {
+        //    throw new WalkAccessDeniedException(ErrorCode.WALK_ACCESS_DENIED);
+        //}
 
-        LocalDateTime start = startDate != null ? startDate.atStartOfDay() : LocalDateTime.MIN;
-        LocalDateTime end = endDate != null ? endDate.plusDays(1).atStartOfDay() : LocalDateTime.MAX;
+        // endDate: 주어진 종료 날짜
+        // plusDays(1): 종료 날짜에 하루를 더함
+        // atStartOfDay(): 해당 날짜의 시작 시간(00:00:00)을 나타내는 LocalDateTime 객체
+        LocalDateTime startDateTime = startDate != null ? startDate.atStartOfDay() : LocalDateTime.MIN;
+        LocalDateTime endDateTime = endDate != null ? endDate.plusDays(1).atStartOfDay() : LocalDateTime.MAX;
 
-//        Page<Walk> walks = walkRepository.findByPetAndStartTimeBetween(pet, start, end, pageable);
+        Page<Walk> walks = walkRepository.findByWalkParticipantsPetIdAndStartTimeBetween(pet.getId(), startDateTime, endDateTime, pageable);
 
-//        return walks.map(walk -> {
-//            List<WalkActivityDto> activities = walkActivityRepository.findByWalk(walk).stream()
-//                    .map(activity -> WalkActivityDto.fromEntity(activity))
-//                    .collect(Collectors.toList());
-//
-//            return new DailyWalksDto(
-//                    walk.getWalkDate(),
-//                    WalkDetailDto.fromEntity(walk, List.of(petId), activities)
-//            );
-//        });
+        Map<LocalDate, List<WalkDto>> walksByDate = walks.getContent().stream()
+                .collect(Collectors.groupingBy(
+                        walk -> walk.getStartTime().toLocalDate(),
+                        Collectors.mapping(WalkDto::fromEntity, Collectors.toList())
+                ));
 
-        return null;
+        // 날짜별로 그룹화된 산책 정보를 DailyWalksDto 객체의 리스트로 변환
+        List<DailyWalksDto> dailyWalks = walksByDate.entrySet().stream()
+                .map(entry -> new DailyWalksDto(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(dailyWalks, pageable, walks.getTotalElements());
     }
 
     /**
      * 반려동물의 기간별 일일 산책 통계 조회
      */
     @Override
-    @Transactional(readOnly = true)
     public Page<WalkStatisticsDto> getPetDailyWalksStatistics(Long petId, String username, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         User user = getUser(username);
         Pet pet = petRepository.findById(petId)
@@ -286,6 +291,7 @@ public class WalkServiceImpl implements WalkService {
         return null;
     }
 
+
     /**
      * 회원의 모든 반려동물의 특정 기간 산책 기록 상세 조회
      */
@@ -299,11 +305,11 @@ public class WalkServiceImpl implements WalkService {
             walkPage = walkRepository.findByUserId(user.getId(), pageable);
         }
 
-        return walkPage.map(this::convertToWalkWithPetsDto);
+        return walkPage.map(this::convertToPetsWalkDetailDto);
     }
 
     // Walk 엔티티를 WalkWithPetsDto로 변환
-    private PetsWalkDetailDto convertToWalkWithPetsDto(Walk walk) {
+    private PetsWalkDetailDto convertToPetsWalkDetailDto(Walk walk) {
         List<Long> petIds = walkParticipantRepository.findByWalkId(walk.getId())
                 .stream()
                 .map(walkingPet -> walkingPet.getPet().getId())

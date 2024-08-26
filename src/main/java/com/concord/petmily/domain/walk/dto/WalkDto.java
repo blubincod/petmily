@@ -16,7 +16,7 @@ import java.util.List;
 public class WalkDto {
     private Long walkId;
     private double distance; // 산책 거리
-    private double duration; // 산책 총 시간
+    private long duration; // 산책 총 시간
     private LocalDateTime startTime; // 산책 시작 시간
     private LocalDateTime endTime; // 산책 종료 시간
     private WalkStatus status; // 산책 진행 상태

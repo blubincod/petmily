@@ -109,17 +109,18 @@ public class WalkController {
 
     /**
      * 반려동물 기간별 일일 산책 목록 조회
+     * TODO 응답을 더 체계적으로 정리
      */
     @GetMapping("/pets/{petId}/walks")
-    public ResponseEntity<ApiResponse<?>> getPetDailyWalks(
+    public ResponseEntity<ApiResponse<List<DailyWalksDto>>> getPetDailyWalks(
             @PathVariable Long petId,
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @PageableDefault(sort = "startTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-//        Page<?> walks = walkService.getPetWalks(petId, startDate, endDate, pageable, userDetails.getUsername());
-        return ResponseEntity.ok(ApiResponse.success(null));
+        Page<DailyWalksDto> walks = walkService.getPetDailyWalks(petId, userDetails.getUsername(), startDate, endDate, pageable);
+        return ResponseEntity.ok(ApiResponse.success(walks));
     }
 
     /**
