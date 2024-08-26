@@ -27,8 +27,10 @@ import java.util.Map;
  * - 산책 시작 및 산책 정보 기록
  * - 산책 종료 및 산책 정보 기록
  * - 산책 활동 기록
- * [기록 및 통계 조회]
+ * [산책 기록 조회]
  * - 산책 상세 기록 조회
+ * - 반려동물 기간별 일일 산책 목록과 요약 조회
+ * - 반려동물의 기간별 일일 산책 통계 조회
  * - 회원의 모든 반려동물의 특정 기간 산책 기록 조회
  * - 회원의 모든 반려동물별 전체 산책 통계 조회
  * - 회원의 모든 반려동물에 대한 종합적인 산책 통계 조회
@@ -132,12 +134,12 @@ public class WalkController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @PageableDefault(sort = "date", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(sort = "startTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-//        Page<WalkStatisticsDto> statistics = walkService.getPetDailyWalkStatistics(
-//                petId, startDate, endDate, pageable, userDetails.getUsername()
-//        );
-        return ResponseEntity.ok(ApiResponse.success(null));
+        Page<WalkStatisticsDto> statistics = walkService.getPetDailyWalksStatistics(
+                petId, userDetails.getUsername(), startDate, endDate, pageable
+        );
+        return ResponseEntity.ok(ApiResponse.success(statistics));
     }
 
     /**

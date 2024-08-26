@@ -1,7 +1,7 @@
 # Walk 테스트
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NjQ2MDEwLCJleHAiOjE3MjQ2NDk2MTAsInN1YiI6ImtpbWp1bjkxIn0.lTvFml2SZtRvJ2IEh-PjAS5Cwow4p4RGKbHEguugGdI
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NjU1NjY1LCJleHAiOjE3MjQ2NTkyNjUsInN1YiI6ImtpbWp1bjkxIn0.vzP2LGmGYTiq72O4Y5PNKrVJj3Y3RdM3DM74MTC0Tug
 #@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MzE4NTk5LCJleHAiOjE3MjQzMjIxOTksInN1YiI6Imp1bmdldW45NyJ9.qxEPcSysWV68F-mhrcnCMWFhHeodou__GKDz7H78DE4
 @username = kimjun91
 @walkId = 20
@@ -94,7 +94,7 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 #### 반려동물의 기간별 일일 산책 통계 조회
-#GET http://localhost:8080/api/v1/walks/pets/3/walks
+GET http://localhost:8080/api/v1/walks/pets/3/statistics/daily?startDate=2024-08-01&endDate=2024-08-25&page=0&size=10
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
@@ -107,16 +107,4 @@ Content-Type: application/json
 GET http://localhost:8080/api/v1/walks/users/{{username}}/statistics
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
-
-#### 회원의 모든 반려동물 산책 기록 조회
-## @no-redirect
-#GET http://localhost:8080/api/v1/walks/pets
-#Authorization: Bearer {{accessToken}}
-#Content-Type: application/json
-#
-#### 반려동물의 산책 정보 조회
-## @no-redirect
-#GET http://localhost:8080/api/v1/walks/pets/2
-#Authorization: Bearer {{accessToken}}
-#Content-Type: application/json
 
