@@ -1,26 +1,15 @@
 package com.concord.petmily.domain.user.controller;
 
-import com.concord.petmily.common.dto.ApiResponse;
-import com.concord.petmily.common.dto.Pagination;
 import com.concord.petmily.domain.user.dto.AddUserRequest;
 import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.service.UserService;
-import com.concord.petmily.domain.walk.dto.WalkStatisticsDto;
-import com.concord.petmily.domain.walk.dto.WalkWithPetsDto;
 import com.concord.petmily.domain.walk.service.WalkService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,10 +17,6 @@ import java.util.Map;
  * [회원]
  * - 회원가입
  * - 회원 정보 조회
- * [산책]
- * - 회원의 모든 반려동물의 산책 기록 조회
- * - 회원의 모든 반려동물별 전체 산책 통계 조회
- * - 회원의 모든 반려동물에 대한 종합적인 산책 통계 조회
  */
 @RestController
 @AllArgsConstructor
@@ -60,46 +45,4 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
-
-    /**
-     * 회원의 모든 반려동물의 특정 기간 산책 기록 조회
-     *
-     * @param startDate 조회 시작 날짜 (선택적, null 가능)
-     * @param endDate   조회 종료 날짜 (선택적, null 가능)
-     * @param pageable  페이지네이션 정보 (페이지 번호, 페이지 크기, 정렬 정보)
-     *                  - page = 0: 기본 페이지 번호를 0으로 설정 (첫 페이지)
-     *                  - size = 10: 한 페이지당 기본 항목 수를 10으로 설정
-     *                  - sort = "startTime": 정렬 기준 필드를 산책 시작 시간인 "startTime"으로 설정
-     *                  - direction = Sort.Direction.DESC: 정렬 방향을 내림차순으로 설정
-     */
-    @GetMapping("/{username}/walks")
-    public ResponseEntity<ApiResponse<List<WalkWithPetsDto>>> getUserPetsWalks(
-            @PathVariable String username,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable // id: walkId
-    ) {
-        Page<WalkWithPetsDto> walksPage = walkService.getUserPetsWalks(username, startDate, endDate, pageable);
-
-        return ResponseEntity.ok(ApiResponse.success(walksPage));
-    }
-    /**
-     * 회원의 모든 반려동물별 전체 산책 통계 조회
-     *
-     * @param pageable 페이지네이션 정보 (페이지 번호, 페이지 크기, 정렬 정보)
-     */
-    @GetMapping("/{username}/pets/walks/statistics")
-    public ResponseEntity<ApiResponse<List<WalkStatisticsDto>>> getUserPetsWalkStatistics(
-            @PathVariable String username,
-            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable // id: petId
-    ) {
-        Page<WalkStatisticsDto> petsStatisticsPage = walkService.getUserPetsWalkStatistics(username, pageable);
-
-        return ResponseEntity.ok(ApiResponse.success(petsStatisticsPage));
-    }
-
-    /**
-     * TODO getUserPetsOverallWalkStatistics
-     * 회원의 모든 반려동물에 대한 종합적인 산책 통계 조회
-     */
 }
