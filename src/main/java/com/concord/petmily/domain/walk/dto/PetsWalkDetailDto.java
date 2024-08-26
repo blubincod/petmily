@@ -5,30 +5,33 @@ import com.concord.petmily.domain.walk.entity.WalkStatus;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
 @Builder
-public class WalkWithPetsDto {
+public class PetsWalkDetailDto {
     private List<Long> petIds;
     private Long walkId;
     private double distance;
     private double duration;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private LocalDate walkDate;
     private WalkStatus status;
 
     // WalkWithPetsDto 객체를 생성
-    public static WalkWithPetsDto fromEntity(Walk walk, List<Long> petIds) {
-        return WalkWithPetsDto.builder()
+    public static PetsWalkDetailDto fromEntity(Walk walk, List<Long> petIds) {
+        return PetsWalkDetailDto.builder()
                 .petIds(petIds)
                 .walkId(walk.getId())
                 .distance(walk.getDistance())
                 .duration(walk.getDuration())
                 .startTime(walk.getStartTime())
                 .endTime(walk.getEndTime())
+                .walkDate(walk.getWalkDate())
                 .status(walk.getWalkStatus())
                 .build();
     }
+
 }

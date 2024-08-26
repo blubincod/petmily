@@ -2,10 +2,7 @@ package com.concord.petmily.domain.walk.entity;
 
 import com.concord.petmily.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -14,7 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -28,7 +26,7 @@ public class Walk {
     private Long id; // 산책 아이디
 
     private double distance; // 산책 거리
-    private double duration; // 산책 시간
+    private long duration; // 산책 시간
     private LocalDateTime startTime; // 산책 시작 시간
     private LocalDateTime endTime; // 산책 종료 시간
     private WalkStatus walkStatus; // 산책 진행 상태
@@ -42,5 +40,5 @@ public class Walk {
     private User user; // 회원 정보
 
     @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
-    private List<WalkingPet> walkingPets = new ArrayList<>(); // 그룹
+    private List<WalkParticipant> walkParticipants = new ArrayList<>(); // 그룹
 }

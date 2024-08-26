@@ -1,7 +1,7 @@
 # User 요청
 
 ### Value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NTA2MjUxLCJleHAiOjE3MjQ1MDk4NTEsInN1YiI6ImtpbWp1bjkxIn0.d3cwDnBwJ9xL7wep9pQ8-AvH0tv-QAVzD8RnZiuGtUU
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NjAxMTA0LCJleHAiOjE3MjQ2MDQ3MDQsInN1YiI6ImtpbWp1bjkxIn0.22RNsw96BFNdnPjJX2Xafsx8xYAr3NvB_4aJW72d93w
 @userId = 1
 @username = kimjun91
 
@@ -40,15 +40,5 @@ Content-Type: application/json
 ### 사용자 정보 조회
 # @no-redirect
 GET http://localhost:8080/api/v1/users/{{userId}}
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-### 회원의 모든 반려동물의 산책 특정 기간 기록 조회
-GET http://localhost:8080/api/v1/users/{{username}}/walks?startDate=2024-08-11&endDate=2024-08-24
-Authorization: Bearer {{accessToken}}
-Content-Type: application/json
-
-### 회원의 모든 반려동물별 전체 산책 통계 조회
-GET http://localhost:8080/api/v1/users/{{username}}/pets/walks/statistics
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json

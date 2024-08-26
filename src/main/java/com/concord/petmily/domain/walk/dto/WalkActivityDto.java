@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 /**
  * 산책 활동 로그 데이터 전송 객체
  */
-@Data
 @Getter
 @Setter
 @Builder
@@ -28,6 +27,9 @@ public class WalkActivityDto {
     public static WalkActivityDto fromEntity(WalkActivity walkActivity) {
         return WalkActivityDto.builder()
                 .id(walkActivity.getId())
+                .petId(walkActivity.getWalkParticipant().getPet().getId())
+                .latitude(walkActivity.getLatitude())
+                .longitude(walkActivity.getLongitude())
                 .activity(walkActivity.getActivityType())
                 .timestamp(walkActivity.getTimestamp())
                 .build();

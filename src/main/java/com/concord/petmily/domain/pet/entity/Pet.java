@@ -2,6 +2,7 @@ package com.concord.petmily.domain.pet.entity;
 
 import com.concord.petmily.domain.pet.dto.PetDto;
 import com.concord.petmily.domain.user.entity.User;
+import com.concord.petmily.domain.walk.entity.WalkParticipant;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,12 +11,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "pet")
 @EntityListeners(AuditingEntityListener.class)
 public class Pet {
@@ -71,6 +74,9 @@ public class Pet {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
+
+    @OneToMany(mappedBy = "pet")
+    private List<WalkParticipant> walkParticipants;
 
     public static Pet fromEntity(User user, PetDto.Create request) {
         return Pet.builder()

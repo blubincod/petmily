@@ -1,17 +1,14 @@
 package com.concord.petmily.domain.walk.entity;
 
-import com.concord.petmily.domain.pet.entity.Pet;
-import com.concord.petmily.domain.walk.dto.WalkActivityDto;
-import com.concord.petmily.domain.walk.dto.WalkDetailDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
-@Data
+
+@Getter
+@Setter
 @Entity
 @Table(name = "walk_activity")
 public class WalkActivity {
@@ -33,5 +30,5 @@ public class WalkActivity {
             @JoinColumn(name = "walk_id", referencedColumnName = "walk_id"),
             @JoinColumn(name = "pet_id", referencedColumnName = "pet_id")
     })
-    private WalkingPet walkingPet;
+    private WalkParticipant walkParticipant;
 }

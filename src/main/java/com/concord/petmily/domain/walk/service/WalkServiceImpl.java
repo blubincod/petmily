@@ -13,9 +13,12 @@ import com.concord.petmily.domain.walk.exception.WalkAccessDeniedException;
 import com.concord.petmily.domain.walk.exception.WalkException;
 import com.concord.petmily.domain.walk.exception.WalkNotFoundException;
 import com.concord.petmily.domain.walk.repository.WalkActivityRepository;
+import com.concord.petmily.domain.walk.repository.WalkParticipantRepository;
 import com.concord.petmily.domain.walk.repository.WalkRepository;
-import com.concord.petmily.domain.walk.repository.WalkingPetRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -43,7 +47,7 @@ public class WalkServiceImpl implements WalkService {
     private final UserRepository userRepository;
     private final PetRepository petRepository;
     private final WalkRepository walkRepository;
-    private final WalkingPetRepository walkingPetRepository;
+    private final WalkParticipantRepository walkParticipantRepository;
     private final WalkActivityRepository walkActivityRepository;
 
     // 회원 정보 조회
@@ -78,7 +82,7 @@ public class WalkServiceImpl implements WalkService {
         walk.setWalkStatus(WalkStatus.IN_PROGRESS);
         walkRepository.save(walk);
 
-        List<WalkingPet> walkingPets = new ArrayList<>();
+        List<WalkParticipant> walkParticipants = new ArrayList<>();
 
         for (int i = 0; i < petIds.size(); i++) {
             Pet pet = petRepository.findById(petIds.get(i))
@@ -90,18 +94,18 @@ public class WalkServiceImpl implements WalkService {
             }
 
             // TODO null 금지
-            WalkingPet walkingPet = new WalkingPet();
-            walkingPet.setWalk(walk);
-            walkingPet.setPet(pet);
+            WalkParticipant walkParticipant = new WalkParticipant();
+            walkParticipant.setWalk(walk);
+            walkParticipant.setPet(pet);
 
-            WalkingPetId walkingPetId = new WalkingPetId();
-            walkingPetId.setWalkId(walk.getId());
-            walkingPetId.setPetId(pet.getId());
-            walkingPet.setId(walkingPetId);
+            WalkParticipantId walkParticipantId = new WalkParticipantId();
+            walkParticipantId.setWalkId(walk.getId());
+            walkParticipantId.setPetId(pet.getId());
+            walkParticipant.setId(walkParticipantId);
 
-            walkingPets.add(walkingPet);
+            walkParticipants.add(walkParticipant);
         }
-        walkingPetRepository.saveAll(walkingPets);
+        walkParticipantRepository.saveAll(walkParticipants);
 
         updateWalkingStatus(user, true);
 
@@ -131,7 +135,7 @@ public class WalkServiceImpl implements WalkService {
         }
 
         // 총 시간 계산
-        double calculatedDuration = calculateDuration(walk.getStartTime(), walkDto.getEndTime());
+        long calculatedDuration = calculateDuration(walk.getStartTime(), walkDto.getEndTime());
 
         walk.setEndTime(walkDto.getEndTime());
         walk.setDistance(walkDto.getDistance());
@@ -152,7 +156,7 @@ public class WalkServiceImpl implements WalkService {
     }
 
     // 산책 시간 계산 메서드
-    private double calculateDuration(LocalDateTime startTime, LocalDateTime endTime) {
+    private long calculateDuration(LocalDateTime startTime, LocalDateTime endTime) {
         return Duration.between(startTime, endTime).toMinutes();
     }
 
@@ -166,10 +170,10 @@ public class WalkServiceImpl implements WalkService {
 
         User user = getUser(username);
 
-        WalkingPet walkingPet = walkingPetRepository.findByWalkIdAndPetId(walkId, walkActivityDto.getPetId())
+        WalkParticipant walkParticipant = walkParticipantRepository.findByWalkIdAndPetId(walkId, walkActivityDto.getPetId())
                 .orElseThrow(() -> new WalkNotFoundException(ErrorCode.PET_NOT_IN_THIS_WALK));
 
-        Pet pet = walkingPet.getPet();
+        Pet pet = walkParticipant.getPet();
 
         // 산책 소유자 확인
         if (!walk.getUser().getUsername().equals(username)) {
@@ -183,7 +187,7 @@ public class WalkServiceImpl implements WalkService {
         validatePetOwnership(user, pet);
 
         WalkActivity walkActivity = new WalkActivity();
-        walkActivity.setWalkingPet(walkingPet);
+        walkActivity.setWalkParticipant(walkParticipant);
         walkActivity.setActivityType(walkActivityDto.getActivity());
         walkActivity.setLatitude(walkActivityDto.getLatitude());
         walkActivity.setLongitude(walkActivityDto.getLongitude());
@@ -206,78 +210,148 @@ public class WalkServiceImpl implements WalkService {
     @Override
     public WalkDetailDto getWalkDetail(Long walkId) {
         Walk walk = walkRepository.findById(walkId)
-                .orElseThrow(()-> new WalkNotFoundException(ErrorCode.WALK_NOT_FOUND));
-        List<WalkingPet> pets = walkingPetRepository.findByWalkId(walkId);
-        List<WalkActivity> activities = walkActivityRepository.findByWalkId(walkId);
-//        List<WalkActivityDto> activityDtos = activities.stream()
-//                .map(WalkActivityDto::fromEntity)
-//                .collect(Collectors.toList());
+                .orElseThrow(() -> new WalkNotFoundException(ErrorCode.WALK_NOT_FOUND));
 
-//        return WalkDetailDto.fromEntity(walk,pets,activityDtos);
-        return null;
+        // 산책에 참여한 반려동물 아이디 리스트
+        List<Long> petIds = walkParticipantRepository.findByWalkId(walk.getId())
+                .stream()
+                .map(walkingPet -> walkingPet.getPet().getId())
+                .collect(Collectors.toList());
+
+        // 해당 산책에 활동 리스트
+        List<WalkActivity> activities = walkActivityRepository.findByWalkId(walk.getId());
+        List<WalkActivityDto> activityDtos = activities.stream()
+                .map(WalkActivityDto::fromEntity)
+                .collect(Collectors.toList());
+
+        return WalkDetailDto.fromEntity(walk, petIds, activityDtos);
     }
 
-
     /**
-     * 회원의 모든 반려동물의 산책 기록 조회
+     * 반려동물 기간별 일일 산책 목록 조회
      */
     @Override
-    public List<WalkWithPetsDto> getUserPetsWalks(String username, LocalDate start, LocalDate end) {
-
-        // 파라미터 입력하지 않은 경우 처리
-        LocalDate startDate = start != null ? start : LocalDate.of(1970, 1, 1);
-        LocalDate endDate = end != null ? end : LocalDate.now();
-
+    public Page<DailyWalksDto> getPetDailyWalks(
+            Long petId, String username, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         User user = getUser(username);
-        List<Walk> walks = walkRepository.findByUserIdAndWalkDateBetween(user.getId(), startDate, endDate);
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new PetException(ErrorCode.PET_NOT_FOUND));
 
-        return walks.stream()
-                .map(walk -> {
-                    List<Long> petIds = walkingPetRepository.findByWalkId(walk.getId())
-                            .stream()
-                            .map(walkingPet -> walkingPet.getPet().getId())
-                            .collect(Collectors.toList());
-                    return WalkWithPetsDto.fromEntity(walk, petIds);
-                })
+        // TODO 공개/비공개 설정 추가(Pet 엔티티 isPublic 으로 구분 )
+        //if (!pet.getUser().equals(user) && !pet.isPublic()) {
+        //    throw new WalkAccessDeniedException(ErrorCode.WALK_ACCESS_DENIED);
+        //}
+
+        // endDate: 주어진 종료 날짜
+        // plusDays(1): 종료 날짜에 하루를 더함
+        // atStartOfDay(): 해당 날짜의 시작 시간(00:00:00)을 나타내는 LocalDateTime 객체
+        LocalDateTime startDateTime = startDate != null ? startDate.atStartOfDay() : LocalDateTime.MIN;
+        LocalDateTime endDateTime = endDate != null ? endDate.plusDays(1).atStartOfDay() : LocalDateTime.MAX;
+
+        Page<Walk> walks = walkRepository.findByWalkParticipantsPetIdAndStartTimeBetween(petId, startDateTime, endDateTime, pageable);
+
+        Map<LocalDate, List<WalkDto>> walksByDate = walks.getContent().stream()
+                .collect(Collectors.groupingBy(
+                        walk -> walk.getStartTime().toLocalDate(),
+                        Collectors.mapping(WalkDto::fromEntity, Collectors.toList())
+                ));
+
+        // 날짜별로 그룹화된 산책 정보를 DailyWalksDto 객체의 리스트로 변환
+        List<DailyWalksDto> dailyWalks = walksByDate.entrySet().stream()
+                .map(entry -> new DailyWalksDto(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(dailyWalks, pageable, walks.getTotalElements());
+    }
+
+    /**
+     * 반려동물의 기간별 일일 산책 통계 조회
+     */
+    @Override
+    public Page<WalkStatisticsDto> getPetDailyWalksStatistics(Long petId, String username, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        User user = getUser(username);
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new PetException(ErrorCode.PET_NOT_FOUND));
+
+        LocalDateTime startDateTime = startDate != null ? startDate.atStartOfDay() : LocalDateTime.MIN;
+        LocalDateTime endDateTime = endDate != null ? endDate.plusDays(1).atStartOfDay() : LocalDateTime.MAX;
+
+        Page<Walk> walksPage = walkRepository.findByWalkParticipantsPetIdAndStartTimeBetween(petId, startDateTime, endDateTime, pageable);
+
+        return walksPage.map(walk -> {
+            LocalDate walkDate = walk.getStartTime().toLocalDate();
+            List<Walk> dailyWalks = walkRepository.findByWalkParticipantsPetIdAndStartTimeBetween(
+                    petId,
+                    walkDate.atStartOfDay(),
+                    walkDate.plusDays(1).atStartOfDay(),
+                    Pageable.unpaged()
+            ).getContent();
+            return createWalkStatisticsDto(petId, walkDate, dailyWalks);
+        });
+    }
+
+    /**
+     * 회원의 모든 반려동물의 특정 기간 산책 기록 상세 조회
+     */
+    @Override
+    public Page<PetsWalkDetailDto> getUserAllPetsWalksDetail(String username, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        User user = getUser(username);
+        Page<Walk> walksPage;
+
+        // FIXME LocalDate -> LocalDateTime로 변경
+        if (startDate != null && endDate != null) {
+            walksPage = walkRepository.findByUserIdAndWalkDateBetween(user.getId(), startDate, endDate, pageable);
+        } else {
+            walksPage = walkRepository.findByUserId(user.getId(), pageable);
+        }
+
+        return walksPage.map(this::convertToPetsWalkDetailDto);
+    }
+
+    // Walk 엔티티를 WalkWithPetsDto로 변환
+    private PetsWalkDetailDto convertToPetsWalkDetailDto(Walk walk) {
+        List<Long> petIds = walkParticipantRepository.findByWalkId(walk.getId())
+                .stream()
+                .map(walkingPet -> walkingPet.getPet().getId())
+                .collect(Collectors.toList());
+
+        return PetsWalkDetailDto.fromEntity(walk, petIds);
     }
 
     /**
      * 회원의 모든 반려동물별 전체 산책 통계 조회
      */
     @Override
-    @Transactional(readOnly = true)
-    public List<WalkStatisticsDto> getUserPetsWalkStatistics(String username) {
+    public Page<WalkStatisticsDto> getUserPetsWalkStatistics(String username, Pageable pageable) {
         User user = getUser(username);
-        List<Pet> pets = petRepository.findByUser(user);
 
-        return pets.stream()
-                .map(pet -> {
-                    List<WalkingPet> walkingPets = walkingPetRepository.findByPet(pet);
-                    List<Walk> petWalks = walkingPets.stream()
-                            .map(WalkingPet::getWalk)
-                            .collect(Collectors.toList());
-                    return createWalkStatisticsDto(pet, petWalks);
-                })
-                .collect(Collectors.toList());
+        Page<Pet> petsPage = petRepository.findByUserId(user.getId(), pageable);
+
+        return petsPage.map(pet -> {
+            // 참여한 산책을 찾기
+            List<WalkParticipant> walkParticipants = walkParticipantRepository.findByIdPetId(pet.getId());
+            // 참여한 산책을 리스트로 변환
+            List<Walk> walks = walkParticipants.stream()
+                    .map(WalkParticipant::getWalk)
+                    .collect(Collectors.toList());
+            return createWalkStatisticsDto(pet.getId(), null, walks);
+        });
     }
 
     // 산책 통계 메서드
-    private WalkStatisticsDto createWalkStatisticsDto(Pet pet, List<Walk> walks) {
-        // 산책 통계 계산
+    private WalkStatisticsDto createWalkStatisticsDto(Long petId, LocalDate date, List<Walk> walks) {
         int totalWalks = walks.size();
         double totalDistance = walks.stream().mapToDouble(Walk::getDistance).sum();
         long totalDuration = walks.stream()
                 .mapToLong(walk -> Duration.between(walk.getStartTime(), walk.getEndTime()).toMinutes())
                 .sum();
 
-        // 평균 계산
         double avgDistance = totalWalks > 0 ? totalDistance / totalWalks : 0;
-        double avgDuration = totalWalks > 0 ? (double) totalDuration / totalWalks : 0;
+        long avgDuration = totalWalks > 0 ? totalDuration / totalWalks : 0;
 
-        // WalkStatisticsDto 생성 및 반환
         return WalkStatisticsDto.builder()
-                .petId(pet.getId())
+                .petId(petId)
+                .date(date)
                 .totalWalks(totalWalks)
                 .totalDistanceKm(totalDistance)
                 .totalDurationMinutes(totalDuration)
@@ -291,67 +365,7 @@ public class WalkServiceImpl implements WalkService {
      * 모든 반려동물에 대한 종합적인 산책 통계 조회
      */
 //    @Override
-//    @Transactional(readOnly = true)
 //    public WalkStatisticsDto getUserPetsOverallWalkStatistics(String username) {
-//        User user = getUser(username);
-//        List<Pet> pets = petRepository.findByUser(user);
-//
-//        List<Walk> allWalks = walkRepository.findAllByUserPets(pets);
-//
-//        int totalWalks = allWalks.size();
-//        double totalDistance = allWalks.stream().mapToDouble(Walk::getDistance).sum();
-//        long totalDuration = allWalks.stream()
-//                .mapToLong(walk -> Duration.between(walk.getStartTime(), walk.getEndTime()).toMinutes())
-//                .sum();
-//
-//        return WalkStatisticsDto.builder()
-//                .totalWalks(totalWalks)
-//                .totalDistanceKm(totalDistance)
-//                .totalDurationMinutes(totalDuration)
-//                .averageDistanceKm(totalWalks > 0 ? totalDistance / totalWalks : 0)
-//                .averageDurationMinutes(totalWalks > 0 ? (double) totalDuration / totalWalks : 0)
-//                .build();
-//    }
-
-    /**
-     * 반려동물의 전체 산책 기록 조회
-     */
-//    @Override
-//    public List<WalkDto> getPetWalks(Long petId, LocalDate startDate, LocalDate endDate) {
-//        List<Walk> walks = walkRepository.findByPetIdAndDateBetween(petId, startDate, endDate);
-//
-//        List<WalkSummaryDto> walkSummaries = walks.stream()
-//                .map(this::convertToSummary)
-//                .collect(Collectors.toList());
-//
-//        WalkStatisticsDto statistics = calculateStatistics(walks);
-
-//        return null;
-//    }
-
-//    private WalkSummaryDto convertToSummary(Walk walk) {
-//        // Walk 엔티티를 WalkSummaryDto로 변환하는 로직
-//    }
-//
-//    private WalkStatisticsDto calculateStatistics(List<Walk> walks) {
-//        // 주어진 산책 목록에 대한 통계를 계산하는 로직
-//    }
-
-
-    /**
-     * 반려동물의 특정 산책 정보 조회
-     */
-//    @Override
-//    public WalkDto getPetWalk(Pet pet) {
-//
-//        return null;
-//    }
-
-//    /**
-//     * 회원의 전체 반려동물 산책 기록 일별 조회
-//     */
-//    @Override
-//    public Map<LocalDate, List<WalkStatisticsDto>> getUserDailyWalks(Long userId) {
 //        return null;
 //    }
 

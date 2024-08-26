@@ -5,14 +5,14 @@ import com.concord.petmily.domain.pet.entity.Gender;
 
 import java.time.LocalDate;
 import javax.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
+
+import lombok.*;
 
 
 public class PetDto {
 
-  @Data
+  @Getter
+  @Setter
   public static class Create {
 
     @NotNull(message = "반려동물의 카테고리는 필수입니다.")
@@ -54,7 +54,8 @@ public class PetDto {
     private String petImages;
   }
 
-  @Data
+  @Getter
+  @Setter
   public static class ModifierPet{
 
     private String petsName;

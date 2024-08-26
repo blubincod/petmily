@@ -23,6 +23,17 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 반려동물 관련 컨트롤러
+ * [반려동물 CRUD]
+ * - 반려동물 등록
+ * - 회원의 반려동물 목록 조회
+ * - 특정 반려동물 상세 정보 조회
+ * - 반려동물 정보 수정
+ * - 반려동물 정보 삭제
+ *
+ * [산책]
+ */
 @RestController
 @RequestMapping("/api/v1/pets")
 @RequiredArgsConstructor
@@ -98,25 +109,4 @@ public class PetController {
 
         return ResponseEntity.status(204).body("반려 동물 정보 삭제 완료"); // 204 No Content 반환
     }
-
-    /**
-     * 특정 반려동물의 산책 특정일 통계 조회
-     */
-    @GetMapping("/{petId}/walks/daily")
-    public ResponseEntity<Map<LocalDate, List<WalkStatisticsDto>>> getPetDailyWalks(@PathVariable Long petId) {
-//        Map<LocalDate, List<WalkStatisticsDto>> dailyWalks = walkService.getPetDailyWalks(petId);
-        return ResponseEntity.ok(null);
-    }
-
-    /**
-     * 특정 반려동물의 특정 산책 상세 정보 조회
-     */
-    @GetMapping("/walks/{walkId}")
-    public ResponseEntity<WalkDto> getPetWalkDetail(
-            @PathVariable Long petId,
-            @PathVariable Long walkId) {
-//        WalkDto walkDetail = walkService.getPetWalkDetail(petId, walkId);
-        return ResponseEntity.ok(null);
-    }
-
 }

@@ -1,13 +1,13 @@
 package com.concord.petmily.domain.walk.service;
 
-import com.concord.petmily.domain.walk.entity.WalkGoal;
+import com.concord.petmily.domain.walk.dto.WalkGoalDto;
 
 public interface WalkGoalService {
-    void setWeeklyWalkGoal();
+    WalkGoalDto createWalkGoal(Long petId, WalkGoalDto walkGoalDto);
 
-    WalkGoal getWalkGoal();
+    WalkGoalDto getWalkGoal(Long petId);
 
-    void updateWalkGoal(int newWalkCount, int newWalkDurationMinutes);
+    WalkGoalDto updateWalkGoal(Long petId, WalkGoalDto walkGoalDto);
 
-    void deleteWalkGoal();
+    void deleteWalkGoal(Long petId);
 }

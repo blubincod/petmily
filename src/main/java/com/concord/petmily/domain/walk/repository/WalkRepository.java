@@ -1,11 +1,14 @@
 package com.concord.petmily.domain.walk.repository;
 
-import com.concord.petmily.domain.walk.dto.WalkDto;
 import com.concord.petmily.domain.walk.entity.Walk;
-import com.concord.petmily.domain.walk.entity.WalkingPet;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -14,16 +17,15 @@ import java.util.List;
  */
 public interface WalkRepository extends JpaRepository<Walk, Long> {
 
-
-     // 회원 아이디로 모든 반려동물의 산책 기록 조회
-    List<Walk> findByUserId(Long userId);
-
     // 특정 날짜의 산책 기록 조회
     List<Walk> findByStartTime(LocalDate date);
 
-     // 반려동물 아이디로 전체 산책 목록 찾기
-//    List<Walk> findByPetId(Long petId);
+    // 회원 아이디로 기간 내의 산책 조회
+    Page<Walk> findByUserIdAndWalkDateBetween(Long userId, LocalDate startDate, LocalDate endDate, Pageable pageable);
 
-    //
-    List<Walk> findByUserIdAndWalkDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
+    // 반려동물 아이디로 기간 내의 산책 조회
+    Page<Walk> findByWalkParticipantsPetIdAndStartTimeBetween(Long petId, LocalDateTime startDateTime, LocalDateTime endDateTime, Pageable pageable);
+
+    // 회원 아이디로 모든 반려동물의 산책 기록 조회
+    Page<Walk> findByUserId(Long userId, Pageable pageable);
 }

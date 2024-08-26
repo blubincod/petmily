@@ -1,10 +1,7 @@
 package com.concord.petmily.domain.post.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 게시물 카테고리
@@ -18,12 +15,13 @@ import lombok.NoArgsConstructor;
  * 6 - 리뷰 게시판
  * 7 - QnA
  */
+@Getter
+@Setter
 @Entity
-@Table(name = "post_category")
-@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "post_category")
 public class PostCategory {
 
     @Id
