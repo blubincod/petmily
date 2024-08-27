@@ -38,33 +38,33 @@ values
 INSERT INTO pet (USER_ID, CATEGORY, BRAND, BIRTH_DATE, AGE, NAME, GENDER,
                  IS_PETS_NEUTER, WEIGHT, PET_STATUS, CHIP, CREATE_AT,
                  MODIFIED_AT)
-VALUES
-    -- USER_ID 1의 반려동물
-    (1, 'DOG', 'Labrador Retriever', '2020-05-15', 3, 'Max', 'MALE', true, 30.5,
+VALUES-- USER_ID 1의 반려동물
+
+    (1, 'DOG', '래브라도 리트리버', '2020-05-15', 3, '맥스', 'MALE', true, 30.5,
      'ACTIVE', 'CHIP123456', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (1, 'CAT', 'Persian', '2021-03-10', 2, 'Luna', 'FEMALE', true, 4.2,
+    (1, 'CAT', '페르시안', '2021-03-10', 2, '루나', 'FEMALE', true, 4.2,
      'ACTIVE', 'CHIP234567', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (1, 'DOG', 'Golden Retriever', '2019-11-20', 4, 'Charlie', 'MALE', false,
+    (1, 'DOG', '골든 리트리버', '2019-11-20', 4, '찰리', 'MALE', false,
      28.7, 'ACTIVE', 'CHIP345678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
--- USER_ID 2의 반려동물
-    (2, 'CAT', 'Siamese', '2022-01-05', 1, 'Milo', 'MALE', false, 3.8, 'ACTIVE',
+    -- USER_ID 2의 반려동물
+    (2, 'CAT', '샴', '2022-01-05', 1, '밀로', 'MALE', false, 3.8, 'ACTIVE',
      'CHIP456789', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (2, 'DOG', 'Poodle', '2020-09-30', 3, 'Bella', 'FEMALE', true, 15.3,
+    (2, 'DOG', '푸들', '2020-09-30', 3, '벨라', 'FEMALE', true, 15.3,
      'ACTIVE', 'CHIP567890', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (2, 'CAT', 'Maine Coon', '2021-07-12', 2, 'Oliver', 'MALE', true, 5.5,
+    (2, 'CAT', '메인쿤', '2021-07-12', 2, '올리버', 'MALE', true, 5.5,
      'ACTIVE', 'CHIP678901', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
--- USER_ID 3의 반려동물
-    (3, 'DOG', 'German Shepherd', '2019-04-22', 4, 'Rocky', 'MALE', true, 35.2,
+    -- USER_ID 3의 반려동물
+    (3, 'DOG', '저먼 셰퍼드', '2019-04-22', 4, '로키', 'MALE', true, 35.2,
      'ACTIVE', 'CHIP789012', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (3, 'CAT', 'British Shorthair', '2020-12-03', 2, 'Lucy', 'FEMALE', false,
+    (3, 'CAT', '브리티시 숏헤어', '2020-12-03', 2, '루시', 'FEMALE', false,
      4.0, 'ACTIVE', 'CHIP890123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (3, 'DOG', 'Beagle', '2021-08-17', 2, 'Daisy', 'FEMALE', true, 12.8,
+    (3, 'DOG', '비글', '2021-08-17', 2, '데이지', 'FEMALE', true, 12.8,
      'ACTIVE', 'CHIP901234', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
--- USER_ID 4의 반려동물
-    (4, 'DOG', 'Shiba Inu', '2021-02-14', 2, 'Hachi', 'MALE', false, 10.5,
+    -- USER_ID 4의 반려동물
+    (4, 'DOG', '시바 이누', '2021-02-14', 2, '하치', 'MALE', false, 10.5,
      'ACTIVE', 'CHIP012345', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
--- USER_ID 5의 반려동물
-    (5, 'DOG', 'Corgi', '2020-07-30', 3, 'Coco', 'FEMALE', true, 12.3, 'ACTIVE',
+    -- USER_ID 5의 반려동물
+    (5, 'DOG', '웰시 코기', '2020-07-30', 3, '코코', 'FEMALE', true, 12.3, 'ACTIVE',
      'CHIP123450', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 산책 테이블
@@ -180,18 +180,20 @@ VALUES (37.5665, 126.9780, 1, 1, '2024-08-10 01:45:00', 'PEE'),
        (37.5691, 126.9806, 11, 17, '2024-08-11 09:45:00', 'WATER'),
        (37.5692, 126.9807, 11, 18, '2024-08-12 10:20:00', 'PEE');
 
--- 카테고리 테이블
+-- 게시판 카테고리 테이블
 insert into post_category(category_id, category_name)
-values (1, '공지사항');
-insert into post_category(category_id, category_name)
-values (2, '가입 인사');
-insert into post_category(category_id, category_name)
-values (3, '정보 공유');
-insert into post_category(category_id, category_name)
-values (4, '산책 인증');
-insert into post_category(category_id, category_name)
-values (5, '자유 게시판');
-insert into post_category(category_id, category_name)
-values (6, '리뷰 게시판');
-insert into post_category(category_id, category_name)
-values (7, 'QnA');
+values (1, '공지사항'),
+       (2, '가입 인사'),
+       (3, '정보 공유'),
+       (4, '산책 인증'),
+       (5, '자유 게시판'),
+       (6, '리뷰 게시판'),
+       (7, 'QnA');
+
+-- 오픈 채팅 카테고리 테이블
+INSERT INTO open_chat_category (name, description)
+VALUES ('일상대화', '일상적인 주제에 대해 자유롭게 대화하는 공간입니다.'),
+       ('반려동물', '반려동물에 관한 정보를 공유하고 소통하는 공간입니다.'),
+       ('산책메이트', '함께 산책할 친구를 찾고 만나는 공간입니다.'),
+       ('펫용품리뷰', '다양한 펫용품에 대한 리뷰와 정보를 공유하는 공간입니다.'),
+       ('동물병원정보', '동물병원 정보와 경험을 공유하는 공간입니다.');
