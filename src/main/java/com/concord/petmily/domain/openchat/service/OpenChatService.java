@@ -1,7 +1,6 @@
 package com.concord.petmily.domain.openchat.service;
 
 import com.concord.petmily.domain.openchat.dto.*;
-import com.concord.petmily.domain.openchat.dto.JoinChatRoomDto;
 
 import java.util.List;
 
@@ -9,7 +8,7 @@ public interface OpenChatService {
     /**
      * 채팅방 생성
      */
-    OpenChatDto createChatRoom(CreateChatRoomDto createDto);
+    OpenChatDto createChatRoom(String username, CreateChatRoomDto createDto);
 
     /**
      * 채팅방 목록 조회

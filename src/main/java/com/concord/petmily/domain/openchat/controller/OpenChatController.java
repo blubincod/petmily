@@ -6,6 +6,8 @@ import com.concord.petmily.domain.openchat.service.MessageService;
 import com.concord.petmily.domain.openchat.service.OpenChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +25,11 @@ public class OpenChatController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse<OpenChatDto>> createChatRoom(
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody CreateChatRoomDto createDto
     ) {
-        OpenChatDto chatRoom = openChatService.createChatRoom(createDto);
+        String username = userDetails.getUsername();
+        OpenChatDto chatRoom = openChatService.createChatRoom(username, createDto);
 
         return ResponseEntity.ok(ApiResponse.success(chatRoom));
     }

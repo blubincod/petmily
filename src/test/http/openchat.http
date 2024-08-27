@@ -1,7 +1,7 @@
 # Open Chat 테스트
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NjU1NjY1LCJleHAiOjE3MjQ2NTkyNjUsInN1YiI6ImtpbWp1bjkxIn0.vzP2LGmGYTiq72O4Y5PNKrVJj3Y3RdM3DM74MTC0Tug
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NzU1MjMyLCJleHAiOjE3MjQ3NTg4MzIsInN1YiI6ImtpbWp1bjkxIn0.UFVh8hLsgMAGiLaSZ42SAwWb5eKM4lcT24B_qta9IyQ
 #@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NjU1NjY1LCJleHAiOjE3MjQ2NTkyNjUsInN1YiI6ImtpbWp1bjkxIn0.vzP2LGmGYTiq72O4Y5PNKrVJj3Y3RdM3DM74MTC0Tug
 
 ### 회원1 로그인 요청
@@ -9,18 +9,19 @@ POST http://localhost:8080/api/v1/users/login
 Content-Type: application/json
 
 {
-
+  "username": "kimjun91",
+  "password": "kim123"
 }
 
 ### 채팅방 생성
-POST http://localhost:8080/api/v1/users/login
+POST http://localhost:8080/api/v1/open-chats
 Content-Type: application/json
 
 {
-  "title": "",
-  "description":"",
-  "password": "",
-  "maxParticipants":"",
-  "currentParticipants": "",
-  "isPublic": "";
+  "categoryId": 3,
+  "title": "OO동 오후 7시 산책 하실 분",
+  "description":"대화하면서 산책하실 분 모집합니다.",
+  "password": null,
+  "maxParticipants": 5,
+  "isPublic": true
 }
