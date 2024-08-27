@@ -1,6 +1,8 @@
 package com.concord.petmily.domain.openchat.service;
 
 import com.concord.petmily.domain.openchat.dto.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public interface OpenChatService {
     /**
      * 채팅방 목록 조회
      */
-    List<OpenChatDto> getChatRoomList();
+    Page<OpenChatDto> getChatRoomList(Pageable pageable);
 
     /**
      * 특정 채팅방 정보 조회

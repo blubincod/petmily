@@ -2,6 +2,7 @@ package com.concord.petmily.domain.openchat.entity;
 
 import com.concord.petmily.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,7 +12,12 @@ import java.util.List;
 /**
  * 오픈채팅 엔티티
  */
+@Getter
+@Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OpenChat {
 
     @Id

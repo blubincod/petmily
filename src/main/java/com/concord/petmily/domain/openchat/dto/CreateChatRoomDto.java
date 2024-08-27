@@ -7,8 +7,9 @@ import lombok.Setter;
 @Setter
 public class CreateChatRoomDto {
     private Long categoryId;
-    private Long creatorId;
     private String title;
     private String description;
+    private String password;
     private int maxParticipants;
+    private boolean isPublic;
 }

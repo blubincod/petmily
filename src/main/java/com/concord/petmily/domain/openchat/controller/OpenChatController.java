@@ -1,10 +1,15 @@
 package com.concord.petmily.domain.openchat.controller;
 
 import com.concord.petmily.common.dto.ApiResponse;
+import com.concord.petmily.common.dto.PagedApiResponse;
 import com.concord.petmily.domain.openchat.dto.*;
 import com.concord.petmily.domain.openchat.service.MessageService;
 import com.concord.petmily.domain.openchat.service.OpenChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,10 +43,15 @@ public class OpenChatController {
      * 채팅방 목록 조회
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<OpenChatDto>>> getChatRoomList() {
-        List<OpenChatDto> chatRooms = openChatService.getChatRoomList();
+    public ResponseEntity<PagedApiResponse<List<OpenChatDto>>> getChatRoomList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        {
+            Page<OpenChatDto> chatRooms = openChatService.getChatRoomList(pageable);
 
-        return ResponseEntity.ok(ApiResponse.success(chatRooms));
+            return ResponseEntity.ok(PagedApiResponse.success(chatRooms));
+        }
     }
 
     /**

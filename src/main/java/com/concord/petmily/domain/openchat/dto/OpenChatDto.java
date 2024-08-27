@@ -1,13 +1,31 @@
 package com.concord.petmily.domain.openchat.dto;
 
-import java.time.LocalDateTime;
+import com.concord.petmily.domain.openchat.entity.OpenChat;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@Builder
 public class OpenChatDto {
-    private Long id;
-    private String name;
+    private Long creatorId;
+    private Long categoryId;
+    private String title;
     private String description;
-    private int currentParticipants;
     private int maxParticipants;
-    private String creatorId;
-    private LocalDateTime createdAt;
+    private int currentParticipants;
+    private boolean isPublic;
+
+    public static OpenChatDto fromEntity(OpenChat openChat) {
+        return OpenChatDto.builder()
+                .creatorId(openChat.getCreator().getId())
+                .categoryId(openChat.getCategory().getId())
+                .title(openChat.getTitle())
+                .description(openChat.getDescription())
+                .maxParticipants(openChat.getMaxParticipants())
+                .currentParticipants(1)
+                .isPublic(openChat.isPublic())
+                .build();
+    }
 }

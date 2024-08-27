@@ -2,6 +2,7 @@ package com.concord.petmily.domain.openchat.service;
 
 import com.concord.petmily.common.exception.ErrorCode;
 import com.concord.petmily.domain.openchat.dto.*;
+import com.concord.petmily.domain.openchat.entity.ChatStatus;
 import com.concord.petmily.domain.openchat.entity.OpenChat;
 import com.concord.petmily.domain.openchat.entity.OpenChatCategory;
 import com.concord.petmily.domain.openchat.repository.OpenChatCategoryRepository;
@@ -10,6 +11,8 @@ import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.exception.UserNotFoundException;
 import com.concord.petmily.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,20 +31,41 @@ public class OpenChatServiceImpl implements OpenChatService {
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
     }
 
-    @Override
-    public OpenChatDto createChatRoom(String username, CreateChatRoomDto createDto) {
-        User user = getUser(username);
-
-//        OpenChatCategory openChatCategory = openChatCategoryRepository.findById(createDto.getCategoryId());
-
-//        openChatRepository.save()
-
-        return null;
+    // 오픈채팅 카테고리 정보 조회
+    private OpenChatCategory getCategory(Long categoryId) {
+        return openChatCategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("해당 카테고리가 존재하지 않습니다."));
     }
 
     @Override
-    public List<OpenChatDto> getChatRoomList() {
-        return null;
+    public OpenChatDto createChatRoom(String username, CreateChatRoomDto createDto) {
+        User user = getUser(username);
+        OpenChatCategory category = getCategory(createDto.getCategoryId());
+
+        OpenChat openChat = createOpenChat(user, category, createDto);
+        OpenChat savedOpenChat = openChatRepository.save(openChat);
+
+        return OpenChatDto.fromEntity(savedOpenChat);
+    }
+
+    // 오픈 채팅 객체 생성
+    private OpenChat createOpenChat(User creator, OpenChatCategory category, CreateChatRoomDto createDto) {
+        return OpenChat.builder()
+                .title(createDto.getTitle())
+                .description(createDto.getDescription())
+                .category(category)
+                .creator(creator)
+                .maxParticipants(createDto.getMaxParticipants())
+                .status(ChatStatus.ACTIVE)
+                .isPublic(createDto.isPublic())
+                .build();
+    }
+
+    @Override
+    public Page<OpenChatDto> getChatRoomList(Pageable pageable) {
+        Page<OpenChat> openChats = openChatRepository.findAll(pageable);
+
+        return openChats.map(OpenChatDto::fromEntity);
     }
 
     @Override

@@ -66,8 +66,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PostDto.ResponseGetPosts> getPosts(Long categoryId, String hashtagName, Pageable pageable) {
-
+    public Page<PostDto.ResponseGetPosts> getPosts(
+            Long categoryId, String hashtagName, Pageable pageable
+    ) {
         if (categoryId == null && hashtagName == null) {
             // categoryId, hashtagName 모두 입력하지 않은 경우
             return postRepository.findAll(pageable).map(PostDto.ResponseGetPosts::new);

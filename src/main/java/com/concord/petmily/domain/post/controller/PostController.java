@@ -62,7 +62,7 @@ public class PostController {
                                                                                  Pageable pageable) {
         Page<PostDto.ResponseGetPosts> responses = postService.getPosts(categoryId, hashtagName, pageable);
 
-        return ResponseEntity.ok(ApiResponse.success(responses));
+        return ResponseEntity.ok(ApiResponse.success((List<PostDto.ResponseGetPosts>) responses));
     }
 
     /**
