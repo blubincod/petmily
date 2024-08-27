@@ -14,6 +14,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
 @Table(name = "comment")
 public class Comment extends BaseTimeEntity {
 

@@ -1,11 +1,14 @@
 package com.concord.petmily.domain.post.controller;
 
+import com.concord.petmily.common.dto.ApiResponse;
 import com.concord.petmily.domain.post.dto.PostDto;
 import com.concord.petmily.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +27,8 @@ import java.util.Set;
  * - 해시태그 조회
  */
 @RestController
-@RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/posts")
 public class PostController {
 
     private final PostService postService;
@@ -39,7 +42,7 @@ public class PostController {
      */
     @PostMapping
     public ResponseEntity<PostDto.Response> createPost (@RequestPart PostDto.Request dto,
-                                                        @RequestPart("files") List<MultipartFile> files,
+                                                        @RequestPart(required = false) List<MultipartFile> files,
                                                         @AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
         PostDto.Response response = postService.createPost(username, dto, files);
@@ -51,18 +54,15 @@ public class PostController {
      * 게시물 전체 조회 (카테고리별, 해시태그별)
      * @param categoryId 조회할 카테고리 id
      * @param hashtagName 조회할 해시태그이름
-     * @param page 조회할 페이지
-     * @param size 조회할 페이지의 사이즈
      * @return 조회된 게시물의 정보와 HTTP 200 상태를 반환
      */
     @GetMapping
-    public ResponseEntity<Page<PostDto.ResponseGetPosts>> getPosts (@RequestParam(required = false) Long categoryId,
-                                       @RequestParam(required = false) String hashtagName,
-                                       @RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "5") int size){
-        Page<PostDto.ResponseGetPosts> responses = postService.getPosts(categoryId, hashtagName, page, size);
+    public ResponseEntity<ApiResponse<List<PostDto.ResponseGetPosts>>> getPosts (@RequestParam(required = false) Long categoryId,
+                                                                                 @RequestParam(required = false) String hashtagName,
+                                                                                 Pageable pageable) {
+        Page<PostDto.ResponseGetPosts> responses = postService.getPosts(categoryId, hashtagName, pageable);
 
-        return ResponseEntity.status(HttpStatus.OK).body(responses);
+        return ResponseEntity.ok(ApiResponse.success(responses));
     }
 
     /**
@@ -91,7 +91,7 @@ public class PostController {
     @PutMapping("/{postId}")
     public ResponseEntity<PostDto.Response> updatePost (@PathVariable Long postId,
                                                         @RequestPart PostDto.Request dto,
-                                                        @RequestPart("files") List<MultipartFile> files,
+                                                        @RequestPart(required = false) List<MultipartFile> files,
                                                         @AuthenticationPrincipal UserDetails userDetails){
         String username = userDetails.getUsername();
         PostDto.Response response = postService.updatePost(username, postId, dto, files);
@@ -123,6 +123,19 @@ public class PostController {
         Set<String> hashtagNames = postService.getAllHashtags();
 
         return ResponseEntity.status(HttpStatus.OK).body(hashtagNames);
+    }
+
+    /**
+     * 해시태그 추가(관리자만 가능)
+     * @param hashtagNames 추가할 해시태그
+     * @return 생성된 해시태그와 HTTP 201 상태를 반환
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/hashtags")
+    public ResponseEntity<List<String>> createHashtags (@RequestBody List<String> hashtagNames){
+        List<String> hashtags = postService.createHashtags(hashtagNames);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(hashtags);
     }
 
 }
