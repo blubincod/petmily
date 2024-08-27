@@ -6,13 +6,13 @@ import com.concord.petmily.domain.post.dto.PostDto;
 import com.concord.petmily.domain.post.entity.*;
 import com.concord.petmily.domain.post.exception.PostException;
 import com.concord.petmily.domain.post.repository.*;
+import com.concord.petmily.domain.user.entity.Role;
 import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.exception.UserException;
 import com.concord.petmily.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,8 +66,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PostDto.ResponseGetPosts> getPosts(Long categoryId, String hashtagName, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<PostDto.ResponseGetPosts> getPosts(Long categoryId, String hashtagName, Pageable pageable) {
 
         if (categoryId == null && hashtagName == null) {
             // categoryId, hashtagName 모두 입력하지 않은 경우
@@ -184,9 +183,12 @@ public class PostServiceImpl implements PostService {
             throw new PostException(ErrorCode.POST_ALREADY_DELETED);
         }
 
-        // 사용자와 게시물 작성자가 다른 경우 에러
-        if(!Objects.equals(user.getId(), post.getUser().getId())) {
-            throw new PostException(ErrorCode.USER_POST_UNMATCHED);
+        if(user.getRole() != Role.ADMIN) {
+            // 사용자가 관리자가 아니라면
+            // 사용자와 게시물 작성자가 다른 경우 에러
+            if (!Objects.equals(user.getId(), post.getUser().getId())) {
+                throw new PostException(ErrorCode.USER_POST_UNMATCHED);
+            }
         }
 
         // 게시물 삭제시 post 테이블의 status 변경
@@ -209,6 +211,16 @@ public class PostServiceImpl implements PostService {
         }
 
         return hashtags.stream().map(Hashtag::getHashtagName).collect(Collectors.toSet());
+    }
+
+    @Override
+    public List<String> createHashtags(List<String> hashtagNames) {
+        // HASHTAG 테이블에 추가
+        for(String hashtagName : hashtagNames) {
+            hashtagRepository.findByHashtagName(hashtagName)
+                    .orElseGet(() -> hashtagRepository.save(new Hashtag(hashtagName)));
+        }
+        return hashtagNames;
     }
 
     // 게시물 조회수 증가

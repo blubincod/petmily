@@ -4,6 +4,8 @@ import com.concord.petmily.common.exception.ErrorCode;
 import com.concord.petmily.domain.likes.entity.Likes;
 import com.concord.petmily.domain.likes.exception.LikesException;
 import com.concord.petmily.domain.likes.repository.LikesRepository;
+import com.concord.petmily.domain.notification.entity.Notification;
+import com.concord.petmily.domain.notification.service.NotificationService;
 import com.concord.petmily.domain.post.entity.Post;
 import com.concord.petmily.domain.post.exception.PostException;
 import com.concord.petmily.domain.post.repository.PostRepository;
@@ -20,6 +22,7 @@ public class LikesServiceImpl implements LikesService {
     private final LikesRepository likesRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final NotificationService notificationService;
 
     @Override
     public void createLikes(String username, Long postId) {
@@ -42,6 +45,9 @@ public class LikesServiceImpl implements LikesService {
         likesRepository.save(likes);
         post.likeCountUp(post);
         postRepository.save(post);
+
+        // 작성자에게 알림 전송
+        notificationService.send(post.getUser(), Notification.NotificationType.LIKE, "작성한 게시물에 좋아요가 추가되었습니다.");
     }
 
     @Override
