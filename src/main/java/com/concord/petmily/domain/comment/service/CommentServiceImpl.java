@@ -5,9 +5,12 @@ import com.concord.petmily.domain.comment.entity.Comment;
 import com.concord.petmily.domain.comment.exception.CommentException;
 import com.concord.petmily.domain.comment.repository.CommentRepository;
 import com.concord.petmily.common.exception.ErrorCode;
+import com.concord.petmily.domain.notification.entity.Notification;
+import com.concord.petmily.domain.notification.service.NotificationService;
 import com.concord.petmily.domain.post.entity.Post;
 import com.concord.petmily.domain.post.exception.PostException;
 import com.concord.petmily.domain.post.repository.PostRepository;
+import com.concord.petmily.domain.user.entity.Role;
 import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.exception.UserException;
 import com.concord.petmily.domain.user.repository.UserRepository;
@@ -24,6 +27,7 @@ public class CommentServiceImpl implements CommentService{
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -47,6 +51,9 @@ public class CommentServiceImpl implements CommentService{
         comment.setUser(user);
         comment.setPost(post);
         commentRepository.save(comment);
+
+        // 작성자에게 알림 전송
+        notificationService.send(post.getUser(), Notification.NotificationType.COMMENT,"작성한 게시물에 댓글이 작성되었습니다.");
     }
 
     @Override
@@ -58,7 +65,7 @@ public class CommentServiceImpl implements CommentService{
                 .orElseThrow(() -> new CommentException(ErrorCode.COMMENT_NOT_FOUND));
 
         // 사용자와 댓글 수정자가 다르면 에러
-        if(!Objects.equals(user.getId(), comment.getUser().getId())) {
+        if (!Objects.equals(user.getId(), comment.getUser().getId())) {
             throw new CommentException(ErrorCode.USER_COMMENT_UNMATCHED);
         }
 
@@ -79,9 +86,12 @@ public class CommentServiceImpl implements CommentService{
             throw new CommentException(ErrorCode.COMMENT_ALREADY_DELETED);
         }
 
-        // 사용자와 댓글 삭제자가 다르면 에러
-        if(!Objects.equals(user.getId(), comment.getUser().getId())) {
-            throw new CommentException(ErrorCode.USER_COMMENT_UNMATCHED);
+        if(user.getRole() != Role.ADMIN) {
+            // 사용자가 관리자가 아니라면
+            // 사용자와 댓글 삭제자가 다르면 에러
+            if (!Objects.equals(user.getId(), comment.getUser().getId())) {
+                throw new CommentException(ErrorCode.USER_COMMENT_UNMATCHED);
+            }
         }
 
         comment.setIsDeleted(true);
