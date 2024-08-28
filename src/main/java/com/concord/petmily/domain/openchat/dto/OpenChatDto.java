@@ -24,7 +24,7 @@ public class OpenChatDto {
                 .title(openChat.getTitle())
                 .description(openChat.getDescription())
                 .maxParticipants(openChat.getMaxParticipants())
-                .currentParticipants(1)
+                .currentParticipants(openChat.getCurrentParticipants())
                 .isPublic(openChat.isPublic())
                 .build();
     }

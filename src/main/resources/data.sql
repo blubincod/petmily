@@ -199,65 +199,86 @@ VALUES ('일상대화', '일상적인 주제에 대해 자유롭게 대화하는
        ('동물병원정보', '동물병원 정보와 경험을 공유하는 공간입니다.');
 
 -- 오픈 채팅방 리스트 데이터
-INSERT INTO open_chat (category_id, title, description, password,
-                       max_participants, current_participants, is_public)
-VALUES
-    (3, 'OO동 저녁 8시 산책 모임', '퇴근 후 함께 산책하며 스트레스 풀어요!', NULL, 5, 2, true),
-    (2, '고양이 집사 모여라!', '고양이 키우는 분들의 일상 공유 모임', NULL, 10, 3, true),
-    (1, '20대 직장인 수다방', '일상 고민부터 취미 공유까지 자유로운 대화', NULL, 15, 4, true),
-    (4, '강아지 장난감 추천', '우리 강아지가 좋아하는 장난감 공유해요', NULL, 8, 1, true),
-    (5, 'OO동 동물병원 정보 공유', '믿을 만한 동물병원 정보 나눠요', NULL, 20, 5, true),
-    (3, 'OO동 주말 아침 공원 산책', '주말 아침 상쾌한 공기 마시며 산책해요', NULL, 6, 2, true),
-    (2, '반려동물 훈련 팁 공유', '반려동물 훈련 노하우 나누는 공간', NULL, 12, 3, true),
-    (1, '펫밀리 독서모임', '반려동물 관련 책 읽고 토론해요', NULL, 8, 2, true),
-    (4, '수제 간식 레시피 공유', '건강한 수제 간식 만드는 법 공유해요', NULL, 10, 1, true),
-    (5, '응급처치 정보 공유', '반려동물 응급상황 대처법 공유해요', NULL, 15, 3, true);
+INSERT INTO open_chat (CATEGORY_ID, TITLE, DESCRIPTION, PASSWORD,
+                       MAX_PARTICIPANTS, CURRENT_PARTICIPANTS, IS_PUBLIC,
+                       CREATOR_ID, CREATED_AT, UPDATED_AT, LAST_MESSAGE_AT,
+                       STATUS, IMAGE_URL)
+VALUES (3, 'OO동 저녁 8시 산책 모임', '퇴근 후 함께 산책하며 스트레스 풀어요!', NULL, 5, 2, true, 1,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE',
+        NULL),
+       (2, '고양이 집사 모여라!', '고양이 키우는 분들의 일상 공유 모임', NULL, 10, 3, true, 2,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE',
+        NULL),
+       (1, '20대 직장인 수다방', '일상 고민부터 취미 공유까지 자유로운 대화', NULL, 15, 4, true, 3,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE',
+        NULL),
+       (4, '강아지 장난감 추천', '우리 강아지가 좋아하는 장난감 공유해요', NULL, 8, 1, true, 4,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE',
+        NULL),
+       (5, 'OO동 동물병원 정보 공유', '믿을 만한 동물병원 정보 나눠요', NULL, 20, 5, true, 5,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE',
+        NULL),
+       (3, 'OO동 주말 아침 공원 산책', '주말 아침 상쾌한 공기 마시며 산책해요', NULL, 6, 2, true, 1,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE',
+        NULL),
+       (2, '반려동물 훈련 팁 공유', '반려동물 훈련 노하우 나누는 공간', NULL, 12, 3, true, 2,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE',
+        NULL),
+       (1, '펫밀리 독서모임', '반려동물 관련 책 읽고 토론해요', NULL, 8, 2, true, 3,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE',
+        NULL),
+       (4, '수제 간식 레시피 공유', '건강한 수제 간식 만드는 법 공유해요', NULL, 10, 1, true, 4,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE',
+        NULL),
+       (5, '응급처치 정보 공유', '반려동물 응급상황 대처법 공유해요', NULL, 15, 3, true, 5,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE',
+        NULL);
 
 -- 오픈 채팅방 참여자 데이터
-INSERT INTO open_chat_participant (user_id, open_chat_id, joined_at, active)
+INSERT INTO open_chat_participant (user_id, open_chat_id, status, joined_at, left_at)
 VALUES
 -- 채팅방 1
-(1, 1, '2024-08-15 18:30:00', true),
-(2, 1, '2024-08-15 19:00:00', true),
+(1, 1, 'ACTIVE', '2024-08-15 18:30:00', NULL),
+(2, 1, 'ACTIVE', '2024-08-15 19:00:00', NULL),
 
 -- 채팅방 2
-(2, 2, '2024-08-16 10:00:00', true),
-(3, 2, '2024-08-16 10:30:00', true),
-(4, 2, '2024-08-16 11:00:00', true),
+(2, 2, 'ACTIVE', '2024-08-16 10:00:00', NULL),
+(3, 2, 'ACTIVE', '2024-08-16 10:30:00', NULL),
+(4, 2, 'ACTIVE', '2024-08-16 11:00:00', NULL),
 
 -- 채팅방 3
-(1, 3, '2024-08-17 20:00:00', true),
-(2, 3, '2024-08-17 20:15:00', true),
-(4, 3, '2024-08-17 20:30:00', true),
-(5, 3, '2024-08-17 21:00:00', true),
+(1, 3, 'ACTIVE', '2024-08-17 20:00:00', NULL),
+(2, 3, 'ACTIVE', '2024-08-17 20:15:00', NULL),
+(4, 3, 'ACTIVE', '2024-08-17 20:30:00', NULL),
+(5, 3, 'ACTIVE', '2024-08-17 21:00:00', NULL),
 
 -- 채팅방 4
-(3, 4, '2024-08-18 14:00:00', true),
+(3, 4, 'ACTIVE', '2024-08-18 14:00:00', NULL),
 
 -- 채팅방 5
-(1, 5, '2024-08-19 09:00:00', true),
-(2, 5, '2024-08-19 09:30:00', true),
-(3, 5, '2024-08-19 10:00:00', true),
-(4, 5, '2024-08-19 10:30:00', true),
-(5, 5, '2024-08-19 11:00:00', true),
+(1, 5, 'ACTIVE', '2024-08-19 09:00:00', NULL),
+(2, 5, 'ACTIVE', '2024-08-19 09:30:00', NULL),
+(3, 5, 'ACTIVE', '2024-08-19 10:00:00', NULL),
+(4, 5, 'ACTIVE', '2024-08-19 10:30:00', NULL),
+(5, 5, 'ACTIVE', '2024-08-19 11:00:00', NULL),
 
 -- 채팅방 6
-(4, 6, '2024-08-20 07:00:00', true),
-(5, 6, '2024-08-20 07:15:00', true),
+(4, 6, 'ACTIVE', '2024-08-20 07:00:00', NULL),
+(5, 6, 'ACTIVE', '2024-08-20 07:15:00', NULL),
 
 -- 채팅방 7
-(1, 7, '2024-08-21 15:00:00', true),
-(3, 7, '2024-08-21 15:30:00', true),
-(5, 7, '2024-08-21 16:00:00', true),
+(1, 7, 'ACTIVE', '2024-08-21 15:00:00', NULL),
+(3, 7, 'ACTIVE', '2024-08-21 15:30:00', NULL),
+(5, 7, 'ACTIVE', '2024-08-21 16:00:00', NULL),
 
 -- 채팅방 8
-(2, 8, '2024-08-22 19:00:00', true),
-(4, 8, '2024-08-22 19:30:00', true),
+(2, 8, 'ACTIVE', '2024-08-22 19:00:00', NULL),
+(4, 8, 'ACTIVE', '2024-08-22 19:30:00', NULL),
 
 -- 채팅방 9
-(3, 9, '2024-08-23 11:00:00', true),
+(3, 9, 'ACTIVE', '2024-08-23 11:00:00', NULL),
 
 -- 채팅방 10
-(1, 10, '2024-08-24 13:00:00', true),
-(2, 10, '2024-08-24 13:30:00', true),
-(5, 10, '2024-08-24 14:00:00', true);
+(1, 10, 'ACTIVE', '2024-08-24 13:00:00', NULL),
+(2, 10, 'ACTIVE', '2024-08-24 13:30:00', NULL),
+(5, 10, 'ACTIVE', '2024-08-24 14:00:00', NULL);

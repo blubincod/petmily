@@ -25,12 +25,12 @@ public interface OpenChatService {
     /**
      * 채팅방 참여
      */
-    void joinChatRoom(Long chatId, JoinChatRoomDto joinDto);
+    void joinChatRoom(Long chatId, String username);
 
     /**
      * 채팅방 나가기
      */
-    void leaveChatRoom(Long chatId, LeaveChatRoomDto leaveDto);
+    void leaveChatRoom(Long chatId, String username);
 
     /**
      * 채팅방 검색

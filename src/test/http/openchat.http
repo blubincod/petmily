@@ -1,7 +1,7 @@
 # Open Chat 테스트
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0ODM0NDgyLCJleHAiOjE3MjQ4MzgwODIsInN1YiI6ImtpbWp1bjkxIn0.Oz_FySP0Gs2-McZhPafQGS1ct713B-HrLVnJuczuqBw
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0ODQxNDAzLCJleHAiOjE3MjQ4NDUwMDMsInN1YiI6ImtpbWp1bjkxIn0.uy_a5wlJ42tbYS0WinKT3t1hlpF79ZCRCbnMgCtgb4Y
 #@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NjU1NjY1LCJleHAiOjE3MjQ2NTkyNjUsInN1YiI6ImtpbWp1bjkxIn0.vzP2LGmGYTiq72O4Y5PNKrVJj3Y3RdM3DM74MTC0Tug
 
 ### 회원1 로그인 요청
@@ -33,4 +33,12 @@ Authorization: Bearer {{accessToken}}
 
 ### 오픈채팅 정보 조회
 GET http://localhost:8080/api/v1/open-chats/2
+Authorization: Bearer {{accessToken}}
+
+### 오픈채팅방 참여
+POST http://localhost:8080/api/v1/open-chats/2/join
+Authorization: Bearer {{accessToken}}
+
+### 오픈채팅방 나가기
+POST http://localhost:8080/api/v1/open-chats/2/leave
 Authorization: Bearer {{accessToken}}

@@ -41,6 +41,7 @@ public class OpenChatController {
 
     /**
      * 채팅방 목록 조회
+     * TODO 목록 정렬, 필터
      */
     @GetMapping
     public ResponseEntity<PagedApiResponse<List<OpenChatDto>>> getChatRoomList(
@@ -71,9 +72,11 @@ public class OpenChatController {
      */
     @PostMapping("/{chatId}/join")
     public ResponseEntity<ApiResponse<Void>> joinChatRoom(
-            @PathVariable Long chatId, @RequestBody JoinChatRoomDto joinDto
+            @PathVariable Long chatId,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        openChatService.joinChatRoom(chatId, joinDto);
+        String username = userDetails.getUsername();
+        openChatService.joinChatRoom(chatId, username);
 
         return ResponseEntity.ok(ApiResponse.success(null));
     }
@@ -83,9 +86,11 @@ public class OpenChatController {
      */
     @PostMapping("/{chatId}/leave")
     public ResponseEntity<ApiResponse<Void>> leaveChatRoom(
-            @PathVariable Long chatId, @RequestBody LeaveChatRoomDto leaveDto
+            @PathVariable Long chatId,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        openChatService.leaveChatRoom(chatId, leaveDto);
+        String username = userDetails.getUsername();
+        openChatService.leaveChatRoom(chatId, username);
 
         return ResponseEntity.ok(ApiResponse.success(null));
     }

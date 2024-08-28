@@ -51,4 +51,17 @@ public class OpenChat {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private OpenChatCategory category;
+
+    // 채팅 참가자 증가
+    public void incrementParticipants() {
+        if (this.currentParticipants < this.maxParticipants) { // 최대 참가자 수 보다 작아야 증가
+            this.currentParticipants++;
+        }
+    }
+    // 채팅 참가자 감소
+    public void decrementParticipants() {
+        if (this.currentParticipants > 0) {
+            this.currentParticipants--;
+        }
+    }
 }
