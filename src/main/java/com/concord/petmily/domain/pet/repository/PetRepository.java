@@ -2,12 +2,12 @@ package com.concord.petmily.domain.pet.repository;
 
 import com.concord.petmily.domain.pet.entity.Pet;
 import com.concord.petmily.domain.pet.entity.PetStatus;
-import com.concord.petmily.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +30,8 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 
     // 회원의 반려동물 조회
     Optional<Pet> findByIdAndUserId(Long petId, Long userId);
+
+    List<Pet> findAllByBirthDate(LocalDate birthDate);
 
 
 }

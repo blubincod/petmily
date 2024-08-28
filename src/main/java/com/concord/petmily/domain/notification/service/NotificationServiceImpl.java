@@ -1,15 +1,24 @@
 package com.concord.petmily.domain.notification.service;
 
+import com.concord.petmily.common.exception.ErrorCode;
 import com.concord.petmily.domain.notification.dto.NotificationDto;
 import com.concord.petmily.domain.notification.entity.Notification;
 import com.concord.petmily.domain.notification.repository.EmitterRepository;
 import com.concord.petmily.domain.notification.repository.NotificationRepository;
+import com.concord.petmily.domain.pet.entity.Pet;
+import com.concord.petmily.domain.pet.repository.PetRepository;
+import com.concord.petmily.domain.user.entity.Role;
 import com.concord.petmily.domain.user.entity.User;
+import com.concord.petmily.domain.user.exception.UserException;
+import com.concord.petmily.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -20,7 +29,10 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final EmitterRepository emitterRepository;
     private final NotificationRepository notificationRepository;
+    private final UserRepository userRepository;
+    private final PetRepository petRepository;
 
+    @Override
     public SseEmitter subscribe(String username, String lastEventId) {
         String emitterId = makeTimeIncludeId(username);
 
@@ -80,6 +92,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     // 알림을 생성하고 지정된 수신자에게 알림을 전송하는 기능 수행
+    @Override
     public void send(User user, Notification.NotificationType notificationType, String content) {
         Notification notification = notificationRepository.save(createNotification(user, notificationType, content));
 
@@ -109,4 +122,54 @@ public class NotificationServiceImpl implements NotificationService {
                 .build();
     }
 
+    // 생일인 사용자에게 알림 전송
+    // 생일인 반려동물의 사용자에게 알림 전송
+    @Override
+    public void sendBirthDateNotification() {
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        List<User> usersWithBirthDateToday = userRepository.findAllByBirthDate(today.format(formatter));
+        for (User user : usersWithBirthDateToday) {
+            send(user, Notification.NotificationType.BIRTHDATE, "생일 축하합니다!");
+        }
+
+        List<Pet> petWithBirthDateToday = petRepository.findAllByBirthDate(today);
+        for (Pet pet : petWithBirthDateToday) {
+            send(pet.getUser(), Notification.NotificationType.BIRTHDATE, pet.getName() + "의 생일을 축하합니다!");
+        }
+    }
+
+    // 관리자가 모든 사용자에게 공지사항을 보냄
+    @Override
+    public void sendAnnouncementToAllUsers(String username, String content) {
+        User sender = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+        // 관리자가 아니라면 에러
+        if(sender.getRole() != Role.ADMIN) {
+            throw new UserException(ErrorCode.UNAUTHORIZED_ACCESS);
+        }
+
+        List<User> users = userRepository.findAll(); // 모든 사용자 조회
+        for (User user : users) {
+            send(user, Notification.NotificationType.ANNOUNCEMENT, content);
+        }
+    }
+
+    // 관리자가 특정 사용자에게 메시지를 보냄
+    @Override
+    public void sendMessageToUser(String username, NotificationDto.sendToUserDto dto) {
+        User sender = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+        // 관리자가 아니라면 에러
+        if(sender.getRole() != Role.ADMIN) {
+            throw new UserException(ErrorCode.UNAUTHORIZED_ACCESS);
+        }
+
+        User user = userRepository.findByUsername(dto.getReceiver())
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+        send(user, Notification.NotificationType.ANNOUNCEMENT, dto.getContent());
+    }
 }

@@ -35,7 +35,7 @@ public class Notification extends BaseTimeEntity {
     private NotificationType notificationType;
 
     public enum NotificationType{
-        COMMENT, LIKE
+        COMMENT, LIKE, BIRTHDATE, WALK, ANNOUNCEMENT, MESSAGE
     }
 
 }

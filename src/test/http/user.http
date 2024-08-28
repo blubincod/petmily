@@ -1,7 +1,7 @@
 # User 요청
 
 ### Value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NjAxMTA0LCJleHAiOjE3MjQ2MDQ3MDQsInN1YiI6ImtpbWp1bjkxIn0.22RNsw96BFNdnPjJX2Xafsx8xYAr3NvB_4aJW72d93w
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0ODM5NDYwLCJleHAiOjE3MjQ4NDMwNjAsInN1YiI6Imp1bmdldW45NyJ9.GkFfVDHqAiu4t3Au8gwHGNJRQRoVkpZmhalThlimf_8
 @userId = 1
 @username = kimjun91
 
@@ -23,13 +23,22 @@ Content-Type: application/json
   "phone": "010-1111-3333"
 }
 
-### 로그인 요청
+### 회원1 로그인 요청
 POST http://localhost:8080/api/v1/users/login
 Content-Type: application/json
 
 {
   "username": "kimjun91",
   "password": "kim123"
+}
+
+### 회원5 로그인 요청
+POST http://localhost:8080/api/v1/users/login
+Content-Type: application/json
+
+{
+  "username": "jungeun97",
+  "password": "jung123"
 }
 
 ### 로그아웃 요청 (토큰 필요)
@@ -40,5 +49,25 @@ Content-Type: application/json
 ### 사용자 정보 조회
 # @no-redirect
 GET http://localhost:8080/api/v1/users/{{userId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+### 사용자 삭제
+DELETE http://localhost:8080/api/v1/users/delete/{{userId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+### 사용자 정지 (관리자 전용)
+PUT http://localhost:8080/api/v1/users/suspend/{{userId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+### 사용자 정지 해제 (관리자 전용)
+PUT http://localhost:8080/api/v1/users/unsuspend/{{userId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+### 회원 통계 조회 (관리자 전용)
+GET http://localhost:8080/api/v1/users/statistics
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
