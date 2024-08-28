@@ -1,7 +1,7 @@
 # Open Chat 테스트
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0ODAyNDYwLCJleHAiOjE3MjQ4MDYwNjAsInN1YiI6ImtpbWp1bjkxIn0.U0xsUUGM-EQrjZFNH0zM2K_84EOYG2l6im-VXrIF8dA
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0ODM0NDgyLCJleHAiOjE3MjQ4MzgwODIsInN1YiI6ImtpbWp1bjkxIn0.Oz_FySP0Gs2-McZhPafQGS1ct713B-HrLVnJuczuqBw
 #@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NjU1NjY1LCJleHAiOjE3MjQ2NTkyNjUsInN1YiI6ImtpbWp1bjkxIn0.vzP2LGmGYTiq72O4Y5PNKrVJj3Y3RdM3DM74MTC0Tug
 
 ### 회원1 로그인 요청

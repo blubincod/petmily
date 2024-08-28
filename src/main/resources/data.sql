@@ -1,4 +1,4 @@
--- 회원 테이블
+-- 회원 데이터
 insert into users (username, email, password, address, age, birth_date,
                    gender, name, nickname, phone, role, user_status, is_walking,
                    registered_at, modified_at)
@@ -34,40 +34,40 @@ values
      'F', '정은', '포도', '010-9999-0000', 'USER', 'ACTIVE', FALSE,
      '2024-08-14T08:00:00', '2024-08-14T08:00:00');
 
--- 반려동물 테이블
+-- 반려동물 데이터
 INSERT INTO pet (USER_ID, CATEGORY, BRAND, BIRTH_DATE, AGE, NAME, GENDER,
                  IS_PETS_NEUTER, WEIGHT, PET_STATUS, CHIP, CREATE_AT,
                  MODIFIED_AT)
 VALUES-- USER_ID 1의 반려동물
 
-    (1, 'DOG', '래브라도 리트리버', '2020-05-15', 3, '맥스', 'MALE', true, 30.5,
-     'ACTIVE', 'CHIP123456', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (1, 'CAT', '페르시안', '2021-03-10', 2, '루나', 'FEMALE', true, 4.2,
-     'ACTIVE', 'CHIP234567', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (1, 'DOG', '골든 리트리버', '2019-11-20', 4, '찰리', 'MALE', false,
-     28.7, 'ACTIVE', 'CHIP345678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    -- USER_ID 2의 반려동물
-    (2, 'CAT', '샴', '2022-01-05', 1, '밀로', 'MALE', false, 3.8, 'ACTIVE',
-     'CHIP456789', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (2, 'DOG', '푸들', '2020-09-30', 3, '벨라', 'FEMALE', true, 15.3,
-     'ACTIVE', 'CHIP567890', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (2, 'CAT', '메인쿤', '2021-07-12', 2, '올리버', 'MALE', true, 5.5,
-     'ACTIVE', 'CHIP678901', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    -- USER_ID 3의 반려동물
-    (3, 'DOG', '저먼 셰퍼드', '2019-04-22', 4, '로키', 'MALE', true, 35.2,
-     'ACTIVE', 'CHIP789012', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (3, 'CAT', '브리티시 숏헤어', '2020-12-03', 2, '루시', 'FEMALE', false,
-     4.0, 'ACTIVE', 'CHIP890123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (3, 'DOG', '비글', '2021-08-17', 2, '데이지', 'FEMALE', true, 12.8,
-     'ACTIVE', 'CHIP901234', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    -- USER_ID 4의 반려동물
-    (4, 'DOG', '시바 이누', '2021-02-14', 2, '하치', 'MALE', false, 10.5,
-     'ACTIVE', 'CHIP012345', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    -- USER_ID 5의 반려동물
-    (5, 'DOG', '웰시 코기', '2020-07-30', 3, '코코', 'FEMALE', true, 12.3, 'ACTIVE',
-     'CHIP123450', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+      (1, 'DOG', '래브라도 리트리버', '2020-05-15', 3, '맥스', 'MALE', true, 30.5,
+       'ACTIVE', 'CHIP123456', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (1, 'CAT', '페르시안', '2021-03-10', 2, '루나', 'FEMALE', true, 4.2,
+       'ACTIVE', 'CHIP234567', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (1, 'DOG', '골든 리트리버', '2019-11-20', 4, '찰리', 'MALE', false,
+       28.7, 'ACTIVE', 'CHIP345678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      -- USER_ID 2의 반려동물
+      (2, 'CAT', '샴', '2022-01-05', 1, '밀로', 'MALE', false, 3.8, 'ACTIVE',
+       'CHIP456789', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (2, 'DOG', '푸들', '2020-09-30', 3, '벨라', 'FEMALE', true, 15.3,
+       'ACTIVE', 'CHIP567890', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (2, 'CAT', '메인쿤', '2021-07-12', 2, '올리버', 'MALE', true, 5.5,
+       'ACTIVE', 'CHIP678901', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      -- USER_ID 3의 반려동물
+      (3, 'DOG', '저먼 셰퍼드', '2019-04-22', 4, '로키', 'MALE', true, 35.2,
+       'ACTIVE', 'CHIP789012', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (3, 'CAT', '브리티시 숏헤어', '2020-12-03', 2, '루시', 'FEMALE', false,
+       4.0, 'ACTIVE', 'CHIP890123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      (3, 'DOG', '비글', '2021-08-17', 2, '데이지', 'FEMALE', true, 12.8,
+       'ACTIVE', 'CHIP901234', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      -- USER_ID 4의 반려동물
+      (4, 'DOG', '시바 이누', '2021-02-14', 2, '하치', 'MALE', false, 10.5,
+       'ACTIVE', 'CHIP012345', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+      -- USER_ID 5의 반려동물
+      (5, 'DOG', '웰시 코기', '2020-07-30', 3, '코코', 'FEMALE', true, 12.3, 'ACTIVE',
+       'CHIP123450', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
--- 산책 테이블
+-- 산책 데이터
 INSERT INTO walk (user_id, walk_status, distance, duration, start_time,
                   end_time, walk_date)
 VALUES
@@ -117,7 +117,7 @@ VALUES
     (5, 1, 4.3, 43.0, '2024-08-12 10:00:00', '2024-08-12 10:43:00',
      '2024-08-12');
 
--- 산책 참여 반려동물 테이블
+-- 산책 참여 반려동물 데이터
 INSERT INTO WALK_PARTICIPANT (PET_ID, WALK_ID)
 VALUES (1, 1),
        (2, 1),
@@ -148,7 +148,7 @@ VALUES (1, 1),
        (11, 17),
        (11, 18);
 
--- 산책에 대한 산책 활동 테이블
+-- 산책에 대한 산책 활동 데이터
 INSERT INTO WALK_ACTIVITY (LATITUDE, LONGITUDE, PET_ID, WALK_ID, TIMESTAMP,
                            ACTIVITY_TYPE)
 VALUES (37.5665, 126.9780, 1, 1, '2024-08-10 01:45:00', 'PEE'),
@@ -180,7 +180,7 @@ VALUES (37.5665, 126.9780, 1, 1, '2024-08-10 01:45:00', 'PEE'),
        (37.5691, 126.9806, 11, 17, '2024-08-11 09:45:00', 'WATER'),
        (37.5692, 126.9807, 11, 18, '2024-08-12 10:20:00', 'PEE');
 
--- 게시판 카테고리 테이블
+-- 게시판 카테고리 데이터
 insert into post_category(category_id, category_name)
 values (1, '공지사항'),
        (2, '가입 인사'),
@@ -190,10 +190,74 @@ values (1, '공지사항'),
        (6, '리뷰 게시판'),
        (7, 'QnA');
 
--- 오픈 채팅 카테고리 테이블
+-- 오픈 채팅 카테고리 데이터
 INSERT INTO open_chat_category (name, description)
 VALUES ('일상대화', '일상적인 주제에 대해 자유롭게 대화하는 공간입니다.'),
        ('반려동물', '반려동물에 관한 정보를 공유하고 소통하는 공간입니다.'),
        ('산책메이트', '함께 산책할 친구를 찾고 만나는 공간입니다.'),
        ('펫용품리뷰', '다양한 펫용품에 대한 리뷰와 정보를 공유하는 공간입니다.'),
        ('동물병원정보', '동물병원 정보와 경험을 공유하는 공간입니다.');
+
+-- 오픈 채팅방 리스트 데이터
+INSERT INTO open_chat (category_id, title, description, password,
+                       max_participants, current_participants, is_public)
+VALUES
+    (3, 'OO동 저녁 8시 산책 모임', '퇴근 후 함께 산책하며 스트레스 풀어요!', NULL, 5, 2, true),
+    (2, '고양이 집사 모여라!', '고양이 키우는 분들의 일상 공유 모임', NULL, 10, 3, true),
+    (1, '20대 직장인 수다방', '일상 고민부터 취미 공유까지 자유로운 대화', NULL, 15, 4, true),
+    (4, '강아지 장난감 추천', '우리 강아지가 좋아하는 장난감 공유해요', NULL, 8, 1, true),
+    (5, 'OO동 동물병원 정보 공유', '믿을 만한 동물병원 정보 나눠요', NULL, 20, 5, true),
+    (3, 'OO동 주말 아침 공원 산책', '주말 아침 상쾌한 공기 마시며 산책해요', NULL, 6, 2, true),
+    (2, '반려동물 훈련 팁 공유', '반려동물 훈련 노하우 나누는 공간', NULL, 12, 3, true),
+    (1, '펫밀리 독서모임', '반려동물 관련 책 읽고 토론해요', NULL, 8, 2, true),
+    (4, '수제 간식 레시피 공유', '건강한 수제 간식 만드는 법 공유해요', NULL, 10, 1, true),
+    (5, '응급처치 정보 공유', '반려동물 응급상황 대처법 공유해요', NULL, 15, 3, true);
+
+-- 오픈 채팅방 참여자 데이터
+INSERT INTO open_chat_participant (user_id, open_chat_id, joined_at, active)
+VALUES
+-- 채팅방 1
+(1, 1, '2024-08-15 18:30:00', true),
+(2, 1, '2024-08-15 19:00:00', true),
+
+-- 채팅방 2
+(2, 2, '2024-08-16 10:00:00', true),
+(3, 2, '2024-08-16 10:30:00', true),
+(4, 2, '2024-08-16 11:00:00', true),
+
+-- 채팅방 3
+(1, 3, '2024-08-17 20:00:00', true),
+(2, 3, '2024-08-17 20:15:00', true),
+(4, 3, '2024-08-17 20:30:00', true),
+(5, 3, '2024-08-17 21:00:00', true),
+
+-- 채팅방 4
+(3, 4, '2024-08-18 14:00:00', true),
+
+-- 채팅방 5
+(1, 5, '2024-08-19 09:00:00', true),
+(2, 5, '2024-08-19 09:30:00', true),
+(3, 5, '2024-08-19 10:00:00', true),
+(4, 5, '2024-08-19 10:30:00', true),
+(5, 5, '2024-08-19 11:00:00', true),
+
+-- 채팅방 6
+(4, 6, '2024-08-20 07:00:00', true),
+(5, 6, '2024-08-20 07:15:00', true),
+
+-- 채팅방 7
+(1, 7, '2024-08-21 15:00:00', true),
+(3, 7, '2024-08-21 15:30:00', true),
+(5, 7, '2024-08-21 16:00:00', true),
+
+-- 채팅방 8
+(2, 8, '2024-08-22 19:00:00', true),
+(4, 8, '2024-08-22 19:30:00', true),
+
+-- 채팅방 9
+(3, 9, '2024-08-23 11:00:00', true),
+
+-- 채팅방 10
+(1, 10, '2024-08-24 13:00:00', true),
+(2, 10, '2024-08-24 13:30:00', true),
+(5, 10, '2024-08-24 14:00:00', true);

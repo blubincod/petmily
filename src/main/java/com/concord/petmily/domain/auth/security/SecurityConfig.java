@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // Cross-Site Request Forgery 보호를 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 생성하지 않는 상태 없는(stateless) 정책을 설정
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/", "/index.html", "/login.html", "/walk.html", "/open-chat.html", "/chat.html").permitAll()
+                        .requestMatchers("/", "/index.html", "/login.html", "/walk.html", "/open-chat-list.html", "/chat.html").permitAll()
                         .requestMatchers("/css/**", "/js/**").permitAll()
                         .requestMatchers("/api/v1/users/signup", "/api/v1/users/login").permitAll() // 인증 없이 접근 허용
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요

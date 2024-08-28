@@ -4,6 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Open Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        #chat-page {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #message-container {
+            height: 400px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        #message-form {
+            display: flex;
+        }
+        #message {
+            flex-grow: 1;
+            padding: 5px;
+        }
+        button {
+            padding: 5px 10px;
+        }
+    </style>
 </head>
 <body>
 <div>
@@ -13,5 +39,13 @@
 </div>
 <h1>오픈 채팅</h1>
 
+<div id="chat-page">
+    <div id="message-container"></div>
+    <form id="message-form">
+        <input type="text" id="message" placeholder="메시지를 입력하세요..."/>
+        <button type="submit">전송</button>
+    </form>
+</div>
+<script src="js/chat.js"></script>
 </body>
 </html>

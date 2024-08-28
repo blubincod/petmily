@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Chat List</title>
+</head>
+<body>
+<h1>오픈채팅 목록</h1>
+<a href="/login.html">로그인</a>
+<a href="/walk.html">산책</a>
+<a href="/open-chat-list.html">오픈채팅</a>
+<a href="/post.html">게시판</a>
+
+<div id="chat-list">
+    <!-- 채팅 목록이 동적으로 추가됩니다 -->
+</div>
+<script>
+    // 채팅 목록을 가져오는 함수
+    function fetchChatRooms() {
+        fetch('/api/v1/open-chats', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getToken()
+            }
+        })// 서버 API 호출
+            .then(response => response.json())
+            .then(data => {
+                const chatListContainer = document.getElementById('chat-list');
+                chatListContainer.innerHTML = ''; // 기존 목록 초기화
+                data.forEach(chatRoom => {
+                    const chatRoomElement = document.createElement('div');
+                    chatRoomElement.textContent = chatRoom.title;
+                    chatRoomElement.onclick = () => {
+                        window.location.href = `/chat.html?id=${chatRoom.id}`; // 채팅방으로 이동
+                    };
+                    chatListContainer.appendChild(chatRoomElement);
+                });
+            });
+    }
+
+    // 페이지 로드 시 채팅 목록 가져오기
+    window.onload = fetchChatRooms;
+
+    // 로컬 스토리지의 토큰 가져오기
+    function getToken() {
+        return localStorage.getItem('token');
+    }
+</script>
+</body>
+</html>
