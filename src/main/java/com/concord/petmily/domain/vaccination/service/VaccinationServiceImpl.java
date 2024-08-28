@@ -80,7 +80,14 @@ public class VaccinationServiceImpl implements VaccinationService {
 
     // VaccinationDto로 변경한는 메서드
     private VaccinationDto convertToVaccinationDto(Vaccination vaccination) {
-
-        return new VaccinationDto();
+        return VaccinationDto.builder()
+                .id(vaccination.getId())
+                .petId(vaccination.getPet().getId())
+                .diseaseId(vaccination.getDisease() != null ? vaccination.getDisease().getId() : null)
+                .diseaseName(vaccination.getDisease() != null ? vaccination.getDisease().getName() : null)
+                .vaccinationDate(vaccination.getVaccinationDate())
+                .nextDueDate(vaccination.getNextDueDate())
+                .clinicName(vaccination.getClinicName())
+                .build();
     }
 }

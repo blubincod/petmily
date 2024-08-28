@@ -22,8 +22,8 @@ Content-Type: application/json
 {
   "diseaseId": 1,
   "vaccinationDate": "2024-08-15",
-  "isVaccination": true,
-  "nextDueDate": "2025-08-15"
+  "nextDueDate": "2025-08-15",
+  "clinicName": "행복동물병원"
 }
 
 ### 특정 반려동물의 예방 접종 목록 조회
@@ -42,8 +42,8 @@ Content-Type: application/json
 {
   "diseaseId": 1,
   "vaccinationDate": "2024-08-16",
-  "isVaccination": true,
-  "nextDueDate": "2025-08-16"
+  "nextDueDate": "2025-08-16",
+  "clinicName": "사랑동물병원"
 }
 
 ### 특정 예방 접종 삭제

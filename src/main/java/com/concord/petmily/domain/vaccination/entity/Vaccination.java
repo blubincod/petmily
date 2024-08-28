@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,34 +18,32 @@ import java.time.LocalDateTime;
 @Entity
 @RequiredArgsConstructor
 @Table(name = "vaccination")
+@EntityListeners(AuditingEntityListener.class)
 public class Vaccination {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //한마리의 반려동물과 연결
     @ManyToOne
     @JoinColumn(name = "pet_id")
     private Pet pet;
 
-    // 하나의 질병과 연결
     @ManyToOne
     @JoinColumn(name = "disease_id")
     private Disease disease;
 
-    // 예방 접종 날짜
-    private LocalDate vaccinationDate;
+    private LocalDate vaccinationDate; // 접종일
 
-    // 예방 접종 여부
-    private boolean isVaccination;
+    private LocalDate nextDueDate; // 다음 접종일
 
-    // 다음 예정일
-    private LocalDate nextDueDate;
+    private String clinicName; // 병원 이름
 
-    // 생성 시점
-    private LocalDateTime createAt;
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-    // 수정 시점
+    @LastModifiedDate
+    @Column(nullable = false)
     private LocalDateTime modifiedAt;
 }

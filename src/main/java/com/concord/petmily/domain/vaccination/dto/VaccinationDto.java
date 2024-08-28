@@ -1,10 +1,20 @@
 package com.concord.petmily.domain.vaccination.dto;
 
+import lombok.*;
+
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class VaccinationDto {
-
-    public static class create {
-
-    }
-
-
+    private Long id;
+    private Long petId;
+    private Long diseaseId;
+    private String diseaseName;
+    private LocalDate vaccinationDate;
+    private LocalDate nextDueDate;
+    private String clinicName;
 }
