@@ -15,5 +15,6 @@ public interface PostService {
     PostDto.Response updatePost(String username, Long postId, PostDto.Request dto, List<MultipartFile> files);
     void deletePost(String username, Long postId);
     Set<String> getAllHashtags();
-    List<String> createHashtags(List<String> hashtagNames);
+    List<String> createHashtags(String username, List<String> hashtagNames);
+    PostDto.Response updateCategory(String username, Long postId, Long categoryId);
 }

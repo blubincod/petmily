@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,5 +32,9 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     // 회원의 반려동물 조회
     Optional<Pet> findByIdAndUserId(Long petId, Long userId);
 
+    // 생일로 반려동물 조회
+    List<Pet> findAllByBirthDate(LocalDate birthDate);
 
+    // 반려동물로 userId 조회
+    Long findUserById(Long userId);
 }

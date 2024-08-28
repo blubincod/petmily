@@ -128,14 +128,32 @@ public class PostController {
     /**
      * 해시태그 추가(관리자만 가능)
      * @param hashtagNames 추가할 해시태그
+     * @param userDetails 현재 인증된 사용자의 세부 정보
      * @return 생성된 해시태그와 HTTP 201 상태를 반환
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/hashtags")
-    public ResponseEntity<List<String>> createHashtags (@RequestBody List<String> hashtagNames){
-        List<String> hashtags = postService.createHashtags(hashtagNames);
+    public ResponseEntity<List<String>> createHashtags (@RequestBody List<String> hashtagNames,
+                                                        @AuthenticationPrincipal UserDetails userDetails){
+        String username = userDetails.getUsername();
+        List<String> hashtags = postService.createHashtags(username, hashtagNames);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(hashtags);
+    }
+
+    /**
+     * 게시물 카테고리 변경(관리자만 가능)
+     * @param postId 변경할 게시물
+     * @param categoryId 변경될 카테고리
+     * @param userDetails 현재 인증된 사용자의 세부 정보
+     */
+    @PutMapping("/category/{postId}")
+    public ResponseEntity<PostDto.Response> updateCategory (@PathVariable Long postId,
+                                                            @RequestBody Long categoryId,
+                                                            @AuthenticationPrincipal UserDetails userDetails){
+        String username = userDetails.getUsername();
+        PostDto.Response response = postService.updateCategory(username, postId, categoryId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }
