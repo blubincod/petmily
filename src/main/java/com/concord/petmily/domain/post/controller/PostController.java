@@ -1,6 +1,7 @@
 package com.concord.petmily.domain.post.controller;
 
 import com.concord.petmily.common.dto.ApiResponse;
+import com.concord.petmily.common.dto.PagedApiResponse;
 import com.concord.petmily.domain.post.dto.PostDto;
 import com.concord.petmily.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -57,12 +57,12 @@ public class PostController {
      * @return 조회된 게시물의 정보와 HTTP 200 상태를 반환
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<PostDto.ResponseGetPosts>>> getPosts (@RequestParam(required = false) Long categoryId,
-                                                                                 @RequestParam(required = false) String hashtagName,
-                                                                                 Pageable pageable) {
+    public ResponseEntity<PagedApiResponse<List<PostDto.ResponseGetPosts>>> getPosts (@RequestParam(required = false) Long categoryId,
+                                                                                      @RequestParam(required = false) String hashtagName,
+                                                                                      Pageable pageable) {
         Page<PostDto.ResponseGetPosts> responses = postService.getPosts(categoryId, hashtagName, pageable);
 
-        return ResponseEntity.ok(ApiResponse.success((List<PostDto.ResponseGetPosts>) responses));
+        return ResponseEntity.ok(PagedApiResponse.success(responses));
     }
 
     /**
