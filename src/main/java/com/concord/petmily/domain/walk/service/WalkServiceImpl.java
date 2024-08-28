@@ -1,6 +1,8 @@
 package com.concord.petmily.domain.walk.service;
 
 import com.concord.petmily.common.exception.ErrorCode;
+import com.concord.petmily.domain.notification.entity.Notification;
+import com.concord.petmily.domain.notification.service.NotificationService;
 import com.concord.petmily.domain.pet.entity.Pet;
 import com.concord.petmily.domain.pet.exception.PetException;
 import com.concord.petmily.domain.pet.repository.PetRepository;
@@ -13,6 +15,7 @@ import com.concord.petmily.domain.walk.exception.WalkAccessDeniedException;
 import com.concord.petmily.domain.walk.exception.WalkException;
 import com.concord.petmily.domain.walk.exception.WalkNotFoundException;
 import com.concord.petmily.domain.walk.repository.WalkActivityRepository;
+import com.concord.petmily.domain.walk.repository.WalkGoalRepository;
 import com.concord.petmily.domain.walk.repository.WalkParticipantRepository;
 import com.concord.petmily.domain.walk.repository.WalkRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +52,8 @@ public class WalkServiceImpl implements WalkService {
     private final WalkRepository walkRepository;
     private final WalkParticipantRepository walkParticipantRepository;
     private final WalkActivityRepository walkActivityRepository;
+    private final WalkGoalRepository walkGoalRepository;
+    private final NotificationService notificationService;
 
     // 회원 정보 조회
     private User getUser(String username) {
@@ -148,6 +153,20 @@ public class WalkServiceImpl implements WalkService {
         walkRepository.save(walk);
 
         updateWalkingStatus(user, false);
+
+        // 산책목표를 달성한 경우, 알림 설정
+        List<WalkParticipant> walkParticipantList = walkParticipantRepository.findByWalkId(walkId);
+        for (WalkParticipant walkParticipant : walkParticipantList) {
+            Long petId = walkParticipant.getPet().getId();
+            WalkGoal walkGoal = walkGoalRepository.findByPetId(petId).orElse(null);
+
+            if(walkGoal != null) {
+                if(calculatedDuration >= walkGoal.getDailyTargetMinutes()
+                        && walk.getStartTime().toLocalTime().isBefore(walkGoal.getTargetStartTime())) {
+                    notificationService.send(user, Notification.NotificationType.WALK, "오늘 목표 달성!");
+                }
+            }
+        }
 
         // Walk Entity를 WalkDto로 변환
         return WalkDto.fromEntity(walk);

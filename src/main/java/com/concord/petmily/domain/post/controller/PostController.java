@@ -130,10 +130,11 @@ public class PostController {
      * @param hashtagNames 추가할 해시태그
      * @return 생성된 해시태그와 HTTP 201 상태를 반환
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/hashtags")
-    public ResponseEntity<List<String>> createHashtags (@RequestBody List<String> hashtagNames){
-        List<String> hashtags = postService.createHashtags(hashtagNames);
+    public ResponseEntity<List<String>> createHashtags (@RequestBody List<String> hashtagNames,
+                                                        @AuthenticationPrincipal UserDetails userDetails){
+        String username = userDetails.getUsername();
+        List<String> hashtags = postService.createHashtags(username, hashtagNames);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(hashtags);
     }

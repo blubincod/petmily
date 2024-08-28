@@ -6,6 +6,12 @@ import lombok.*;
 public class NotificationDto {
     @Getter
     @Setter
+    public static class sendToUserDto {
+        String receiver;
+        String content;
+    }
+    @Getter
+    @Setter
     @AllArgsConstructor
     @Builder
     @NoArgsConstructor

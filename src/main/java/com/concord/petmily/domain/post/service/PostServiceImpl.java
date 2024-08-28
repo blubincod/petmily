@@ -215,7 +215,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<String> createHashtags(List<String> hashtagNames) {
+    public List<String> createHashtags(String username, List<String> hashtagNames) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+        // 관리자가 아니라면 에러
+        if(user.getRole() != Role.ADMIN) {
+            throw new UserException(ErrorCode.UNAUTHORIZED_ACCESS);
+        }
+
         // HASHTAG 테이블에 추가
         for(String hashtagName : hashtagNames) {
             hashtagRepository.findByHashtagName(hashtagName)

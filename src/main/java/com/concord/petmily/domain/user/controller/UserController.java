@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -45,4 +47,52 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
+
+    /**
+     * 사용자 삭제
+     */
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId,
+                                        @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        userService.deleteUser(username, userId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
+    /**
+     * 사용자 정지
+     */
+    @PutMapping("/suspend/{userId}")
+    public ResponseEntity<String> suspendUser(@PathVariable Long userId,
+                                           @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        userService.suspendUser(username, userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body("회원 정지 완료");
+    }
+
+    /**
+     * 사용자 정지 해제
+     */
+    @PutMapping("/unsuspend/{userId}")
+    public ResponseEntity<String> unsuspendUser(@PathVariable Long userId,
+                                              @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        userService.unsuspendUser(username, userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body("회원 정지 해제 완료");
+    }
+
+    /**
+     * 회원 통계 조회 (관리자 전용)
+     */
+    @GetMapping("/statistics")
+    public ResponseEntity<String> statistics(@AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        String result = userService.getStatistics(username);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 }
