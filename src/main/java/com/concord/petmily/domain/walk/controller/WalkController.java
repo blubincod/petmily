@@ -1,6 +1,6 @@
 package com.concord.petmily.domain.walk.controller;
 
-import com.concord.petmily.common.dto.ApiResponse;
+import com.concord.petmily.common.dto.PagedApiResponse;
 import com.concord.petmily.domain.walk.dto.*;
 import com.concord.petmily.domain.walk.service.WalkGoalService;
 import com.concord.petmily.domain.walk.service.WalkService;
@@ -58,21 +58,23 @@ public class WalkController {
      * @param userDetails 현재 인증된 사용자의 세부 정보
      */
     @PostMapping
-    public ResponseEntity<WalkDto> startWalk(
+    public ResponseEntity<StartWalkDto.Response> startWalk(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody StartWalkRequest startWalkRequest
+            @RequestBody StartWalkDto.Request startWalkRequest
     ) {
         String username = userDetails.getUsername();
         List<Long> petIds = startWalkRequest.getPetIds();
         LocalDateTime startTime = startWalkRequest.getStartTime();
 
-        WalkDto createdWalk = walkService.startWalk(username, petIds, startTime);
+        StartWalkDto.Response createdWalk = walkService.startWalk(username, petIds, startTime);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWalk);
     }
 
     /**
      * 산책 종료 및 산책 정보 기록
+     *
+     * 1분 미만은 기록하지 않음
      */
     @PutMapping("/{walkId}/end")
     public ResponseEntity<WalkDto> endWalk(
@@ -120,7 +122,7 @@ public class WalkController {
      * TODO 응답을 더 체계적으로 정리
      */
     @GetMapping("/pets/{petId}/walks")
-    public ResponseEntity<ApiResponse<List<DailyWalksDto>>> getPetDailyWalks(
+    public ResponseEntity<PagedApiResponse<List<DailyWalksDto>>> getPetDailyWalks(
             @PathVariable Long petId,
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -128,14 +130,14 @@ public class WalkController {
             @PageableDefault(sort = "startTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         Page<DailyWalksDto> walks = walkService.getPetDailyWalks(petId, userDetails.getUsername(), startDate, endDate, pageable);
-        return ResponseEntity.ok(ApiResponse.success(walks));
+        return ResponseEntity.ok(PagedApiResponse.success(walks));
     }
 
     /**
      * 반려동물의 기간별 일일 산책 통계 조회
      */
     @GetMapping("/pets/{petId}/statistics/daily")
-    public ResponseEntity<ApiResponse<List<WalkStatisticsDto>>> getPetDailyWalksStatistics(
+    public ResponseEntity<PagedApiResponse<List<WalkStatisticsDto>>> getPetDailyWalksStatistics(
             @PathVariable Long petId,
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -145,7 +147,7 @@ public class WalkController {
         Page<WalkStatisticsDto> statistics = walkService.getPetDailyWalksStatistics(
                 petId, userDetails.getUsername(), startDate, endDate, pageable
         );
-        return ResponseEntity.ok(ApiResponse.success(statistics));
+        return ResponseEntity.ok(PagedApiResponse.success(statistics));
     }
 
     /**
@@ -160,7 +162,7 @@ public class WalkController {
      *                  - direction = Sort.Direction.DESC: 정렬 방향을 내림차순으로 설정
      */
     @GetMapping("/users/{username}")
-    public ResponseEntity<ApiResponse<List<PetsWalkDetailDto>>> getUserAllPetsWalksDetail(
+    public ResponseEntity<PagedApiResponse<List<PetsWalkDetailDto>>> getUserAllPetsWalksDetail(
             @PathVariable String username,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
@@ -168,7 +170,7 @@ public class WalkController {
     ) {
         Page<PetsWalkDetailDto> walksPage = walkService.getUserAllPetsWalksDetail(username, startDate, endDate, pageable);
 
-        return ResponseEntity.ok(ApiResponse.success(walksPage));
+        return ResponseEntity.ok(PagedApiResponse.success(walksPage));
     }
 
     /**
@@ -177,24 +179,24 @@ public class WalkController {
      * @param pageable 페이지네이션 정보 (페이지 번호, 페이지 크기, 정렬 정보)
      */
     @GetMapping("/users/{username}/statistics")
-    public ResponseEntity<ApiResponse<List<WalkStatisticsDto>>> getUserPetsWalkStatistics(
+    public ResponseEntity<PagedApiResponse<List<WalkStatisticsDto>>> getUserPetsWalkStatistics(
             @PathVariable String username,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable // id: petId
     ) {
         Page<WalkStatisticsDto> petsStatisticsPage = walkService.getUserPetsWalkStatistics(username, pageable);
 
-        return ResponseEntity.ok(ApiResponse.success(petsStatisticsPage));
+        return ResponseEntity.ok(PagedApiResponse.success(petsStatisticsPage));
     }
 
     /**
      * TODO 회원의 모든 반려동물에 대한 종합적인 산책 통계 조회
      */
     @GetMapping("/users/{username}/statistics/overall")
-    public ResponseEntity<ApiResponse<?>> getUserPetsOverallWalkStatistics(
+    public ResponseEntity<PagedApiResponse<?>> getUserPetsOverallWalkStatistics(
             @PathVariable String username
     ) {
 //        OverallWalkStatisticsDto overallStatistics = walkService.getUserPetsOverallWalkStatistics(username);
-        return ResponseEntity.ok(ApiResponse.success(null));
+        return ResponseEntity.ok(PagedApiResponse.success(null));
     }
 
     /**

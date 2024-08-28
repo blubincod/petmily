@@ -39,6 +39,7 @@ public class Walk {
     @JoinColumn(name = "user_id") // 외래키 매핑
     private User user; // 회원 정보
 
+    // FIXME OneToMany 사용 고려
     @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
     private List<WalkParticipant> walkParticipants = new ArrayList<>(); // 그룹
 }

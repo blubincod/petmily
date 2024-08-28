@@ -1,5 +1,7 @@
 package com.concord.petmily.domain.user.entity;
 
+import com.concord.petmily.domain.openchat.entity.OpenChat;
+import com.concord.petmily.domain.openchat.entity.OpenChatParticipant;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 
 @Entity
@@ -79,8 +82,12 @@ public class User implements UserDetails {
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
+    @OneToMany(mappedBy = "user")
+    private List<OpenChatParticipant> openChatParticipants;
+
     // Spring Security가 사용자의 권한을 확인하고, 접근 제어를 수행하기 위해 사용하는 메서드
     @Override
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(role.name()));
     }

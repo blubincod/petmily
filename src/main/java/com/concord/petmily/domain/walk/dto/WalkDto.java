@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WalkDto {
+public class WalkDto { // TODO Start/EndWalkDto와 합치기
     private Long walkId;
     private double distance; // 산책 거리
     private long duration; // 산책 총 시간

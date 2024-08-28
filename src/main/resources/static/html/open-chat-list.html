@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Chat List</title>
+    <style>
+        .chat-room {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>오픈채팅 목록</h1>
+<nav>
+    <a href="/login.html">로그인</a>
+    <a href="/walk.html">산책</a>
+    <a href="/open-chat-list.html">오픈채팅</a>
+    <a href="/post.html">게시판</a>
+</nav>
+
+<div id="chat-list">
+    <!-- 채팅 목록이 동적으로 추가됩니다 -->
+</div>
+
+<script>
+    function fetchChatRooms() {
+        fetch('/api/v1/open-chats', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getToken()
+            }
+        })
+            .then(response => response.json())
+            .then(response => {
+                if (response.status === 'success' && Array.isArray(response.data)) {
+                    const chatListContainer = document.getElementById('chat-list');
+                    chatListContainer.innerHTML = ''; // 기존 목록 초기화
+
+                    response.data.forEach(chatRoom => {
+                        const chatRoomElement = document.createElement('div');
+                        chatRoomElement.className = 'chat-room';
+                        chatRoomElement.innerHTML = `
+                        <h3>${chatRoom.title}</h3>
+                        <p>${chatRoom.description}</p>
+                        <p>참가자: ${chatRoom.currentParticipants}/${chatRoom.maxParticipants}</p>
+                        <p>카테고리 ID: ${chatRoom.categoryId}</p>
+                    `;
+                        chatRoomElement.onclick = () => {
+                            window.location.href = `/open-chat.html?id=${chatRoom.creatorId}`; // 채팅방으로 이동
+                        };
+                        chatListContainer.appendChild(chatRoomElement);
+                    });
+                } else {
+                    console.error('채팅방 데이터를 가져오는 데 실패했습니다:', response);
+                }
+            })
+            .catch(error => {
+                console.error('API 호출 중 오류 발생:', error);
+            });
+    }
+
+    // 페이지 로드 시 채팅 목록 가져오기
+    window.onload = fetchChatRooms;
+
+    // 로컬 스토리지의 토큰 가져오기
+    function getToken() {
+        return localStorage.getItem('token');
+    }
+</script>
+</body>
+</html>
