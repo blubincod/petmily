@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ko">
-<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +26,7 @@
     let currentLocation = {latitude: null, longitude: null}
     let walkId = null
     let walkingPets = []
+    let selectedPetId = null
 
     // 산책 시작 버튼
     document.getElementById('startWalking').addEventListener('click', () => {
@@ -70,7 +70,7 @@
                 const option = document.createElement('option');
                 option.value = petId;
                 option.textContent = `반려동물 ID: ${petId}`;
-                select.appendChild(option);
+                select.appendChild(option); // 생성한 옵션을 드롭다운에 추가
             });
             select.addEventListener('change', updateSelectedPetInfo);
             updateSelectedPetInfo();
@@ -82,11 +82,13 @@
         }
     }
 
+    // 선택된 반려동물의 정보를 업데이트
     function updateSelectedPetInfo() {
-        const select = document.getElementById('petSelect');
-        const selectedPetInfo = document.getElementById('selectedPetInfo');
+        const select = document.getElementById('petSelect'); // 선택된 반려동물 요소
+        const selectedPetInfo = document.getElementById('selectedPetInfo'); // 선택된 반려동물 정보
 
         if (select.value) {
+            selectedPetId = select.value;
             selectedPetInfo.textContent = `선택된 반려동물 ID: ${select.value}`;
         } else {
             selectedPetInfo.textContent = '반려동물을 선택해주세요';
@@ -121,22 +123,19 @@
     // 활동 전송 버튼 - 대변
     document.getElementById('poop').addEventListener('click', () => {
         if (walkingInterval) {
-            sendActivity('POOP', walkId)
-            console.log('poop')
+            sendActivity('POOP', walkId, selectedPetId)
         }
     })
     // 활동 전송 버튼 - 소변
     document.getElementById('pee').addEventListener('click', () => {
         if (walkingInterval) {
-            sendActivity('PEE', walkId)
-            console.log('pee')
+            sendActivity('PEE', walkId, selectedPetId)
         }
     })
     // 활동 전송 버튼 - 수분 섭취
     document.getElementById('water').addEventListener('click', () => {
         if (walkingInterval) {
-            sendActivity('WATER', walkId)
-            console.log('water')
+            sendActivity('WATER', walkId, selectedPetId)
         }
     })
 
