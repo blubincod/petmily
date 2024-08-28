@@ -89,7 +89,7 @@ public class PetController {
     public ResponseEntity<?> updatePet(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long petId,
-            @RequestBody PetDto.ModifierPet request,
+            @RequestBody PetDto.ModifyPet request,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage
     ) {
         petService.updatePet(petId, userDetails.getUsername(), request, profileImage);

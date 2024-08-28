@@ -1,0 +1,55 @@
+# Vaccination 테스트
+
+### 값 설정
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0ODU5NzQyLCJleHAiOjE3MjQ4NjMzNDIsInN1YiI6ImtpbWp1bjkxIn0.s7rukAOYwxJzgyyJLDKeVkiWoH9L0LWohejtiU8ddrg
+@petId = 1
+@vaccinationId = 1
+
+### 회원 로그인 요청
+POST http://localhost:8080/api/v1/users/login
+Content-Type: application/json
+
+{
+  "username": "kimjun91",
+  "password": "kim123"
+}
+
+### 예방 접종 정보 등록
+POST http://localhost:8080/api/v1/pets/{{petId}}/vaccinations
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "diseaseId": 1,
+  "vaccinationDate": "2024-08-15",
+  "isVaccination": true,
+  "nextDueDate": "2025-08-15"
+}
+
+### 특정 반려동물의 예방 접종 목록 조회
+GET http://localhost:8080/api/v1/pets/{{petId}}/vaccinations
+Authorization: Bearer {{accessToken}}
+
+### 특정 예방 접종의 상세 정보 조회
+GET http://localhost:8080/api/v1/pets/{{petId}}/vaccinations/{{vaccinationId}}
+Authorization: Bearer {{accessToken}}
+
+### 특정 예방 접종 수정
+PUT http://localhost:8080/api/v1/pets/{{petId}}/vaccinations/{{vaccinationId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "diseaseId": 1,
+  "vaccinationDate": "2024-08-16",
+  "isVaccination": true,
+  "nextDueDate": "2025-08-16"
+}
+
+### 특정 예방 접종 삭제
+DELETE http://localhost:8080/api/v1/pets/{{petId}}/vaccinations/{{vaccinationId}}
+Authorization: Bearer {{accessToken}}
+
+### 전체 접종 조회 (관리자)
+GET http://localhost:8080/api/v1/vaccinations?page=0&size=10
+Authorization: Bearer {{accessToken}}

@@ -35,37 +35,37 @@ values
      '2024-08-14T08:00:00', '2024-08-14T08:00:00');
 
 -- 반려동물 데이터
-INSERT INTO pet (USER_ID, CATEGORY, BRAND, BIRTH_DATE, AGE, NAME, GENDER,
-                 IS_PETS_NEUTER, WEIGHT, PET_STATUS, CHIP, CREATE_AT,
-                 MODIFIED_AT)
-VALUES-- USER_ID 1의 반려동물
-
-      (1, 'DOG', '래브라도 리트리버', '2020-05-15', 3, '맥스', 'MALE', true, 30.5,
-       'ACTIVE', 'CHIP123456', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (1, 'CAT', '페르시안', '2021-03-10', 2, '루나', 'FEMALE', true, 4.2,
-       'ACTIVE', 'CHIP234567', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (1, 'DOG', '골든 리트리버', '2019-11-20', 4, '찰리', 'MALE', false,
-       28.7, 'ACTIVE', 'CHIP345678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      -- USER_ID 2의 반려동물
-      (2, 'CAT', '샴', '2022-01-05', 1, '밀로', 'MALE', false, 3.8, 'ACTIVE',
-       'CHIP456789', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (2, 'DOG', '푸들', '2020-09-30', 3, '벨라', 'FEMALE', true, 15.3,
-       'ACTIVE', 'CHIP567890', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (2, 'CAT', '메인쿤', '2021-07-12', 2, '올리버', 'MALE', true, 5.5,
-       'ACTIVE', 'CHIP678901', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      -- USER_ID 3의 반려동물
-      (3, 'DOG', '저먼 셰퍼드', '2019-04-22', 4, '로키', 'MALE', true, 35.2,
-       'ACTIVE', 'CHIP789012', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (3, 'CAT', '브리티시 숏헤어', '2020-12-03', 2, '루시', 'FEMALE', false,
-       4.0, 'ACTIVE', 'CHIP890123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (3, 'DOG', '비글', '2021-08-17', 2, '데이지', 'FEMALE', true, 12.8,
-       'ACTIVE', 'CHIP901234', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      -- USER_ID 4의 반려동물
-      (4, 'DOG', '시바 이누', '2021-02-14', 2, '하치', 'MALE', false, 10.5,
-       'ACTIVE', 'CHIP012345', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      -- USER_ID 5의 반려동물
-      (5, 'DOG', '웰시 코기', '2020-07-30', 3, '코코', 'FEMALE', true, 12.3, 'ACTIVE',
-       'CHIP123450', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO pet (USER_ID, TYPE, BREED, BIRTH_DATE, AGE, NAME, GENDER,
+                 IS_NEUTERED, WEIGHT, PET_STATUS, CHIP_NUMBER, CREATED_AT,
+                 UPDATED_AT)
+VALUES
+-- USER_ID 1의 반려동물
+(1, 'DOG', '래브라도 리트리버', '2020-05-15', 3, '맥스', 'MALE', true, 30.5,
+ 'ACTIVE', 'CHIP123456', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 'CAT', '페르시안', '2021-03-10', 2, '루나', 'FEMALE', true, 4.2,
+ 'ACTIVE', 'CHIP234567', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 'DOG', '골든 리트리버', '2019-11-20', 4, '찰리', 'MALE', false,
+ 28.7, 'ACTIVE', 'CHIP345678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- USER_ID 2의 반려동물
+(2, 'CAT', '샴', '2022-01-05', 1, '밀로', 'MALE', false, 3.8, 'ACTIVE',
+ 'CHIP456789', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'DOG', '푸들', '2020-09-30', 3, '벨라', 'FEMALE', true, 15.3,
+ 'ACTIVE', 'CHIP567890', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'CAT', '메인쿤', '2021-07-12', 2, '올리버', 'MALE', true, 5.5,
+ 'ACTIVE', 'CHIP678901', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- USER_ID 3의 반려동물
+(3, 'DOG', '저먼 셰퍼드', '2019-04-22', 4, '로키', 'MALE', true, 35.2,
+ 'ACTIVE', 'CHIP789012', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'CAT', '브리티시 숏헤어', '2020-12-03', 2, '루시', 'FEMALE', false,
+ 4.0, 'ACTIVE', 'CHIP890123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'DOG', '비글', '2021-08-17', 2, '데이지', 'FEMALE', true, 12.8,
+ 'ACTIVE', 'CHIP901234', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- USER_ID 4의 반려동물
+(4, 'DOG', '시바 이누', '2021-02-14', 2, '하치', 'MALE', false, 10.5,
+ 'ACTIVE', 'CHIP012345', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- USER_ID 5의 반려동물
+(5, 'DOG', '웰시 코기', '2020-07-30', 3, '코코', 'FEMALE', true, 12.3, 'ACTIVE',
+ 'CHIP123450', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 산책 데이터
 INSERT INTO walk (user_id, walk_status, distance, duration, start_time,

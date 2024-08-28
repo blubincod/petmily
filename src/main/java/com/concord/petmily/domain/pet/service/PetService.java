@@ -31,7 +31,7 @@ public interface PetService {
     /**
      * 반려동물 정보 수정
      */
-    void updatePet(Long petId, String username, PetDto.ModifierPet request, MultipartFile profile);
+    void updatePet(Long petId, String username, PetDto.ModifyPet request, MultipartFile profile);
 
     /**
      * 반려동물 삭제 처리

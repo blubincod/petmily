@@ -2,49 +2,47 @@ package com.concord.petmily.domain.vaccination.entity;
 
 import com.concord.petmily.domain.disease.entity.Disease;
 import com.concord.petmily.domain.pet.entity.Pet;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import lombok.RequiredArgsConstructor;
 
+@Getter
+@Setter
 @Entity
-@Table(name = "vaccination")
 @RequiredArgsConstructor
+@Table(name = "vaccination")
 public class Vaccination {
 
-  // 기본 키
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  //하나의 반려동물과 연결.
-  @ManyToOne
-  @JoinColumn(name = "pet_id")
-  private Pet petId;
+    //한마리의 반려동물과 연결
+    @ManyToOne
+    @JoinColumn(name = "pet_id")
+    private Pet pet;
 
-  // 하나의 질병과 연결.
-  @ManyToOne
-  @JoinColumn(name = "disease_id")
-  private Disease diseaseId;
+    // 하나의 질병과 연결
+    @ManyToOne
+    @JoinColumn(name = "disease_id")
+    private Disease disease;
 
-  // 예방 접종 날짜
-  private LocalDate vaccinationDate;
+    // 예방 접종 날짜
+    private LocalDate vaccinationDate;
 
-  // 예방 접종 여부
-  private boolean isVaccination;
+    // 예방 접종 여부
+    private boolean isVaccination;
 
-  // 다음 예정일
-  private LocalDate nextDueDate;
+    // 다음 예정일
+    private LocalDate nextDueDate;
 
-  // 생성 시점
-  private LocalDateTime createAt;
+    // 생성 시점
+    private LocalDateTime createAt;
 
-  // 수정 시점
-  private LocalDateTime modifiedAt;
+    // 수정 시점
+    private LocalDateTime modifiedAt;
 }
