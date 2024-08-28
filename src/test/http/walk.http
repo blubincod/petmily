@@ -44,7 +44,6 @@ Content-Type: application/json
 {
   "endTime": "2024-08-13T13:00:00Z",
   "distance": 5.2
-
 }
 
 ### 활동 전송 - 대변

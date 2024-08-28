@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+<h2>로그인</h2>
+<form id="loginForm">
+    Username: <input type="text" id="username"><br>
+    Password: <input type="password" id="password"><br>
+    <button type="submit">Login</button>
+</form>
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // 폼 제출 시 새로고침 방지
+        fetch('/api/v1/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Login failed: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('로그인 성공:', data);
+                // 토큰을 로컬 스토리지에 저장
+                localStorage.setItem('token', data.accessToken);
+                // 로그인 성공 후 처리 (예: 페이지 리다이렉트)
+                window.location.href = '/index.html'; // 예시: 대시보드 페이지로 이동
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Login failed: ' + error.message);
+            });
+    });
+</script>
+</body>
+</html>

@@ -70,7 +70,10 @@ public class OpenChatServiceImpl implements OpenChatService {
 
     @Override
     public OpenChatDto getChatRoomInfo(Long chatId) {
-        return null;
+        OpenChat openChat = openChatRepository.findById(chatId)
+                .orElseThrow(() -> new RuntimeException("해당 채팅이 존재하지 않습니다."));
+
+        return OpenChatDto.fromEntity(openChat);
     }
 
     @Override

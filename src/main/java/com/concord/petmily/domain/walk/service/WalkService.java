@@ -14,7 +14,7 @@ public interface WalkService {
      * 산책 시작/종료 활동, 산책 정보 저장
      */
     // 산책 시작
-    WalkDto startWalk(String username, List<Long> petList, LocalDateTime startTime);
+    StartWalkDto.Response startWalk(String username, List<Long> petList, LocalDateTime startTime);
 
     // 산책 종료
     WalkDto endWalk(Long walkId, String username, WalkDto walkDto);

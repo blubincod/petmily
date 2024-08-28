@@ -67,7 +67,7 @@ public class WalkServiceImpl implements WalkService {
      */
     @Override
     @Transactional
-    public WalkDto startWalk(String username, List<Long> petIds, LocalDateTime startTime) {
+    public StartWalkDto.Response  startWalk(String username, List<Long> petIds, LocalDateTime startTime) {
         User user = getUser(username);
 
         // 회원 산책 중 여부 확인
@@ -75,7 +75,7 @@ public class WalkServiceImpl implements WalkService {
             throw new WalkException(ErrorCode.WALK_ALREADY_IN_PROGRESS);
         }
 
-        // TODO 리팩토링 : 깔끔하게 정리
+        // TODO 리팩토링 - 중복 메서드 추출
         Walk walk = new Walk();
         walk.setUser(user);
         walk.setStartTime(startTime);
@@ -109,8 +109,12 @@ public class WalkServiceImpl implements WalkService {
 
         updateWalkingStatus(user, true);
 
-        // Walk Entity를 WalkDto로 변환
-        return WalkDto.fromEntity(walk);
+        // StartWalkDto.Response 생성 및 반환
+        return StartWalkDto.Response.builder()
+                .walkId(walk.getId())
+                .startTime(walk.getStartTime())
+                .pets(petIds)
+                .build();
     }
 
     /**

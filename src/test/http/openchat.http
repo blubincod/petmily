@@ -1,7 +1,7 @@
 # Open Chat 테스트
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NzczODMxLCJleHAiOjE3MjQ3Nzc0MzEsInN1YiI6ImtpbWp1bjkxIn0.OyOe4L7sI-nm4CDDPo_cIFRyHAiq05ZICXdtMDsJj2g
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0ODAyNDYwLCJleHAiOjE3MjQ4MDYwNjAsInN1YiI6ImtpbWp1bjkxIn0.U0xsUUGM-EQrjZFNH0zM2K_84EOYG2l6im-VXrIF8dA
 #@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NjU1NjY1LCJleHAiOjE3MjQ2NTkyNjUsInN1YiI6ImtpbWp1bjkxIn0.vzP2LGmGYTiq72O4Y5PNKrVJj3Y3RdM3DM74MTC0Tug
 
 ### 회원1 로그인 요청
@@ -29,4 +29,8 @@ Content-Type: application/json
 
 ### 오픈채팅 목록 조회
 GET http://localhost:8080/api/v1/open-chats?page=0&size=10
+Authorization: Bearer {{accessToken}}
+
+### 오픈채팅 정보 조회
+GET http://localhost:8080/api/v1/open-chats/2
 Authorization: Bearer {{accessToken}}

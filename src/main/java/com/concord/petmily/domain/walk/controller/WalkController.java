@@ -58,21 +58,23 @@ public class WalkController {
      * @param userDetails 현재 인증된 사용자의 세부 정보
      */
     @PostMapping
-    public ResponseEntity<WalkDto> startWalk(
+    public ResponseEntity<StartWalkDto.Response> startWalk(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody StartWalkRequest startWalkRequest
+            @RequestBody StartWalkDto.Request startWalkRequest
     ) {
         String username = userDetails.getUsername();
         List<Long> petIds = startWalkRequest.getPetIds();
         LocalDateTime startTime = startWalkRequest.getStartTime();
 
-        WalkDto createdWalk = walkService.startWalk(username, petIds, startTime);
+        StartWalkDto.Response createdWalk = walkService.startWalk(username, petIds, startTime);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWalk);
     }
 
     /**
      * 산책 종료 및 산책 정보 기록
+     *
+     * 1분 미만은 기록하지 않음
      */
     @PutMapping("/{walkId}/end")
     public ResponseEntity<WalkDto> endWalk(
