@@ -101,7 +101,7 @@ public class OpenChatServiceImpl implements OpenChatService {
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         // 이미 참여한 사용자인지 확인
-        if (openChatParticipantRepository.findByOpenChatAndUser(openChat, user).isPresent()) {
+        if (openChatParticipantRepository.findByUserIdAndOpenChatId(openChat.getId(), user.getId()).isPresent()) {
             throw new RuntimeException("이미 채팅방에 참여한 사용자입니다.");
         }
 
@@ -129,7 +129,7 @@ public class OpenChatServiceImpl implements OpenChatService {
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         OpenChatParticipant participant = openChatParticipantRepository
-                .findByOpenChatAndUser(openChat, user)
+                .findByUserIdAndOpenChatId(openChat.getId(), user.getId())
                 .orElseThrow(() -> new RuntimeException("참가자를 찾을 수 없습니다."));
 
         participant.setStatus(ParticipantStatus.LEFT);

@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -38,6 +37,7 @@ public class SecurityConfig {
         return (web) -> web.ignoring()
                 .requestMatchers(toH2Console()) // H2 데이터베이스 콘솔에 대한 요청 패턴을 무시
                 .requestMatchers("/static/**"); // '/static/' 경로 아래의 모든 리소스에 대한 요청을 무시
+
     }
 
     /**
@@ -47,9 +47,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable) // Cross-Site Request Forgery 보호를 비활성화
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 생성하지 않는 상태 없는(stateless) 정책을 설정
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/", "/index.html", "/login.html", "/walk.html", "/open-chat-list.html", "/chat.html").permitAll()
+                        .requestMatchers(
+                                "/", "/index.html", "/login.html",
+                                "/walk.html", "/open-chat-list.html", "/open-chat.html",
+                                "/post.html", "/ws/**").permitAll()
                         .requestMatchers("/css/**", "/js/**").permitAll()
                         .requestMatchers("/api/v1/users/signup", "/api/v1/users/login").permitAll() // 인증 없이 접근 허용
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요

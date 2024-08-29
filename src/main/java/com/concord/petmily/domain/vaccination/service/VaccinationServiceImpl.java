@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * 접종 비즈니스 로직
+ * 접종 서비스 구현 클래스
  */
 
 @Service
@@ -45,16 +45,12 @@ public class VaccinationServiceImpl implements VaccinationService {
     }
 
     /**
-     * 예방 접종 정보를 등록합니다.
+     * 예방 접종 정보 등록
      *
      * @param username 사용자 이름
      * @param petId    반려동물 ID
      * @param dto      예방 접종 요청 정보
      * @return 등록된 예방 접종 정보
-     * @throws UserNotFoundException    사용자를 찾을 수 없는 경우
-     * @throws PetNotFoundException     반려동물을 찾을 수 없는 경우
-     * @throws PetException             반려동물 소유자가 일치하지 않는 경우
-     * @throws DiseaseNotFoundException 질병을 찾을 수 없는 경우
      */
     @Override
     @Transactional
@@ -93,11 +89,10 @@ public class VaccinationServiceImpl implements VaccinationService {
     }
 
     /**
-     * 특정 반려동물의 모든 예방 접종 정보를 조회합니다.
+     * 특정 반려동물의 모든 예방 접종 정보 조회
      *
      * @param petId 반려동물 ID
      * @return 예방 접종 정보 목록
-     * @throws PetNotFoundException 반려동물을 찾을 수 없는 경우
      */
     @Override
     public List<VaccinationDto> getVaccinationsByPetId(Long petId) {
@@ -111,13 +106,11 @@ public class VaccinationServiceImpl implements VaccinationService {
     }
 
     /**
-     * 특정 예방 접종의 상세 정보를 조회합니다.
+     * 특정 예방 접종의 상세 정보 조회
      *
      * @param petId         반려동물 ID
      * @param vaccinationId 예방 접종 ID
      * @return 예방 접종 상세 정보
-     * @throws PetNotFoundException 반려동물을 찾을 수 없는 경우
-     * @throws RuntimeException     예방 접종 기록을 찾을 수 없는 경우
      */
     @Override
     public VaccinationDto getVaccinationDetail(Long petId, Long vaccinationId) {
@@ -130,18 +123,13 @@ public class VaccinationServiceImpl implements VaccinationService {
     }
 
     /**
-     * 예방 접종 정보를 수정합니다.
+     * 예방 접종 정보를 수정
      *
      * @param username      사용자 이름
      * @param petId         반려동물 ID
      * @param vaccinationId 예방 접종 ID
      * @param dto           수정할 예방 접종 정보
      * @return 수정된 예방 접종 정보
-     * @throws UserNotFoundException    사용자를 찾을 수 없는 경우
-     * @throws PetNotFoundException     반려동물을 찾을 수 없는 경우
-     * @throws PetException             반려동물 소유자가 일치하지 않는 경우
-     * @throws DiseaseNotFoundException 질병을 찾을 수 없는 경우
-     * @throws RuntimeException         예방 접종 기록을 찾을 수 없는 경우
      */
     @Override
     @Transactional
@@ -188,15 +176,11 @@ public class VaccinationServiceImpl implements VaccinationService {
     }
 
     /**
-     * 예방 접종 정보를 삭제합니다.
+     * 예방 접종 정보 삭제
      *
      * @param username      사용자 이름
      * @param petId         반려동물 ID
      * @param vaccinationId 예방 접종 ID
-     * @throws UserNotFoundException 사용자를 찾을 수 없는 경우
-     * @throws PetNotFoundException  반려동물을 찾을 수 없는 경우
-     * @throws PetException          반려동물 소유자가 일치하지 않는 경우
-     * @throws RuntimeException      예방 접종 기록을 찾을 수 없는 경우
      */
     @Override
     @Transactional
@@ -215,7 +199,7 @@ public class VaccinationServiceImpl implements VaccinationService {
     }
 
     /**
-     * 모든 예방 접종 정보를 페이지네이션하여 조회합니다.
+     * 모든 예방 접종 정보 페이지네이션하여 조회 (관리자 기능)
      *
      * @param pageable 페이지 정보
      * @return 페이지네이션된 예방 접종 정보

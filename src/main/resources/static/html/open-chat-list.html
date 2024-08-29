@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Open Chat List</title>
     <style>
-        .chat-room {
+        .chatMessage-room {
             border: 1px solid #ddd;
             padding: 10px;
             margin-bottom: 10px;
@@ -16,13 +16,13 @@
 <body>
 <h1>오픈채팅 목록</h1>
 <nav>
+    <a href="/index.html">홈</a>
     <a href="/login.html">로그인</a>
     <a href="/walk.html">산책</a>
-    <a href="/open-chat-list.html">오픈채팅</a>
     <a href="/post.html">게시판</a>
 </nav>
 
-<div id="chat-list">
+<div id="chatMessage-list">
     <!-- 채팅 목록이 동적으로 추가됩니다 -->
 </div>
 
@@ -37,12 +37,12 @@
             .then(response => response.json())
             .then(response => {
                 if (response.status === 'success' && Array.isArray(response.data)) {
-                    const chatListContainer = document.getElementById('chat-list');
+                    const chatListContainer = document.getElementById('chatMessage-list');
                     chatListContainer.innerHTML = ''; // 기존 목록 초기화
 
                     response.data.forEach(chatRoom => {
                         const chatRoomElement = document.createElement('div');
-                        chatRoomElement.className = 'chat-room';
+                        chatRoomElement.className = 'chatMessage-room';
                         chatRoomElement.innerHTML = `
                         <h3>${chatRoom.title}</h3>
                         <p>${chatRoom.description}</p>
@@ -50,7 +50,7 @@
                         <p>카테고리 ID: ${chatRoom.categoryId}</p>
                     `;
                         chatRoomElement.onclick = () => {
-                            window.location.href = `/open-chat.html?id=${chatRoom.creatorId}`; // 채팅방으로 이동
+                            window.location.href = `/open-chat.html?id=${chatRoom.id}`; // 채팅방으로 이동
                         };
                         chatListContainer.appendChild(chatRoomElement);
                     });
