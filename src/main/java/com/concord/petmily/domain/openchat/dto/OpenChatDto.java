@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class OpenChatDto {
+    private Long id;
     private Long creatorId;
     private Long categoryId;
     private String title;
@@ -19,6 +20,7 @@ public class OpenChatDto {
 
     public static OpenChatDto fromEntity(OpenChat openChat) {
         return OpenChatDto.builder()
+                .id(openChat.getId())
                 .creatorId(openChat.getCreator().getId())
                 .categoryId(openChat.getCategory().getId())
                 .title(openChat.getTitle())

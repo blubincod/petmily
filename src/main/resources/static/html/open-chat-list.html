@@ -50,7 +50,7 @@
                         <p>카테고리 ID: ${chatRoom.categoryId}</p>
                     `;
                         chatRoomElement.onclick = () => {
-                            window.location.href = `/open-chat.html?id=${chatRoom.creatorId}`; // 채팅방으로 이동
+                            window.location.href = `/open-chat.html?id=${chatRoom.id}`; // 채팅방으로 이동
                         };
                         chatListContainer.appendChild(chatRoomElement);
                     });

@@ -7,27 +7,76 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <style>
-        #chat-page {
-            max-width: 600px;
-            margin: 0 auto;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
             padding: 20px;
+            background-color: #f0f0f0;
         }
+
+        #chat-page {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
         #message-container {
             height: 400px;
-            border: 1px solid #ddd;
-            padding: 10px;
             overflow-y: auto;
-            margin-bottom: 10px;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
         }
+
         #message-form {
             display: flex;
+            padding: 20px;
         }
+
         #message {
             flex-grow: 1;
-            padding: 5px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
+
         button {
-            padding: 5px 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            max-width: 70%;
+        }
+
+        .sent {
+            background-color: #e1ffc7;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .received {
+            background-color: #f0f0f0;
+        }
+
+        nav {
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #333;
         }
     </style>
 </head>
@@ -46,6 +95,20 @@
         <button type="submit">전송</button>
     </form>
 </div>
+<script>
+    // 로컬 스토리지에서 토큰 가져오기
+    var token = localStorage.getItem('token');
+
+    // 토큰이 없으면 로그인 페이지로 리다이렉트
+    if (!token) {
+        window.location.href = '/login.html';
+    }
+</script>
+<script>
+    console.log("Hello!!");
+    console.log("Token" ,token)
+</script>
 <script src="js/chat.js"></script>
+
 </body>
 </html>
