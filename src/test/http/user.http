@@ -1,7 +1,7 @@
 # User 요청
 
 ### Value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NjAxMTA0LCJleHAiOjE3MjQ2MDQ3MDQsInN1YiI6ImtpbWp1bjkxIn0.22RNsw96BFNdnPjJX2Xafsx8xYAr3NvB_4aJW72d93w
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0OTM1MzI4LCJleHAiOjE3MjQ5Mzg5MjgsInN1YiI6Imp1bmdldW45NyJ9.5TGvBHiPSbZzlrdo9iCvnSU_nM9H-09lQALip677tAc
 @userId = 1
 @username = kimjun91
 
@@ -51,6 +51,34 @@ Content-Type: application/json
 GET http://localhost:8080/api/v1/users/{{userId}}
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
+
+### 사용자 정보 수정
+PUT http://localhost:8080/api/v1/users/{{userId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "username": "test",
+  "email": "testupdate@example.com",
+  "password": "test123",
+  "address": "강원특별자치도 양양군",
+  "age": 33,
+  "birthDate": "1991-11-11",
+  "gender": "M",
+  "name": "테스트",
+  "nickname": "테테",
+  "phone": "010-1111-3333"
+}
+
+### 회원 Role, Status 변경 (관리자 전용)
+PUT http://localhost:8080/api/v1/users/admin/{{userId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "role": "ADMIN",
+  "status": "SUSPENDED"
+}
 
 ### 사용자 삭제
 DELETE http://localhost:8080/api/v1/users/delete/{{userId}}

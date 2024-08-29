@@ -215,7 +215,7 @@ public class NotificationServiceImpl implements NotificationService {
                 send(user, Notification.NotificationType.WALK, "산책목표 달성!");
             } else {
                 long minutesLeft = walkGoal.getDailyTargetMinutes() - totalDurationInMinutes;
-                send(user, Notification.NotificationType.WALK, "산책목표" + minutesLeft + "분 미달성!");
+                send(user, Notification.NotificationType.WALK, "산책목표 " + minutesLeft + "분 미달성!");
             }
         }
 
