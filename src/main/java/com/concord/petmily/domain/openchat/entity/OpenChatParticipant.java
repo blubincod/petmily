@@ -29,7 +29,7 @@ public class OpenChatParticipant {
 
     @Enumerated(EnumType.STRING)
     private ParticipantStatus status; // 참여자 상태
-    
+
     private LocalDateTime joinedAt;
     private LocalDateTime leftAt;
 
