@@ -10,6 +10,7 @@ import com.concord.petmily.domain.pet.repository.PetRepository;
 import com.concord.petmily.domain.user.entity.Role;
 import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.exception.UserException;
+import com.concord.petmily.domain.user.exception.UserNotFoundException;
 import com.concord.petmily.domain.user.repository.UserRepository;
 import com.concord.petmily.domain.walk.entity.Walk;
 import com.concord.petmily.domain.walk.entity.WalkGoal;
@@ -40,6 +41,18 @@ public class NotificationServiceImpl implements NotificationService {
     private final PetRepository petRepository;
     private final WalkGoalRepository walkGoalRepository;
     private final WalkRepository walkRepository;
+
+    // 회원이름으로 정보 조회
+    private User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    // 회원아이디로 정보 조회
+    private User getUserByUserId(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+    }
 
     @Override
     public SseEmitter subscribe(String username, String lastEventId) {
@@ -151,13 +164,7 @@ public class NotificationServiceImpl implements NotificationService {
     // 관리자가 모든 사용자에게 공지사항을 보냄
     @Override
     public void sendAnnouncementToAllUsers(String username, String content) {
-        User sender = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
-
-        // 관리자가 아니라면 에러
-        if(sender.getRole() != Role.ADMIN) {
-            throw new UserException(ErrorCode.UNAUTHORIZED_ACCESS);
-        }
+        validateAdmin(getUserByUsername(username));
 
         List<User> users = userRepository.findAll(); // 모든 사용자 조회
         for (User user : users) {
@@ -168,18 +175,11 @@ public class NotificationServiceImpl implements NotificationService {
     // 관리자가 특정 사용자에게 메시지를 보냄
     @Override
     public void sendMessageToUser(String username, NotificationDto.sendToUserDto dto) {
-        User sender = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+        validateAdmin(getUserByUsername(username));
 
-        // 관리자가 아니라면 에러
-        if(sender.getRole() != Role.ADMIN) {
-            throw new UserException(ErrorCode.UNAUTHORIZED_ACCESS);
-        }
+        User receiver = getUserByUsername(dto.getReceiver());
 
-        User user = userRepository.findByUsername(dto.getReceiver())
-                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
-
-        send(user, Notification.NotificationType.ANNOUNCEMENT, dto.getContent());
+        send(receiver, Notification.NotificationType.ANNOUNCEMENT, dto.getContent());
     }
 
     // 산책목표를 달성/미달성 알림
@@ -208,8 +208,7 @@ public class NotificationServiceImpl implements NotificationService {
                     .sum() / 60); // 총합을 초에서 분으로 변환
 
             Long userId = petRepository.findUserById(walkGoal.getPetId());
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+            User user = getUserByUserId(userId);
 
             // 산책 목표 달성/미달성 알림
             if(totalDurationInMinutes >= walkGoal.getDailyTargetMinutes()) {
@@ -226,11 +225,17 @@ public class NotificationServiceImpl implements NotificationService {
 
         for (WalkGoal walkGoal : walkGoals2) {
             Long userId = petRepository.findUserById(walkGoal.getPetId());
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+            User user = getUserByUserId(userId);
 
             long minutesLeft = Duration.between(walkGoal.getTargetStartTime(), LocalTime.now()).toMinutes();
             send(user, Notification.NotificationType.WALK, minutesLeft + "분 뒤 산책 예정!");
+        }
+    }
+
+    // 관리자 계정인지 유효성 검사
+    private void validateAdmin(User user) {
+        if (user.getRole() != Role.ADMIN) {
+            throw new UserException(ErrorCode.UNAUTHORIZED_ACCESS);
         }
     }
 

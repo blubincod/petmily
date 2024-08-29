@@ -10,7 +10,7 @@ import com.concord.petmily.domain.post.entity.Post;
 import com.concord.petmily.domain.post.exception.PostException;
 import com.concord.petmily.domain.post.repository.PostRepository;
 import com.concord.petmily.domain.user.entity.User;
-import com.concord.petmily.domain.user.exception.UserException;
+import com.concord.petmily.domain.user.exception.UserNotFoundException;
 import com.concord.petmily.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,13 +24,23 @@ public class LikesServiceImpl implements LikesService {
     private final PostRepository postRepository;
     private final NotificationService notificationService;
 
+    // 회원 정보 조회
+    private User getUser(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    // 게시물 정보 조회
+    private Post getPost(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
+    }
+
     @Override
     public void createLikes(String username, Long postId) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+        User user = getUser(username);
 
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
+        Post post = getPost(postId);
 
         // 이미 좋아요 되어있으면 에러
         if (likesRepository.findByUserIdAndPost(user.getId(), post).isPresent()) {
@@ -52,11 +62,9 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     public void deleteLikes(String username, Long postId) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+        User user = getUser(username);
 
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
+        Post post = getPost(postId);
 
         // 좋아요 되어있지 않으면 에러
         Likes likes = likesRepository.findByUserIdAndPost(user.getId(), post)

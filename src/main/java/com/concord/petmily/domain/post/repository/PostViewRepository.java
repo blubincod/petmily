@@ -8,5 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface PostViewRepository extends JpaRepository<PostView, Long> {
+
     Optional<PostView> findByUserIdAndPostId(Long userId, Long postId);
+
 }

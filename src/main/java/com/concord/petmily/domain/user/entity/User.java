@@ -1,6 +1,5 @@
 package com.concord.petmily.domain.user.entity;
 
-import com.concord.petmily.domain.openchat.entity.OpenChat;
 import com.concord.petmily.domain.openchat.entity.OpenChatParticipant;
 import jakarta.persistence.*;
 import lombok.*;

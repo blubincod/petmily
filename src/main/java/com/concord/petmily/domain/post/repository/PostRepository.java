@@ -16,7 +16,9 @@ import java.util.Set;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findByPostCategoryId(Long categoryId, Pageable pageable);
+
     Page<Post> findByIdIn(Set<Long> postIds, Pageable pageable);
+
     Page<Post> findByPostCategoryIdAndIdIn(Long categoryId, Set<Long> postIds, Pageable pageable);
 
 }

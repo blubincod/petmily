@@ -9,5 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface LikesRepository extends JpaRepository<Likes, Long> {
+
     Optional<Likes> findByUserIdAndPost(Long UserId, Post post);
+
 }
