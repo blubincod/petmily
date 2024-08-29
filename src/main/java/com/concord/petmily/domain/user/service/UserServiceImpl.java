@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,13 +21,22 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    // username으로 회원 정보 조회
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    // userId로 회원 정보 조회
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    // 회원가입
+    @Override
     public Long registerUser(AddUserRequest dto) {
-        if (userRepository.existsByUsername(dto.getUsername())) {
-            throw new UserException(ErrorCode.USERNAME_ALREADY_EXISTS);
-        }
-        if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new UserException(ErrorCode.EMAIL_ALREADY_EXISTS);
-        }
+        validateUniqueUser(dto.getUsername(), dto.getEmail());
 
         User user = User.builder()
                 .username(dto.getUsername())
@@ -45,14 +57,104 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user).getId();
     }
 
-    public User findById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+    // 회원 삭제 기능
+    @Override
+    public void deleteUser(String username, Long targetId) {
+        User user = findByUsername(username);
+
+        User target = findById(targetId);
+
+        if(user.getRole() != Role.ADMIN) {
+            // 사용자가 관리자가 아니라면
+            // 사용자와 targetId가 다른 경우 에러
+            if (!Objects.equals(user.getId(), targetId)) {
+                throw new UserException(ErrorCode.UNAUTHORIZED_ACCESS);
+            }
+        }
+
+        // 회원 삭제시 user_status 변경
+        target.setUserStatus(Status.DELETED);
+        userRepository.save(target);
     }
 
-    // TODO 중복 기능?
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+    // 회원 정지 기능 (관리자 전용)
+    @Override
+    public void suspendUser(String username, Long targetId) {
+        validateAdmin(findByUsername(username));
+
+        User target = findById(targetId);
+
+        // 회원 정지시 user_status 변경
+        target.setUserStatus(Status.SUSPENDED);
+        userRepository.save(target);
+    }
+
+    // 회원 정지 해제 기능 (관리자 전용)
+    @Override
+    public void unsuspendUser(String username, Long targetId) {
+        validateAdmin(findByUsername(username));
+
+        User target = findById(targetId);
+
+        // 회원 정지 해제시 user_status 변경
+        target.setUserStatus(Status.ACTIVE);
+        userRepository.save(target);
+    }
+
+    // 회원 통계 조회 (관리자 전용)
+    @Override
+    public String getStatistics(String username) {
+        validateAdmin(findByUsername(username));
+
+        // 총 사용자, 활성 사용자, 비활성 사용자, 정지 사용자, 삭제 사용자
+        Long countTotalUsers = userRepository.count();
+        Long countActiveUsers = userRepository.countByUserStatus(Status.ACTIVE);
+        Long countInactiveUsers = userRepository.countByUserStatus(Status.INACTIVE);
+        Long countSuspendedUsers = userRepository.countByUserStatus(Status.SUSPENDED);
+        Long countDeletedUsers = userRepository.countByUserStatus(Status.DELETED);
+
+        // 최근 한 달 및 일주일 이내 가입자 수
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime oneMonthAgo = now.minusMonths(1);
+        LocalDateTime oneWeekAgo = now.minusWeeks(1);
+
+        Long countRegisteredWithinOneMonth = userRepository.countByRegisteredAtAfter(oneMonthAgo);
+        Long countRegisteredWithinOneWeek = userRepository.countByRegisteredAtAfter(oneWeekAgo);
+
+        String result = String.format(
+                "총 사용자 : %d명%n" +
+                        "활성 사용자 : %d명%n" +
+                        "비활성 사용자 : %d명%n" +
+                        "정지된 사용자 : %d명%n" +
+                        "삭제된 사용자 : %d명%n" +
+                        "최근 한달 이내 가입자 : %d명%n" +
+                        "최근 일주일 이내 가입자 : %d명",
+                countTotalUsers,
+                countActiveUsers,
+                countInactiveUsers,
+                countSuspendedUsers,
+                countDeletedUsers,
+                countRegisteredWithinOneMonth,
+                countRegisteredWithinOneWeek
+        );
+
+        return result;
+    }
+
+    // 관리자 계정인지 유효성 검사
+    private void validateAdmin(User user) {
+        if (user.getRole() != Role.ADMIN) {
+            throw new UserException(ErrorCode.UNAUTHORIZED_ACCESS);
+        }
+    }
+
+    // UniqueUser인지 유효성 검사
+    private void validateUniqueUser(String username, String email) {
+        if (userRepository.existsByUsername(username)) {
+            throw new UserException(ErrorCode.USERNAME_ALREADY_EXISTS);
+        }
+        if (userRepository.existsByEmail(email)) {
+            throw new UserException(ErrorCode.EMAIL_ALREADY_EXISTS);
+        }
     }
 }

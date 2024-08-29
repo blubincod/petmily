@@ -2,7 +2,6 @@ package com.concord.petmily.domain.user.service;
 
 import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

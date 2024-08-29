@@ -9,6 +9,7 @@ import com.concord.petmily.domain.post.repository.*;
 import com.concord.petmily.domain.user.entity.Role;
 import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.exception.UserException;
+import com.concord.petmily.domain.user.exception.UserNotFoundException;
 import com.concord.petmily.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,14 +43,30 @@ public class PostServiceImpl implements PostService {
     @Value("${file.dir}")
     private String fileDir;
 
+    // 회원 정보 조회
+    private User getUser(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    // 게시물 정보 조회
+    private Post getPost(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
+    }
+
+    // 게시물 카테고리 조회
+    private PostCategory getPostCategory(Long postCategoryId) {
+        return postCategoryRepository.findById(postCategoryId)
+                .orElseThrow(() -> new PostException(ErrorCode.POST_CATEGORY_NOT_FOUND));
+    }
+
     @Override
     @Transactional
     public PostDto.Response createPost(String username, PostDto.Request dto, List<MultipartFile> files) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+        User user = getUser(username);
 
-        PostCategory postCategory = postCategoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new PostException(ErrorCode.POST_CATEGORY_NOT_FOUND));
+        PostCategory postCategory = getPostCategory(dto.getCategoryId());
 
         Post post = postRepository.save(dto.toEntity());
         post.setPostCategory(postCategory);
@@ -60,8 +77,7 @@ public class PostServiceImpl implements PostService {
             saveImage(user.getId(), post, files);
         }
 
-        PostDto.Response response = saveHashtags(post, dto);
-        return response;
+        return saveHashtags(post, dto);
     }
 
     @Override
@@ -92,11 +108,9 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostDto.Response getPost(String username, Long postId) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+        User user = getUser(username);
 
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
+        Post post = getPost(postId);
 
         Optional<PostView> existingRecord = postViewRepository.findByUserIdAndPostId(user.getId(), postId);
         // 조회한 기록이 없는 경우
@@ -130,19 +144,12 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostDto.Response updatePost(String username, Long postId, PostDto.Request dto, List<MultipartFile> files) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+        User user = getUser(username);
 
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
+        Post post = getPost(postId);
+        validatePost(post);
 
-        PostCategory postCategory = postCategoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new PostException(ErrorCode.POST_CATEGORY_NOT_FOUND));
-
-        // 이미 삭제된 게시물이라면 에러
-        if(post.getPostStatus() == PostStatus.DELETED) {
-            throw new PostException(ErrorCode.POST_ALREADY_DELETED);
-        }
+        PostCategory postCategory = getPostCategory(dto.getCategoryId());
 
         // 사용자와 게시물 작성자가 다른 경우 에러
         if(!Objects.equals(user.getId(), post.getUser().getId())) {
@@ -166,23 +173,16 @@ public class PostServiceImpl implements PostService {
         }
         postHashtagRepository.saveAll(postHashtags);
 
-        PostDto.Response response = saveHashtags(post, dto);
-        return response;
+        return saveHashtags(post, dto);
     }
 
     @Override
     @Transactional
     public void deletePost(String username, Long postId) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+        User user = getUser(username);
 
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
-
-        // 이미 삭제된 게시물이라면 에러
-        if(post.getPostStatus() == PostStatus.DELETED) {
-            throw new PostException(ErrorCode.POST_ALREADY_DELETED);
-        }
+        Post post = getPost(postId);
+        validatePost(post);
 
         if(user.getRole() != Role.ADMIN) {
             // 사용자가 관리자가 아니라면
@@ -215,7 +215,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<String> createHashtags(List<String> hashtagNames) {
+    public List<String> createHashtags(String username, List<String> hashtagNames) {
+        validateAdmin(getUser(username));
+
         // HASHTAG 테이블에 추가
         for(String hashtagName : hashtagNames) {
             hashtagRepository.findByHashtagName(hashtagName)
@@ -224,15 +226,43 @@ public class PostServiceImpl implements PostService {
         return hashtagNames;
     }
 
+    @Override
+    public PostDto.Response updateCategory(String username, Long postId, Long categoryId) {
+        validateAdmin(getUser(username));
+
+        Post post = getPost(postId);
+        validatePost(post);
+
+        PostCategory postCategory = getPostCategory(categoryId);
+
+        post.setPostCategory(postCategory);
+
+        return new PostDto.Response(post);
+    }
+
+    // 관리자 계정인지 유효성 검사
+    private void validateAdmin(User user) {
+        if (user.getRole() != Role.ADMIN) {
+            throw new UserException(ErrorCode.UNAUTHORIZED_ACCESS);
+        }
+    }
+
+    // 이미 삭제된 게시물인지 유효성 검사
+    private void validatePost(Post post) {
+        if(post.getPostStatus() == PostStatus.DELETED) {
+            throw new PostException(ErrorCode.POST_ALREADY_DELETED);
+        }
+    }
+
     // 게시물 조회수 증가
-    public void viewCountUp(Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
+    private void viewCountUp(Long postId) {
+        Post post = getPost(postId);
+
         post.viewCountUp(post);
     }
 
     // 새로운 hashtag 등록
-    public PostDto.Response saveHashtags(Post post, PostDto.Request dto) {
+    private PostDto.Response saveHashtags(Post post, PostDto.Request dto) {
         for(String hashtagName : dto.getHashtagNames()) {
             Hashtag hashtag = hashtagRepository.findByHashtagName(hashtagName)
                     .orElseGet(() -> hashtagRepository.save(new Hashtag(hashtagName)));
@@ -247,7 +277,7 @@ public class PostServiceImpl implements PostService {
     }
 
     // hashtagName으로 PostId 찾기
-    public Set<Long> searchPostIds(String hashtagName) {
+    private Set<Long> searchPostIds(String hashtagName) {
         Hashtag hashtag = hashtagRepository.findByHashtagName(hashtagName)
                 .orElseThrow(() -> new PostException(ErrorCode.HASHTAG_NOT_FOUND));
         Set<PostHashtag> postHashtags = postHashtagRepository.findAllByHashtagId(hashtag.getId());
@@ -262,7 +292,7 @@ public class PostServiceImpl implements PostService {
         return postIds;
     }
 
-    public String saveImage(Long userId, Post post, List<MultipartFile> files) {
+    private String saveImage(Long userId, Post post, List<MultipartFile> files) {
         // 파일 저장 경로
         String savedFullPath = String.format("%s/post/%d/%d",
                 FileUtils.getAbsolutePath(fileDir), userId, post.getId());

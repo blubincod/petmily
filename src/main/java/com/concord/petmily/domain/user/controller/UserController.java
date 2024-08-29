@@ -1,22 +1,27 @@
 package com.concord.petmily.domain.user.controller;
 
+import com.concord.petmily.common.dto.ApiResponse;
 import com.concord.petmily.domain.user.dto.AddUserRequest;
 import com.concord.petmily.domain.user.entity.User;
 import com.concord.petmily.domain.user.service.UserService;
-import com.concord.petmily.domain.walk.service.WalkService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 /**
  * 회원 관련 컨트롤러
- * [회원]
+ *
  * - 회원가입
  * - 회원 정보 조회
+ * - 회원 삭제
+ * - 회원 정지
+ * - 회원 정지 해제
+ * - 회원 통계 조회
  */
 @RestController
 @AllArgsConstructor
@@ -24,25 +29,80 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
-    private final WalkService walkService;
 
     /**
      * 회원가입
+     * @param addUserRequest 회원가입 입력 정보
      */
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody AddUserRequest addUserRequest) {
+    public ResponseEntity<ApiResponse<Map<String, Long>>> registerUser(@Valid @RequestBody AddUserRequest addUserRequest) {
         Long userId = userService.registerUser(addUserRequest);
 
-        return new ResponseEntity<>(Map.of("userId", userId), HttpStatus.CREATED);
+        return ResponseEntity.ok(ApiResponse.success(Map.of("userId", userId)));
     }
 
     /**
-     * 사용자 정보 조회
+     * 회원 정보 조회
+     * @param userId 회원 번호
      */
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
+    public ResponseEntity<ApiResponse<User>> getUserById(@PathVariable Long userId) {
         User user = userService.findById(userId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        return ResponseEntity.ok(ApiResponse.success(user));
+    }
+
+    /**
+     * 회원 삭제
+     * @param userId 회원 번호
+     * @param userDetails 현재 인증된 사용자의 세부 정보
+     */
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long userId,
+                                                        @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        userService.deleteUser(username, userId);
+
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    /**
+     * 회원 정지 (관리자 전용)
+     * @param userId 회원 번호
+     * @param userDetails 현재 인증된 사용자의 세부 정보
+     */
+    @PutMapping("/suspend/{userId}")
+    public ResponseEntity<ApiResponse<Void>> suspendUser(@PathVariable Long userId,
+                                              @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        userService.suspendUser(username, userId);
+
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    /**
+     * 회원 정지 해제 (관리자 전용)
+     * @param userId 회원 번호
+     * @param userDetails 현재 인증된 사용자의 세부 정보
+     */
+    @PutMapping("/unsuspend/{userId}")
+    public ResponseEntity<ApiResponse<Void>> unsuspendUser(@PathVariable Long userId,
+                                                @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        userService.unsuspendUser(username, userId);
+
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    /**
+     * 회원 통계 조회 (관리자 전용)
+     * @param userDetails 현재 인증된 사용자의 세부 정보
+     */
+    @GetMapping("/statistics")
+    public ResponseEntity<ApiResponse<String>> statistics(@AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        String result = userService.getStatistics(username);
+
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
 }
