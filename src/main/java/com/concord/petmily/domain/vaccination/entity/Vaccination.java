@@ -2,6 +2,7 @@ package com.concord.petmily.domain.vaccination.entity;
 
 import com.concord.petmily.domain.disease.entity.Disease;
 import com.concord.petmily.domain.pet.entity.Pet;
+import com.concord.petmily.domain.vaccination.dto.VaccinationDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +34,9 @@ public class Vaccination {
     @JoinColumn(name = "disease_id")
     private Disease disease;
 
-    private LocalDate vaccinationDate; // 접종일
+    private LocalDate vaccinationDate; // 최근 접종일
 
-    private LocalDate nextDueDate; // 다음 접종일
+    private LocalDate nextVaccinationDate; // 다음 접종일
 
     private String clinicName; // 병원 이름
 
@@ -46,4 +47,16 @@ public class Vaccination {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
+
+    public VaccinationDto toVaccinationDto() {
+        return VaccinationDto.builder()
+                .id(this.id)
+                .petId(this.pet != null ? this.pet.getId() : null)
+                .diseaseId(this.disease != null ? this.disease.getId() : null)
+                .diseaseName(this.disease != null ? this.disease.getName() : null)
+                .vaccinationDate(this.vaccinationDate)
+                .nextVaccinationDate(this.nextVaccinationDate)
+                .clinicName(this.clinicName)
+                .build();
+    }
 }

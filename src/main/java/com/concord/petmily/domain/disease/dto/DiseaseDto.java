@@ -26,7 +26,7 @@ public class DiseaseDto {
         private String description;
 
         @Min(0)
-        private Integer vaccinationDeadline;
+        private Integer vaccinationCycle;
 
         @NotEmpty
         private PetType petType;
@@ -41,7 +41,7 @@ public class DiseaseDto {
         @Size(max = 500)
         private String description;
 
-        private Integer vaccinationDeadline;
+        private Integer vaccinationCycle;
 
         private PetType petType;
     }

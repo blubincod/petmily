@@ -1,19 +1,18 @@
 package com.concord.petmily.domain.vaccination.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VaccinationDto {
-    private Long id;
-    private Long petId;
+public class VaccinationRequestDto {
     private Long diseaseId;
-    private String diseaseName;
     private LocalDate vaccinationDate;
     private LocalDate nextVaccinationDate;
     private String clinicName;

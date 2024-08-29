@@ -21,11 +21,22 @@ public enum ErrorCode {
     USER_ACCOUNT_UNMATCHED("사용자와 계좌의 소유자가 다릅니다."),
     USERNAME_ALREADY_EXISTS("이미 존재하는 아이디 입니다."),
     EMAIL_ALREADY_EXISTS("이미 존재하는 이메일 입니다."),
+    INVALID_PET_TYPE("잘못된 반려동물 유형입니다."),
 
     // Pet
     PET_NOT_FOUND("등록되지 않은 반려동물입니다."),
     PET_ALREADY_REGISTERED("해당 반려동물은 이미 등록되어 있습니다."),
     PET_OWNER_MISMATCH("해당 반려동물의 주인이 아닙니다."),
+
+    // Disease
+    DISEASE_NOT_FOUND("현재 등록되지 않은 질병입니다."),
+    DISEASE_ALREADY_EXISTS("이미 등록된 질병입니다."),
+    INVALID_DISEASE_DATA("잘못된 질병 데이터입니다."),
+
+    // Vaccination
+    VACCINATION_NOT_FOUND("예방접종 기록을 찾을 수 없습니다."),
+    INVALID_VACCINATION_DATE("잘못된 예방접종 날짜입니다."),
+    VACCINATION_ALREADY_RECORDED("해당 날짜에 이미 예방접종 기록이 존재합니다."),
 
     // Walk
     WALK_NOT_FOUND("존재하지 않는 산책 정보입니다."),
@@ -55,7 +66,12 @@ public enum ErrorCode {
     LIKES_ALREADY_EXISTS("이미 좋아요 되어있는 게시물입니다."),
     LIKES_NOT_FOUND("좋아요 되어있지 않은 게시물입니다."),
 
-
+    // OpenChat
+    CHAT_ROOM_NOT_FOUND("채팅방을 찾을 수 없습니다."),
+    USER_NOT_IN_CHAT_ROOM("사용자가 채팅방에 참여하지 않았습니다."),
+    CHAT_MESSAGE_NOT_FOUND("채팅 메시지를 찾을 수 없습니다."),
+    INVALID_CHAT_MESSAGE("잘못된 채팅 메시지입니다."),
+    
     // Other
     DATABASE_CONNECTION_FAILED("데이터베이스 연결에 실패했습니다."),
     NETWORK_ERROR("네트워크 오류가 발생했습니다."),

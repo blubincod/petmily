@@ -1,7 +1,7 @@
 # Vaccination 테스트
 
 ### 값 설정
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0ODU5NzQyLCJleHAiOjE3MjQ4NjMzNDIsInN1YiI6ImtpbWp1bjkxIn0.s7rukAOYwxJzgyyJLDKeVkiWoH9L0LWohejtiU8ddrg
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0OTA0NDMzLCJleHAiOjE3MjQ5MDgwMzMsInN1YiI6ImtpbWp1bjkxIn0.r1ZbWqZoRKORl2Zj-W5IbsQNhOCfa2xp-ZlFwIHHsJw
 @petId = 1
 @vaccinationId = 1
 
@@ -20,9 +20,8 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "diseaseId": 1,
+  "diseaseId": 2,
   "vaccinationDate": "2024-08-15",
-  "nextDueDate": "2025-08-15",
   "clinicName": "행복동물병원"
 }
 
@@ -42,8 +41,8 @@ Content-Type: application/json
 {
   "diseaseId": 1,
   "vaccinationDate": "2024-08-16",
-  "nextDueDate": "2025-08-16",
-  "clinicName": "사랑동물병원"
+  "nextVaccinationDate": "2025-08-23",
+  "clinicName": "사랑동물병원2"
 }
 
 ### 특정 예방 접종 삭제

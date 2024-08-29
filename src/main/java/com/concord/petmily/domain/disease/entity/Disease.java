@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -21,7 +23,7 @@ public class Disease {
 
     private String name;
     private String description;
-    private Integer vaccinationDeadline;
+    private Integer vaccinationCycle; // 예방 접종 주기
 
     @Enumerated(EnumType.STRING)
     private PetType petType;
@@ -30,8 +32,13 @@ public class Disease {
         Disease disease = new Disease();
         disease.setName(dto.getName());
         disease.setDescription(dto.getDescription());
-        disease.setVaccinationDeadline(dto.getVaccinationDeadline());
+        disease.setVaccinationCycle(dto.getVaccinationCycle());
         disease.setPetType(dto.getPetType());
         return disease;
+    }
+
+    // 다음 접종일을 계산하는 메서드
+    public LocalDate calculateNextDueDate(LocalDate vaccinationDate) {
+        return vaccinationDate.plusDays(this.getVaccinationCycle());
     }
 }

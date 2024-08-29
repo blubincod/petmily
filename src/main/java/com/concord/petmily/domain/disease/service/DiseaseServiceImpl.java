@@ -61,8 +61,8 @@ public class DiseaseServiceImpl implements DiseaseService {
         if (StringUtils.hasText(request.getDescription())) {
             disease.setDescription(request.getDescription());
         }
-        if (request.getVaccinationDeadline() != null) {
-            disease.setVaccinationDeadline(request.getVaccinationDeadline());
+        if (request.getVaccinationCycle() != null) {
+            disease.setVaccinationCycle(request.getVaccinationCycle());
         }
         if (request.getPetType() != null) {
             disease.setPetType(request.getPetType());
