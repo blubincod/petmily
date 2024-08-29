@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +19,12 @@ import java.util.List;
 
 /**
  * 반려동물의 접종 정보 관련 컨트롤러
- * - 예방 접종 정보 등록
- * - 특정 반려동물의 예방 접종 목록 조회
- * - 특정 예방 접종의 상세 정보 조회
- * - 특정 예방 접종 정보 수정
- * - 특정 예방 접종 정보 삭제
- * - 전체 접종 정보 조회 (관리자 기능)
+ * - 반려동물의 예방 접종 정보 등록
+ * - 반려동물의 모든 예방 접종 정보 조회
+ * - 반려동물의 예방 접종 정보를 수정
+ * - 반려동물의 특정 예방 접종 정보 수정
+ * - 반려동물의 특정 예방 접종 정보 삭제
+ * - 모든 예방 접종 정보 페이지네이션하여 조회 (관리자 기능)
  * <p>
  * 이 컨트롤러는 반려동물의 예방 접종 정보를 관리하는 API 엔드포인트를 제공합니다.
  * 각 엔드포인트는 특정 반려동물에 대한 접종 정보를 처리하며,
@@ -89,6 +90,7 @@ public class VaccinationController {
 
     // 전체 접종 조회 (관리자)
     @GetMapping("/vaccinations")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PagedApiResponse<List<VaccinationDto>>> getAllVaccinations(Pageable pageable) {
         Page<VaccinationDto> vaccinationsPage = vaccinationService.getAllVaccinations(pageable);
         return ResponseEntity.ok(PagedApiResponse.success(vaccinationsPage));
