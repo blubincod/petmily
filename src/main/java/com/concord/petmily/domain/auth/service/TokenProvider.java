@@ -93,6 +93,11 @@ public class TokenProvider {
      * @return 추출된 username
      */
     public String getUsername(String token) {
+        // "Bearer " 접두사 제거
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
         Claims claims = getClaims(token);
         System.out.println(claims.getSubject());
         return claims.getSubject();
