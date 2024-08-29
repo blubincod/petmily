@@ -24,6 +24,6 @@ public class WalkGoal {
 
     private String title; // 산책 목표 제목
     private int dailyTargetMinutes; // 일일 목표 산책 시간(분)
-    private LocalTime targetStartTime; // 목표 산책 시작 시간
-
+    private LocalTime targetStartTime; // 일일 목표 산책 시작 시간
+    private int dailyTargetCount; // 일일 목표 산책 횟수
 }

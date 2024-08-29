@@ -11,7 +11,7 @@ public class PasswordHashGenerator {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         // 이메일 앞부분을 기준으로 설정한 비밀번호
-        String[] passwords = {"lee123", "park123", "choi123", "jung123", "kim123"};
+        String[] passwords = {"admin"};
 
         // 각 비밀번호를 해싱
         for (String password : passwords) {

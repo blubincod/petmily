@@ -4,11 +4,16 @@ import com.concord.petmily.domain.walk.entity.Walk;
 import com.concord.petmily.domain.walk.entity.WalkStatus;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
+@Getter
+@Setter
 @Builder
 public class PetsWalkDetailDto {
     private List<Long> petIds;

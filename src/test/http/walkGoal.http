@@ -1,7 +1,7 @@
 # Walk Goal 요청
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0NjY4OTA0LCJleHAiOjE3MjQ2NzI1MDQsInN1YiI6ImtpbWp1bjkxIn0.QdLUNlnqtpBbmRQywpMqQIBxhG8zw9-H-cD2D4AT5e8
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0OTM5OTcxLCJleHAiOjE3MjQ5NDM1NzEsInN1YiI6ImFkbWluIn0.9JXPnaBSLPttCcSabAtyMKyXfqbAamAwu0mTY3M8k84
 @petId = 3
 
 ### 회원1 로그인 요청
