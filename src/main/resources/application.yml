@@ -4,6 +4,12 @@ spring:
   profiles:
     active: dev
 
+  jwt:
+    issuer: petmily
+    secret: c3R1ZHktc3ByaW5nYm9vdA==
+
+file:
+  dir: /petmily
 ---
 spring:
   config:
@@ -14,6 +20,18 @@ spring:
     driver-class-name: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        ddl-auto: update
+    defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
+  sql:
+    init:
+      mode: always
 
 ---
 spring:

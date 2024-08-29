@@ -1,0 +1,91 @@
+# User 요청
+
+### Value
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0OTM3OTQ2LCJleHAiOjE3MjQ5NDE1NDYsInN1YiI6ImFkbWluIn0.Kp8rlHe_kqRz9RhsLYkGy0nWVH6lodv7MjU1O7wfFv4
+@userId = 1
+@username = kimjun91
+
+### 회원가입 요청 - 회원1
+# @no-redirect
+POST http://localhost:8080/api/v1/users/signup
+Content-Type: application/json
+
+{
+  "username": "test",
+  "email": "test@example.com",
+  "password": "test123",
+  "address": "강원특별자치도 양양군",
+  "age": 33,
+  "birthDate": "1991-11-11",
+  "gender": "M",
+  "name": "테스트",
+  "nickname": "테테",
+  "phone": "010-1111-3333"
+}
+
+### 회원1 로그인 요청
+POST http://localhost:8080/api/v1/users/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+### 회원5 로그인 요청
+POST http://localhost:8080/api/v1/users/login
+Content-Type: application/json
+
+{
+  "username": "jungeun97",
+  "password": "jung123"
+}
+
+### 로그아웃 요청 (토큰 필요)
+POST http://localhost:8080/api/v1/users/logout
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+### 사용자 정보 조회
+# @no-redirect
+GET http://localhost:8080/api/v1/users/{{userId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+### 사용자 정보 수정
+PUT http://localhost:8080/api/v1/users/{{userId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "username": "test",
+  "email": "testupdate@example.com",
+  "password": "test123",
+  "address": "강원특별자치도 양양군",
+  "age": 33,
+  "birthDate": "1991-11-11",
+  "gender": "M",
+  "name": "테스트",
+  "nickname": "테테",
+  "phone": "010-1111-3333"
+}
+
+### 회원 Role, Status 변경 (관리자 전용)
+PUT http://localhost:8080/api/v1/users/admin/7
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "role": "ADMIN",
+  "status": "ACTIVE"
+}
+
+### 사용자 삭제 (본인 또는 관리자)
+DELETE http://localhost:8080/api/v1/users/delete/7
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+
+### 회원 통계 조회 (관리자 전용)
+GET http://localhost:8080/api/v1/users/statistics
+Authorization: Bearer {{accessToken}}

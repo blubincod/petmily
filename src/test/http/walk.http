@@ -1,0 +1,108 @@
+# Walk 테스트
+
+### value
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0OTM4NDg5LCJleHAiOjE3MjQ5NDIwODksInN1YiI6ImtpbWp1bjkxIn0.WlhtoJEJbPTwk4vAt_KwMWtBYtpR7kGUnlyO_8ES3Hk
+#@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0MzE4NTk5LCJleHAiOjE3MjQzMjIxOTksInN1YiI6Imp1bmdldW45NyJ9.qxEPcSysWV68F-mhrcnCMWFhHeodou__GKDz7H78DE4
+@username = kimjun91
+@walkId = 20
+@petIds = 1,3
+@petId = 3
+
+### 회원1 로그인 요청
+POST http://localhost:8080/api/v1/users/login
+Content-Type: application/json
+
+{
+  "username": "kimjun91",
+  "password": "kim123"
+}
+
+### 회원5 로그인 요청
+POST http://localhost:8080/api/v1/users/login
+Content-Type: application/json
+
+{
+  "username": "jungeun97",
+  "password": "jung123"
+}
+
+### 산책 시작
+POST http://localhost:8080/api/v1/walks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "petIds" :  [{{petIds}}],
+  "startTime": "2024-08-12T12:00:00Z"
+}
+
+### 산책 종료
+PUT http://localhost:8080/api/v1/walks/{{walkId}}/end
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "endTime": "2024-08-13T13:00:00Z",
+  "distance": 5.2
+}
+
+### 활동 전송 - 대변
+POST http://localhost:8080/api/v1/walks/{{walkId}}/activities
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "petId": {{petId}},
+  "latitude": 37.7749,
+  "longitude": 122.4194,
+  "activity": "POOP",
+  "timestamp": "2024-08-10T12:10:00Z"
+}
+
+### 활동 전송 - 소변
+POST http://localhost:8080/api/v1/walks/{{walkId}}/activities
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "petId": {{petId}},
+  "latitude": 37.7749,
+  "longitude": 122.4194,
+  "activity": "PEE",
+  "timestamp": "2024-08-10T12:20:00Z"
+}
+
+### 활동 전송 - 수분 섭취
+POST http://localhost:8080/api/v1/walks/{{walkId}}/activities
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{ "petId": {{petId}},
+  "latitude": 37.7749,
+  "longitude": 122.4194,
+  "activity": "WATER",
+  "timestamp": "2024-08-10T12:30:00Z"
+}
+
+#### 특정 산책 상세 기록 조회
+GET http://localhost:8080/api/v1/walks/10
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+#### 반려동물 기간별 일일 산책 목록과 요약 조회
+GET http://localhost:8080/api/v1/walks/pets/3/walks?startDate=2024-08-12&endDate=2024-08-12&page=0&size=10
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+#### 반려동물의 기간별 일일 산책 통계 조회
+GET http://localhost:8080/api/v1/walks/pets/3/statistics/daily?startDate=2024-08-01&endDate=2024-08-25&page=0&size=10
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+### 회원의 모든 반려동물의 특정 기간 산책 기록 조회
+GET http://localhost:8080/api/v1/walks/users/{{username}}?startDate=2024-08-01&endDate=2024-08-31&page=0&size=10
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+### 회원의 모든 반려동물별 전체 산책 통계 조회
+GET http://localhost:8080/api/v1/walks/users/{{username}}/statistics
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json

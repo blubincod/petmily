@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walk</title>
+</head>
+<body>
+<div>
+    <a href="/index.html">홈</a>
+    <a href="/open-chat-list.html">오픈채팅 둘러보기</a>
+    <a href="/post.html">게시판</a>
+</div>
+<h1>산책</h1>
+<button id="startWalking">산책 시작</button>
+<button id="stopWalking">산책 종료</button>
+<div id="activityButtons" style="display: none;">
+    <select id="petSelect"></select>
+    <div id="selectedPetInfo"></div>
+    <button id="poop">Poop</button>
+    <button id="pee">Pee</button>
+    <button id="water">Water</button>
+</div>
+<script>
+    let walkingInterval
+    let currentLocation = {latitude: null, longitude: null}
+    let walkId = null
+    let walkingPets = []
+    let selectedPetId = null
+
+    // 산책 시작 버튼
+    document.getElementById('startWalking').addEventListener('click', () => {
+        if (!walkingInterval) {
+            // 서버에 산책 시작 요청
+            fetch('http://localhost:8080/api/v1/walks', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(),
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    petIds: [1, 3],
+                    startTime: new Date()
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('산책 시작:', data)
+
+                    // 서버로부터 받은 산책 ID 저장
+                    walkId = data.walkId;
+                    walkingPets = data.pets; // 서버에서 반환한 산책 중인 반려동물 목록
+                    console.log("산책 중인 반려동물: ", walkingPets);
+                    walkingInterval = setInterval(() => updateLocation(walkId), 3000)
+                    updatePetSelect();
+
+                    // 산책 시작 후 활동 버튼 보이기
+                    document.getElementById('activityButtons').style.display = 'block';
+                })
+                .catch((error) => console.error('Error:', error));
+        }
+    })
+
+    // 반려동물 선택 드롭다운 업데이트
+    function updatePetSelect() {
+        const select = document.getElementById('petSelect');
+        select.innerHTML = '';
+        if (walkingPets && walkingPets.length > 0) {
+            walkingPets.forEach(petId => {
+                const option = document.createElement('option');
+                option.value = petId;
+                option.textContent = `반려동물 ID: ${petId}`;
+                select.appendChild(option); // 생성한 옵션을 드롭다운에 추가
+            });
+            select.addEventListener('change', updateSelectedPetInfo);
+            updateSelectedPetInfo();
+        } else {
+            const option = document.createElement('option');
+            option.textContent = '산책 가능한 반려동물이 없습니다';
+            select.appendChild(option);
+            document.getElementById('selectedPetInfo').textContent = '산책 가능한 반려동물이 없습니다';
+        }
+    }
+
+    // 선택된 반려동물의 정보를 업데이트
+    function updateSelectedPetInfo() {
+        const select = document.getElementById('petSelect'); // 선택된 반려동물 요소
+        const selectedPetInfo = document.getElementById('selectedPetInfo'); // 선택된 반려동물 정보
+
+        if (select.value) {
+            selectedPetId = select.value;
+            selectedPetInfo.textContent = `선택된 반려동물 ID: ${select.value}`;
+        } else {
+            selectedPetInfo.textContent = '반려동물을 선택해주세요';
+        }
+    }
+
+    // 산책 중지 버튼
+    document.getElementById('stopWalking').addEventListener('click', () => {
+        if (walkingInterval && walkId) {
+            fetch(`http://localhost:8080/api/v1/walks/${walkId}/end`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(),
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    distance: 7.7,
+                    endTime: new Date()
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('산책 종료', data)
+                    clearInterval(walkingInterval);
+                    walkingInterval = null
+                    walkId = null; // walkId 초기화
+                })
+                .catch((error) => console.error('Error:', error));
+        }
+    })
+
+    // 활동 전송 버튼 - 대변
+    document.getElementById('poop').addEventListener('click', () => {
+        if (walkingInterval) {
+            sendActivity('POOP', walkId, selectedPetId)
+        }
+    })
+    // 활동 전송 버튼 - 소변
+    document.getElementById('pee').addEventListener('click', () => {
+        if (walkingInterval) {
+            sendActivity('PEE', walkId, selectedPetId)
+        }
+    })
+    // 활동 전송 버튼 - 수분 섭취
+    document.getElementById('water').addEventListener('click', () => {
+        if (walkingInterval) {
+            sendActivity('WATER', walkId, selectedPetId)
+        }
+    })
+
+    // 로컬 스토리지의 토큰 가져오기
+    function getToken() {
+        return localStorage.getItem('token');
+    }
+
+    // 위치 정보 갱신 메서드
+    function updateLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                currentLocation.latitude = position.coords.latitude
+                currentLocation.longitude = position.coords.longitude
+                console.log('위치 업데이트:', currentLocation)
+            }, (error) => {
+                console.error('Error getting location:', error)
+            })
+        } else {
+            console.error('현재 브라우저는 지원하지 않습니다.')
+        }
+    }
+
+    // 산책 활동 전송 메서드
+    function sendActivity(activity, walkId, petId) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const latitude = position.coords.latitude
+                const longitude = position.coords.longitude
+                // 서버로 위치 정보 전송
+                fetch(`http://localhost:8080/api/v1/walks/${walkId}/activities`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + getToken(),
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        petId: petId,
+                        latitude: latitude,
+                        longitude: longitude,
+                        activity: activity,
+                        timestamp: new Date()
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => console.log('Success:', data))
+                    .catch((error) => console.error('Error:', error))
+            }, (error) => {
+                console.error('Error getting location:', error)
+            })
+        } else {
+            console.error('현재 브라우저는 지원하지 않습니다.')
+        }
+    }
+</script>
+</body>
+</html>
