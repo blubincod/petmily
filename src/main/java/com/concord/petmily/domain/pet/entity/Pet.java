@@ -33,10 +33,10 @@ public class Pet {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Category category;
+    private PetType type;
 
     @Column(nullable = false, length = 50)
-    private String brand;
+    private String breed;
 
     @Column(nullable = false)
     private LocalDate birthDate;
@@ -52,45 +52,46 @@ public class Pet {
     private Gender gender;
 
     @Column(nullable = false)
-    private Boolean isPetsNeuter;
+    private Boolean isNeutered; // 중성화 여부
 
     @Column(nullable = false)
     private double weight;
 
     @Column(name = "pet_status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private PetStatus petStatus;
+    private PetStatus status;
 
     @Column(length = 255)
     private String image;
 
     @Column(unique = true, length = 20)
-    private String chip;
+    private String chipNumber;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(nullable = false)
-    private LocalDateTime modifiedAt;
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "pet")
     private List<WalkParticipant> walkParticipants;
 
-    public static Pet fromEntity(User user, PetDto.Create request) {
+    public static Pet fromDto(User user, PetDto.Create request) {
         return Pet.builder()
                 .user(user)
-                .category(request.getPetsCategory())
-                .brand(request.getPetsBreed())
+                .type(request.getType())
+                .breed(request.getBreed())
                 .birthDate(request.getBirthDate())
-                .age(request.getPetsAge())
-                .name(request.getPetsName())
-                .gender(request.getPetsGender())
-                .isPetsNeuter(request.isPetsNeuter())
-                .weight(request.getPetsWeight())
-                .petStatus(PetStatus.ACTIVE)
-                .chip(request.getPetsChip().isEmpty() ? null : request.getPetsChip())
+                .age(request.getAge())
+                .name(request.getName())
+                .gender(request.getGender())
+                .isNeutered(request.isNeutered())
+                .weight(request.getWeight())
+                .status(PetStatus.ACTIVE)
+                .image(request.getImageUrl())
+                .chipNumber(request.getChipNumber() != null && !request.getChipNumber().isEmpty() ? request.getChipNumber() : null)
                 .build();
     }
 }

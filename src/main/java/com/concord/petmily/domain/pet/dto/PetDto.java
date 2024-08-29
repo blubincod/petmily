@@ -1,6 +1,6 @@
 package com.concord.petmily.domain.pet.dto;
 
-import com.concord.petmily.domain.pet.entity.Category;
+import com.concord.petmily.domain.pet.entity.PetType;
 import com.concord.petmily.domain.pet.entity.Gender;
 
 import java.time.LocalDate;
@@ -14,58 +14,53 @@ public class PetDto {
   @Getter
   @Setter
   public static class Create {
+    @NotNull
+    private PetType type;
 
-    @NotNull(message = "반려동물의 카테고리는 필수입니다.")
-    private Category petsCategory;
+    @NotBlank
+    private String breed;
 
-    @NotBlank(message = "반려동물의 품종은 필수입니다.")
-    private String petsBreed;
+    @NotBlank
+    private String name;
 
-    @NotBlank(message = "반려동물의 이름은 필수입니다.")
-    private String petsName;
-
-    @NotNull(message = "반려동물의 생년월일은 필수입니다.")
-    @PastOrPresent(message = "반려동물의 생년월일은 현재 날짜 또는 과거여야 합니다.")
+    @NotNull
+    @PastOrPresent
     private LocalDate birthDate;
 
-    @Min(value = 0, message = "반려동물의 나이는 0 이상이어야 합니다.")
-    private int petsAge;
+    @Min(0)
+    private int age;
 
-    @NotNull(message = "반려동물의 성별은 필수입니다.")
-    private Gender petsGender;
-    @NotNull(message = "반려동물의 중성화 여부는 필수입니다.")
-    private boolean isPetsNeuter;
+    @NotNull
+    private Gender gender;
 
-    @Min(value = 0, message = "반려동물의 무게는 0보다 커야 합니다.")
-    private double petsWeight;
+    @NotNull
+    private boolean isNeutered;
 
-    private String petsImage;
+    @Min(0)
+    private double weight;
 
-    private String petsChip;
+    private String imageUrl;
+
+    private String chipNumber;
   }
 
   @Getter
   @AllArgsConstructor
-  public static class PetsVo{
-    private Long petId;
-    private String petBrand;
-    private String petName;
-    private Gender petGender;
-    private String petImages;
+  public static class PetsVo {
+    private Long id;
+    private String breed;
+    private String name;
+    private Gender gender;
+    private String imageUrl;
   }
 
   @Getter
   @Setter
-  public static class ModifierPet{
-
-    private String petsName;
-
+  public static class ModifyPet {
+    private String name;
     private LocalDate birthDate;
-
-    private Boolean isPetsNeuter;
-
-    private Double petsWeight;
-
-    private String petsChip;
+    private Boolean isNeutered;
+    private Double weight;
+    private String chipNumber;
   }
 }

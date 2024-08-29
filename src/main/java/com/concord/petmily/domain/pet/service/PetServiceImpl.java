@@ -41,27 +41,23 @@ public class PetServiceImpl implements PetService {
     @Transactional(rollbackFor = Exception.class)
     public void registerPet(String username, PetDto.Create request, MultipartFile profileImage) {
         User user = getUser(username);
-        // 새로운 반려동물 엔티티를 저장
-        Pet petEntity = petRepository.save(Pet.fromEntity(user, request));
-        // 프로필 이미지를 저장하고 파일 경로를 반환
+        Pet petEntity = petRepository.save(Pet.fromDto(user, request));
         String savedFilePath = saveProfile(user.getId(), petEntity.getId(), profileImage);
-        request.setPetsImage(savedFilePath);
+        request.setImageUrl(savedFilePath);
 
         try {
-            // 저장된 프로필 경로를 반영하여 다시 저장
-            petRepository.save(Pet.fromEntity(user, request));
+            petRepository.save(Pet.fromDto(user, request));
         } catch (Exception e) {
-            // 만약 저장에 실패하면, 업로드된 파일을 삭제
             if (savedFilePath != null) {
                 File picFile = new File(FileUtils.getAbsolutePath(fileDir), savedFilePath);
                 if (picFile.exists() && !picFile.delete()) {
-                    // 파일 삭제 실패 처리 (로그 기록 또는 예외 발생)
                     throw new RuntimeException("파일 삭제 중 오류 발생: " + picFile.getAbsolutePath());
                 }
             }
-            throw e;  // 원본 예외를 다시 던져 트랜잭션 롤백 유도
+            throw e;
         }
     }
+
 
     // 프로필 이미지 저장 메소드
     private String saveProfile(Long userId, Long petId, MultipartFile profileImage) {
@@ -100,9 +96,7 @@ public class PetServiceImpl implements PetService {
     public Page<Pet> getPetsByUserId(String username, Pageable pages) {
         User user = getUser(username);
 
-        Page<Pet> pets = petRepository.findByUserIdAndPetStatus(user.getId(), PetStatus.ACTIVE, pages);
-
-        return pets;
+        return petRepository.findByUserIdAndStatus(user.getId(), PetStatus.ACTIVE, pages);
     }
 
     /**
@@ -124,53 +118,38 @@ public class PetServiceImpl implements PetService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updatePet(Long petId, String username, PetDto.ModifierPet request,
+    public void updatePet(Long petId, String username, PetDto.ModifyPet request,
                           MultipartFile profile) {
         User user = getUser(username);
-
-        // 사용자 ID와 반려동물 ID로 반려동물 정보 조회
         Pet pet = petRepository.findByIdAndUserId(petId, user.getId())
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 반려동물 입니다."));
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 반려동물입니다."));
 
-        // 반려동물 이름 수정
-        if (request.getPetsName() != null) {
-            pet.setName(request.getPetsName());
+        if (request.getName() != null) {
+            pet.setName(request.getName());
         }
-
-        // 중성화 여부 수정
-        if (request.getIsPetsNeuter() != null) {
-            pet.setIsPetsNeuter(request.getIsPetsNeuter());
+        if (request.getIsNeutered() != null) {
+            pet.setIsNeutered(request.getIsNeutered());
         }
-
-        // 생년월일 수정
         if (request.getBirthDate() != null) {
             pet.setBirthDate(request.getBirthDate());
         }
-
-        // 체중 수정
-        if (request.getPetsWeight() != null) {
-            pet.setWeight(request.getPetsWeight());
+        if (request.getWeight() != null) {
+            pet.setWeight(request.getWeight());
         }
 
-        // 새로운 프로필 이미지가 업로드된 경우 처리
-        if (!profile.isEmpty()) {
-            // 기존 프로필 이미지 삭제
+        if (profile != null && !profile.isEmpty()) {
             if (pet.getImage() != null) {
                 File file = new File(FileUtils.getAbsolutePath(fileDir), pet.getImage());
                 if (file.exists() && !file.delete()) {
-                    // 예외 발생: 파일 삭제 실패
                     throw new RuntimeException("기존 프로필 파일 삭제에 실패했습니다.");
                 }
             }
-
-            // 새로운 프로필 이미지 저장
             String saveProfilePath = saveProfile(user.getId(), pet.getId(), profile);
-            pet.setImage(saveProfilePath);  // 새 이미지 경로 설정
+            pet.setImage(saveProfilePath);
         }
 
-        // 반려동물 마이크로칩 번호 수정
-        if (request.getPetsChip() != null) {
-            pet.setChip(request.getPetsChip());
+        if (request.getChipNumber() != null) {
+            pet.setChipNumber(request.getChipNumber());
         }
     }
 
@@ -184,17 +163,14 @@ public class PetServiceImpl implements PetService {
         Pet pet = petRepository.findByIdAndUserId(petId, user.getId())
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 반려동물입니다."));
 
-        // 반려동물에 프로필 이미지가 있는 경우 파일 삭제
         if (pet.getImage() != null) {
             File file = new File(FileUtils.getAbsolutePath(fileDir), pet.getImage());
             if (file.exists() && !file.delete()) {
-                // 예외 발생: 파일 삭제 실패
                 throw new RuntimeException("프로필 파일 삭제에 실패했습니다.");
             }
         }
 
-        // 반려동물 상태를 'DELETED'로 설정하여 논리적 삭제
-        pet.setPetStatus(PetStatus.DELETED);
+        pet.setStatus(PetStatus.DELETED);
     }
 
 

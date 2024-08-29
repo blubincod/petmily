@@ -35,37 +35,37 @@ values
      '2024-08-14T08:00:00', '2024-08-14T08:00:00');
 
 -- 반려동물 데이터
-INSERT INTO pet (USER_ID, CATEGORY, BRAND, BIRTH_DATE, AGE, NAME, GENDER,
-                 IS_PETS_NEUTER, WEIGHT, PET_STATUS, CHIP, CREATE_AT,
-                 MODIFIED_AT)
-VALUES-- USER_ID 1의 반려동물
-
-      (1, 'DOG', '래브라도 리트리버', '2020-05-15', 3, '맥스', 'MALE', true, 30.5,
-       'ACTIVE', 'CHIP123456', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (1, 'CAT', '페르시안', '2021-03-10', 2, '루나', 'FEMALE', true, 4.2,
-       'ACTIVE', 'CHIP234567', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (1, 'DOG', '골든 리트리버', '2019-11-20', 4, '찰리', 'MALE', false,
-       28.7, 'ACTIVE', 'CHIP345678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      -- USER_ID 2의 반려동물
-      (2, 'CAT', '샴', '2022-01-05', 1, '밀로', 'MALE', false, 3.8, 'ACTIVE',
-       'CHIP456789', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (2, 'DOG', '푸들', '2020-09-30', 3, '벨라', 'FEMALE', true, 15.3,
-       'ACTIVE', 'CHIP567890', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (2, 'CAT', '메인쿤', '2021-07-12', 2, '올리버', 'MALE', true, 5.5,
-       'ACTIVE', 'CHIP678901', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      -- USER_ID 3의 반려동물
-      (3, 'DOG', '저먼 셰퍼드', '2019-04-22', 4, '로키', 'MALE', true, 35.2,
-       'ACTIVE', 'CHIP789012', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (3, 'CAT', '브리티시 숏헤어', '2020-12-03', 2, '루시', 'FEMALE', false,
-       4.0, 'ACTIVE', 'CHIP890123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      (3, 'DOG', '비글', '2021-08-17', 2, '데이지', 'FEMALE', true, 12.8,
-       'ACTIVE', 'CHIP901234', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      -- USER_ID 4의 반려동물
-      (4, 'DOG', '시바 이누', '2021-02-14', 2, '하치', 'MALE', false, 10.5,
-       'ACTIVE', 'CHIP012345', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-      -- USER_ID 5의 반려동물
-      (5, 'DOG', '웰시 코기', '2020-07-30', 3, '코코', 'FEMALE', true, 12.3, 'ACTIVE',
-       'CHIP123450', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO pet (USER_ID, TYPE, BREED, BIRTH_DATE, AGE, NAME, GENDER,
+                 IS_NEUTERED, WEIGHT, PET_STATUS, CHIP_NUMBER, CREATED_AT,
+                 UPDATED_AT)
+VALUES
+-- USER_ID 1의 반려동물
+(1, 'DOG', '래브라도 리트리버', '2020-05-15', 3, '맥스', 'MALE', true, 30.5,
+ 'ACTIVE', 'CHIP123456', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 'CAT', '페르시안', '2021-03-10', 2, '루나', 'FEMALE', true, 4.2,
+ 'ACTIVE', 'CHIP234567', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 'DOG', '골든 리트리버', '2019-11-20', 4, '찰리', 'MALE', false,
+ 28.7, 'ACTIVE', 'CHIP345678', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- USER_ID 2의 반려동물
+(2, 'CAT', '샴', '2022-01-05', 1, '밀로', 'MALE', false, 3.8, 'ACTIVE',
+ 'CHIP456789', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'DOG', '푸들', '2020-09-30', 3, '벨라', 'FEMALE', true, 15.3,
+ 'ACTIVE', 'CHIP567890', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'CAT', '메인쿤', '2021-07-12', 2, '올리버', 'MALE', true, 5.5,
+ 'ACTIVE', 'CHIP678901', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- USER_ID 3의 반려동물
+(3, 'DOG', '저먼 셰퍼드', '2019-04-22', 4, '로키', 'MALE', true, 35.2,
+ 'ACTIVE', 'CHIP789012', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'CAT', '브리티시 숏헤어', '2020-12-03', 2, '루시', 'FEMALE', false,
+ 4.0, 'ACTIVE', 'CHIP890123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'DOG', '비글', '2021-08-17', 2, '데이지', 'FEMALE', true, 12.8,
+ 'ACTIVE', 'CHIP901234', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- USER_ID 4의 반려동물
+(4, 'DOG', '시바 이누', '2021-02-14', 2, '하치', 'MALE', false, 10.5,
+ 'ACTIVE', 'CHIP012345', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- USER_ID 5의 반려동물
+(5, 'DOG', '웰시 코기', '2020-07-30', 3, '코코', 'FEMALE', true, 12.3, 'ACTIVE',
+ 'CHIP123450', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 산책 데이터
 INSERT INTO walk (user_id, walk_status, distance, duration, start_time,
@@ -235,7 +235,8 @@ VALUES (3, 'OO동 저녁 8시 산책 모임', '퇴근 후 함께 산책하며 �
         NULL);
 
 -- 오픈 채팅방 참여자 데이터
-INSERT INTO open_chat_participant (user_id, open_chat_id, status, joined_at, left_at)
+INSERT INTO open_chat_participant (user_id, open_chat_id, status, joined_at,
+                                   left_at)
 VALUES
 -- 채팅방 1
 (1, 1, 'ACTIVE', '2024-08-15 18:30:00', NULL),
@@ -282,3 +283,28 @@ VALUES
 (1, 10, 'ACTIVE', '2024-08-24 13:00:00', NULL),
 (2, 10, 'ACTIVE', '2024-08-24 13:30:00', NULL),
 (5, 10, 'ACTIVE', '2024-08-24 14:00:00', NULL);
+
+-- 질병 데이터
+INSERT INTO disease (name, description, vaccination_cycle, pet_type)
+VALUES
+-- 개 질병
+('광견병', '치명적인 바이러스성 질병으로, 모든 포유류에 감염될 수 있습니다.', 365, 'DOG'),
+('파보바이러스', '심각한 위장 질환을 일으키는 바이러스성 질병입니다.', 365, 'DOG'),
+('디스템퍼', '호흡기, 소화기, 신경계에 영향을 미치는 바이러스성 질병입니다.', 365, 'DOG'),
+('켄넬코프', '전염성이 강한 호흡기 질환입니다.', 180, 'DOG'),
+('레프토스피라증', '박테리아로 인한 질병으로 간과 신장에 영향을 줍니다.', 365, 'DOG'),
+
+-- 고양이 질병
+('범백혈구감소증', '매우 전염성이 강하고 치명적인 바이러스성 질병입니다.', 365, 'CAT'),
+('백혈병', '면역 체계를 약화시키는 바이러스성 질병입니다.', 365, 'CAT'),
+('칼리시바이러스', '상부 호흡기 감염을 일으키는 바이러스성 질병입니다.', 365, 'CAT'),
+('허피스바이러스', '상부 호흡기 감염과 안구 질환을 일으키는 바이러스성 질병입니다.', 365, 'CAT'),
+('클라미디아', '결막염과 상부 호흡기 감염을 일으키는 세균성 질병입니다.', 365, 'CAT'),
+
+-- 기타 동물 질병
+-- 토끼 질병
+('마이크소마토시스', '토끼에게 치명적인 바이러스성 질병입니다.', 180, 'OTHER'),
+('토끼 출혈병', '급성 바이러스성 질병으로 간에 영향을 줍니다.', 365, 'OTHER'),
+-- 햄스터 질병
+('웻테일', '햄스터의 꼬리와 항문 주변이 젖어 있는 상태를 말합니다.', NULL, 'OTHER'),
+('치아 과다 성장', '햄스터의 치아가 지속적으로 자라 문제를 일으키는 상태입니다.', NULL, 'OTHER');
