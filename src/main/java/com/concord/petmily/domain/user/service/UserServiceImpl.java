@@ -150,6 +150,7 @@ public class UserServiceImpl implements UserService {
         Long countRegisteredWithinOneMonth = userRepository.countByRegisteredAtAfter(oneMonthAgo);
         Long countRegisteredWithinOneWeek = userRepository.countByRegisteredAtAfter(oneWeekAgo);
 
+        // FIXME 줄발꿈 노출 변경
         String result = String.format(
                 "총 사용자 : %d명%n" +
                         "활성 사용자 : %d명%n" +

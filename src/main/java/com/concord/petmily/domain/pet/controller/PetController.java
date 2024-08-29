@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * FIXME 전체
  * 반려동물 관련 컨트롤러
  * [반려동물 CRUD]
  * - 반려동물 등록

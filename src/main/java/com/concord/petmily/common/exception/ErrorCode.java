@@ -22,8 +22,8 @@ public enum ErrorCode {
     USERNAME_ALREADY_EXISTS("이미 존재하는 아이디 입니다."),
     EMAIL_ALREADY_EXISTS("이미 존재하는 이메일 입니다."),
     INVALID_PET_TYPE("잘못된 반려동물 유형입니다."),
-    INVALID_ROLE_TYPE("잘못된 ROLE 입니다."),
-    INVALID_STATUS_TYPE("잘못된 STATUS 입니다."),
+    INVALID_ROLE_TYPE("잘못된 역할입니다."),
+    INVALID_STATUS_TYPE("잘못된 상태입니다."),
 
     // Pet
     PET_NOT_FOUND("등록되지 않은 반려동물입니다."),

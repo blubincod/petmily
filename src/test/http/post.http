@@ -1,7 +1,7 @@
 # post 테스트
 
 ### value
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0ODcwNDA2LCJleHAiOjE3MjQ4NzQwMDYsInN1YiI6Imp1bmdldW45NyJ9.iYxynnlBeZNKvAxb5yCyUtAzQ6OvPCthPdr5RnZ35Wc
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0OTM5OTcxLCJleHAiOjE3MjQ5NDM1NzEsInN1YiI6ImFkbWluIn0.9JXPnaBSLPttCcSabAtyMKyXfqbAamAwu0mTY3M8k84
 
 ### 회원1 로그인 요청
 POST http://localhost:8080/api/v1/users/login
@@ -12,13 +12,13 @@ Content-Type: application/json
   "password": "kim123"
 }
 
-### 회원5 로그인 요청
+### 관리자 로그인 요청
 POST http://localhost:8080/api/v1/users/login
 Content-Type: application/json
 
 {
-  "username": "jungeun97",
-  "password": "jung123"
+  "username": "admin",
+  "password": "admin"
 }
 
 
@@ -116,13 +116,11 @@ Content-Type: application/json
 ["#동물", "#장난감"]
 
 ### 게시물 카테고리 수정 (관리자 전용)
-PUT http://localhost:8080/api/v1/posts/category/1
+PUT http://localhost:8080/api/v1/posts/category/2
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 7
-
-
 
 ### 댓글 등록
 POST http://localhost:8080/api/v1/posts/1/comment

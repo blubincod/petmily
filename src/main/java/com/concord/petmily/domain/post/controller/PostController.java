@@ -141,7 +141,7 @@ public class PostController {
      * @param categoryId 변경될 카테고리
      * @param userDetails 현재 인증된 사용자의 세부 정보
      */
-    @PutMapping("/category/{postId}")
+    @PutMapping("/{postId}/category")
     public ResponseEntity<ApiResponse<PostDto.Response>> updateCategory (@PathVariable Long postId,
                                                             @RequestBody Long categoryId,
                                                             @AuthenticationPrincipal UserDetails userDetails){

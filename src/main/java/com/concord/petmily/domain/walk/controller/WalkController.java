@@ -108,13 +108,13 @@ public class WalkController {
     }
 
     /**
-     * 특정 산책 상세 조회
+     * FIXME 특정 산책 상세 조회
      */
     @GetMapping("/{walkId}")
-    public ResponseEntity<?> getWalkDetail(@PathVariable Long walkId) {
+    public ResponseEntity<WalkDetailDto> getWalkDetail(@PathVariable Long walkId) {
         WalkDetailDto walkDetail = walkService.getWalkDetail(walkId);
 
-        return ResponseEntity.ok(walkDetail);
+        return ResponseEntity.status(HttpStatus.OK).body(walkDetail);
     }
 
     /**
