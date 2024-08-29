@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface OpenChatParticipantRepository extends JpaRepository<OpenChatParticipant, OpenChatParticipantId> {
     int countByOpenChatAndStatus(OpenChat openChat, ParticipantStatus status);
 
-    Optional<OpenChatParticipant> findByOpenChatAndUser(OpenChat openChat, User user);
+    Optional<OpenChatParticipant> findByUserIdAndOpenChatId(Long openChatId, Long userId);
 }

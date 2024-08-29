@@ -10,14 +10,9 @@ function getChatRoomId() {
 // WebSocket 서버에 연결하는 함수
 function connect() {
     // SockJS를 사용하여 WebSocket 연결 생성
-    let socket = new SockJS('/ws');
+    let socket = new SockJS('http://localhost:8080/ws');
     // Stomp 클라이언트 생성
     stompClient = Stomp.over(socket);
-
-    // 연결 시 사용할 헤더 (인증 토큰 포함)
-    let headers = {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-    };
 
     let token = localStorage.getItem('token');
     if (!token) {
@@ -26,14 +21,20 @@ function connect() {
         return;
     }
 
+    // 연결 시 사용할 헤더 (인증 토큰 포함)
+    let headers = {
+        'Authorization': 'Bearer ' + token
+    };
+
     // Stomp 클라이언트로 서버에 연결
     stompClient.connect(headers,
         // 연결 성공 시 콜백
         function (frame) {
             console.log('Connected: ' + frame);
-            // 메시지 토픽 구독
-            stompClient.subscribe('/topic/messages', function (message) {
-                showMessage(JSON.parse(message.body).content);
+            let chatRoomId = getChatRoomId();
+            // 메시지 토픽 구독 (채팅방 ID 포함)
+            stompClient.subscribe('/topic/messages/' + chatRoomId, function (message) {
+                showMessage(JSON.parse(message.body));
             });
         },
         // 연결 실패 시 콜백
@@ -59,8 +60,15 @@ function disconnect() {
 function sendMessage(message) {
     if (stompClient && stompClient.connected) {
         let token = localStorage.getItem('token');
+        let chatRoomId = getChatRoomId();
         // 메시지 전송 시 인증 토큰 포함
-        stompClient.send("/app/chat", {'Authorization': 'Bearer ' + token}, JSON.stringify({'message': message}));
+        stompClient.send("/app/api/v1/chat.sendMessage",
+            {'Authorization': 'Bearer ' + token},
+            JSON.stringify({
+                'content': message,
+                'openChatId': chatRoomId
+            })
+        );
     } else {
         console.error('STOMP client is not connected');
     }
@@ -70,7 +78,7 @@ function sendMessage(message) {
 function showMessage(message) {
     let messageContainer = document.getElementById('message-container');
     let messageElement = document.createElement('p');
-    messageElement.textContent = message;
+    messageElement.textContent = `${message.sender.username}: ${message.content}`;
     messageContainer.appendChild(messageElement);
 }
 

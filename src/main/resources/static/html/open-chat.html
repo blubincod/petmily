@@ -14,7 +14,7 @@
             background-color: #f0f0f0;
         }
 
-        #chat-page {
+        #chatMessage-page {
             max-width: 800px;
             margin: 0 auto;
             background-color: white;
@@ -84,30 +84,18 @@
 <div>
     <a href="/index.html">홈</a>
     <a href="/walk.html">산책</a>
+    <a href="/open-chat-list.html">오픈채팅 둘러보기</a>
     <a href="/post.html">게시판</a>
 </div>
 <h1>오픈 채팅</h1>
 
-<div id="chat-page">
+<div id="chatMessage-page">
     <div id="message-container"></div>
     <form id="message-form">
         <input type="text" id="message" placeholder="메시지를 입력하세요..."/>
         <button type="submit">전송</button>
     </form>
 </div>
-<script>
-    // 로컬 스토리지에서 토큰 가져오기
-    var token = localStorage.getItem('token');
-
-    // 토큰이 없으면 로그인 페이지로 리다이렉트
-    if (!token) {
-        window.location.href = '/login.html';
-    }
-</script>
-<script>
-    console.log("Hello!!");
-    console.log("Token" ,token)
-</script>
 <script src="js/chat.js"></script>
 
 </body>
