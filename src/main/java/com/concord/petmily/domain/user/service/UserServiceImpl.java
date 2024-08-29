@@ -1,6 +1,7 @@
 package com.concord.petmily.domain.user.service;
 
 import com.concord.petmily.common.exception.ErrorCode;
+import com.concord.petmily.domain.user.dto.AddAdminRequest;
 import com.concord.petmily.domain.user.exception.UserException;
 import com.concord.petmily.domain.user.dto.AddUserRequest;
 import com.concord.petmily.domain.user.entity.Role;
@@ -57,6 +58,58 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user).getId();
     }
 
+    // 회원 정보 수정
+    @Override
+    public User updateUser(String username, Long targetId, AddUserRequest dto) {
+        User user = findByUsername(username);
+
+        User target = findById(targetId);
+
+        // 사용자와 targetId가 다른 경우 에러
+        if (!Objects.equals(user.getId(), targetId)) {
+            throw new UserException(ErrorCode.UNAUTHORIZED_ACCESS);
+        }
+
+        validateUniqueUser(dto.getUsername(), dto.getEmail());
+
+        target.setUsername(dto.getUsername());
+        target.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+        target.setEmail(dto.getEmail());
+        target.setAddress(dto.getAddress());
+        target.setAge(dto.getAge());
+        target.setBirthDate(dto.getBirthDate());
+        target.setGender(dto.getGender());
+        target.setName(dto.getName());
+        target.setNickname(dto.getNickname());
+        target.setPhone(dto.getPhone());
+
+        return userRepository.save(target);
+    }
+
+    // 회원 Role, Status 변경 (관리자 전용)
+    @Override
+    public User updateUserByAdmin(String username, Long targetId, AddAdminRequest dto) {
+        validateAdmin(findByUsername(username));
+
+        User target = findById(targetId);
+
+        // Role 설정
+        try {
+            target.setRole(Role.valueOf(dto.getRole()));
+        } catch (IllegalArgumentException e) {
+            throw new UserException(ErrorCode.INVALID_ROLE_TYPE);
+        }
+
+        // Status 설정
+        try {
+            target.setUserStatus(Status.valueOf(dto.getStatus()));
+        } catch (IllegalArgumentException e) {
+            throw new UserException(ErrorCode.INVALID_STATUS_TYPE);
+        }
+
+        return userRepository.save(target);
+    }
+
     // 회원 삭제 기능
     @Override
     public void deleteUser(String username, Long targetId) {
@@ -74,30 +127,6 @@ public class UserServiceImpl implements UserService {
 
         // 회원 삭제시 user_status 변경
         target.setUserStatus(Status.DELETED);
-        userRepository.save(target);
-    }
-
-    // 회원 정지 기능 (관리자 전용)
-    @Override
-    public void suspendUser(String username, Long targetId) {
-        validateAdmin(findByUsername(username));
-
-        User target = findById(targetId);
-
-        // 회원 정지시 user_status 변경
-        target.setUserStatus(Status.SUSPENDED);
-        userRepository.save(target);
-    }
-
-    // 회원 정지 해제 기능 (관리자 전용)
-    @Override
-    public void unsuspendUser(String username, Long targetId) {
-        validateAdmin(findByUsername(username));
-
-        User target = findById(targetId);
-
-        // 회원 정지 해제시 user_status 변경
-        target.setUserStatus(Status.ACTIVE);
         userRepository.save(target);
     }
 
