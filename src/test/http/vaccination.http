@@ -1,7 +1,7 @@
 # Vaccination 테스트
 
 ### 값 설정
-@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0OTA0NDMzLCJleHAiOjE3MjQ5MDgwMzMsInN1YiI6ImtpbWp1bjkxIn0.r1ZbWqZoRKORl2Zj-W5IbsQNhOCfa2xp-ZlFwIHHsJw
+@accessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZXRtaWx5IiwiaWF0IjoxNzI0OTQwMzQ2LCJleHAiOjE3MjQ5NDM5NDYsInN1YiI6ImtpbWp1bjkxIn0.skcrkvlrOoEoKbbJVh3sND4YCOcX-fsqlnrCmfMCc8A
 @petId = 1
 @vaccinationId = 1
 
