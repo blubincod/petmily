@@ -29,7 +29,8 @@ public class TokenProvider {
 
     /**
      * JWT 토큰을 생성
-     * @param user 사용자 정보
+     *
+     * @param user      사용자 정보
      * @param expiredAt 토큰 만료 시간
      * @return 생성된 JWT 토큰
      */
@@ -44,12 +45,14 @@ public class TokenProvider {
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .setSubject(user.getUsername()) // username을 subject로 설정
+//                .claim("userId", user.getId()) // 사용자 ID를 클레임으로 추가
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }
 
     /**
      * 주어진 JWT 토큰의 유효성을 검사
+     *
      * @param token 검사할 토큰
      * @return 유효한 경우 true, 그렇지 않으면 false
      */
@@ -68,6 +71,7 @@ public class TokenProvider {
     /**
      * JWT 토큰에서 인증 정보 추출
      * JWT 클레임에서 Authentication 객체를 생성하여 Spring Security가 사용자를 인증하는 데 사용
+     *
      * @param token JWT 토큰
      * @return 추출된 인증 정보
      */
@@ -84,17 +88,31 @@ public class TokenProvider {
 
     /**
      * JWT 토큰에서 username 추출
+     *
      * @param token JWT 토큰
      * @return 추출된 username
      */
     public String getUsername(String token) {
         Claims claims = getClaims(token);
+        System.out.println(claims.getSubject());
         return claims.getSubject();
     }
 
     /**
+     * FIXME JWT 토큰에서 userId 추출
+     * @param token
+     * @return
+     */
+//    public Long getUserId(String token) {
+//        Claims claims = getClaims(token);
+//        System.out.println("Token claims: " + claims.toString());
+//        return claims.get("userId", Long.class);
+//    }
+
+    /**
      * JWT 토큰에서 클레임 추출
      * 다른 메서드에서 JWT를 파싱하고 클레임을 추출
+     *
      * @param token JWT 토큰
      * @return 추출된 클레임
      */
