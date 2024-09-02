@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * 회원 관련 컨트롤러
- *
+ * <p>
  * - 회원가입
  * - 회원 정보 조회
  * - 회원 정보 수정
@@ -33,10 +33,13 @@ public class UserController {
 
     /**
      * 회원가입
+     *
      * @param addUserRequest 회원가입 입력 정보
      */
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<Map<String, Long>>> registerUser(@Valid @RequestBody AddUserRequest addUserRequest) {
+    public ResponseEntity<ApiResponse<Map<String, Long>>> registerUser(
+            @Valid @RequestBody AddUserRequest addUserRequest
+    ) {
         Long userId = userService.registerUser(addUserRequest);
 
         return ResponseEntity.ok(ApiResponse.success(Map.of("userId", userId)));
@@ -44,20 +47,24 @@ public class UserController {
 
     /**
      * 회원 정보 조회
-     * @param userId 회원 번호
+     *
+     * @param username 회원 번호
      */
-    @GetMapping("/{userId}")
-    public ResponseEntity<ApiResponse<User>> getUserById(@PathVariable Long userId) {
-        User user = userService.findById(userId);
+    @GetMapping("/{username}")
+    public ResponseEntity<ApiResponse<User>> getUserById(
+            @PathVariable String username
+    ) {
+        User user = userService.findByUsername(username);
 
         return ResponseEntity.ok(ApiResponse.success(user));
     }
 
     /**
      * 회원 정보 수정
-     * @param userId 회원 번호
+     *
+     * @param userId         회원 번호
      * @param addUserRequest 회원수정 입력 정보
-     * @param userDetails 현재 인증된 사용자의 세부 정보
+     * @param userDetails    현재 인증된 사용자의 세부 정보
      */
     @PutMapping("/{userId}")
     public ResponseEntity<ApiResponse<User>> updateUser(@PathVariable Long userId,
@@ -71,9 +78,10 @@ public class UserController {
 
     /**
      * 회원 Role, Status 변경 (관리자 전용)
-     * @param userId 회원 번호
+     *
+     * @param userId          회원 번호
      * @param addAdminRequest 회원수정 입력 정보
-     * @param userDetails 현재 인증된 사용자의 세부 정보
+     * @param userDetails     현재 인증된 사용자의 세부 정보
      */
     @PutMapping("/admin/{userId}")
     public ResponseEntity<ApiResponse<User>> updateUserByAdmin(@PathVariable Long userId,
@@ -87,7 +95,8 @@ public class UserController {
 
     /**
      * 회원 삭제
-     * @param userId 회원 번호
+     *
+     * @param userId      회원 번호
      * @param userDetails 현재 인증된 사용자의 세부 정보
      */
     @DeleteMapping("/delete/{userId}")
@@ -101,6 +110,7 @@ public class UserController {
 
     /**
      * 회원 통계 조회 (관리자 전용)
+     *
      * @param userDetails 현재 인증된 사용자의 세부 정보
      */
     @GetMapping("/statistics")

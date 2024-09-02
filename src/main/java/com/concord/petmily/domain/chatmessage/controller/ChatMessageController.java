@@ -25,7 +25,7 @@ public class ChatMessageController {
 
         System.out.println("TOKEN " + token);
 
-        // 토큰에서 사용자 ID 추출
+        // 토큰에서 사용자 로그인 ID(Username) 추출
         String username = tokenProvider.getUsername(token);
 
         System.out.println("USERNAME " + username);

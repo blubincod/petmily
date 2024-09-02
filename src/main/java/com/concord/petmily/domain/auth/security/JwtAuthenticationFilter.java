@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRequestFilter는 각 요청당 한 번만 실행되도록 보장
     private final TokenProvider tokenProvider;
 
     // HTTP 요청 헤더에서 사용할 인증 헤더 이름
@@ -28,6 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // Bearer 토큰임을 나타내는 접두사
     private final static String TOKEN_PREFIX = "Bearer ";
 
+    // Spring Security 프레임워크에 의해 자동으로 실행
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
@@ -41,18 +42,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // 토큰이 존재하거나 유효한 경우 인증 처리
             if (token != null && tokenProvider.validToken(token)) {
+                // 토큰에서 인증 정보 추출
                 Authentication authentication = tokenProvider.getAuthentication(token);
+                // SecurityContext에 인증 정보 설정
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 log.debug("Set Authentication to security context for '{}', uri: {}", authentication.getName(), request.getRequestURI());
             } else {
                 log.debug("No valid JWT token found, uri: {}", request.getRequestURI());
             }
-        } catch (Exception ex) {
-            log.error("Could not set user authentication in security context", ex);
+        } catch (Exception e) {
+            log.error("Could not set user authentication in security context", e);
         }
 
-        // 필터로 요청 전달
+        log.debug("JwtAuthenticationFilter started");
+        // 현재 필터의 처리가 끝난 후 다음 필터로 요청을 전달
         filterChain.doFilter(request, response);
+        log.debug("JwtAuthenticationFilter finished");
     }
 
     /**

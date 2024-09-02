@@ -7,8 +7,6 @@ import com.concord.petmily.domain.user.entity.User;
 public interface UserService {
     // username으로 회원조회
     User findByUsername(String username);
-    // userId로 회원조회
-    User findById(Long userId);
     // 회원가입
     Long registerUser(AddUserRequest dto);
     // 회원 정보 수정
