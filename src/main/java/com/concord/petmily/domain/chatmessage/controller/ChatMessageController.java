@@ -23,12 +23,8 @@ public class ChatMessageController {
     public void handleChat(@Payload ChatMessageDto chatMessageDTO,
                            @Header("Authorization") String token) {
 
-        System.out.println("TOKEN " + token);
-
         // 토큰에서 사용자 로그인 ID(Username) 추출
         String username = tokenProvider.getUsername(token);
-
-        System.out.println("USERNAME " + username);
 
         // 메시지 저장 및 처리
         ChatMessage savedMessage = chatMessageService.saveMessage(
