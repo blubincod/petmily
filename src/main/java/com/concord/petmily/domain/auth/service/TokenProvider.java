@@ -45,7 +45,6 @@ public class TokenProvider {
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .setSubject(user.getUsername()) // username을 subject로 설정
-//                .claim("userId", user.getId()) // 사용자 ID를 클레임으로 추가
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }
@@ -76,7 +75,9 @@ public class TokenProvider {
      * @return 추출된 인증 정보
      */
     public Authentication getAuthentication(String token) {
+        // TODO 토큰에 역할을 등록할지 생각(USER,ADMIN)
         Claims claims = getClaims(token);
+        // 사용자에게 "ROLE_USER" 권한을 부여
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
 
         return new UsernamePasswordAuthenticationToken(
@@ -99,20 +100,8 @@ public class TokenProvider {
         }
 
         Claims claims = getClaims(token);
-        System.out.println(claims.getSubject());
         return claims.getSubject();
     }
-
-    /**
-     * FIXME JWT 토큰에서 userId 추출
-     * @param token
-     * @return
-     */
-//    public Long getUserId(String token) {
-//        Claims claims = getClaims(token);
-//        System.out.println("Token claims: " + claims.toString());
-//        return claims.get("userId", Long.class);
-//    }
 
     /**
      * JWT 토큰에서 클레임 추출

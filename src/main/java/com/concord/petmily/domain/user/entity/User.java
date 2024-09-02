@@ -1,6 +1,7 @@
 package com.concord.petmily.domain.user.entity;
 
 import com.concord.petmily.domain.openchat.entity.OpenChatParticipant;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -82,6 +83,7 @@ public class User implements UserDetails {
     private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<OpenChatParticipant> openChatParticipants;
 
     // Spring Security가 사용자의 권한을 확인하고, 접근 제어를 수행하기 위해 사용하는 메서드
